@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QMessageBox>
 
 CreateAgentDialog::CreateAgentDialog(QDialog *parent) : QDialog(parent, Qt::Tool) {
@@ -31,6 +32,7 @@ void CreateAgentDialog::save() {
     query.bindValue( ":phone",   phoneEdit->text() );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
     else {

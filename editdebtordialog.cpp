@@ -1,5 +1,6 @@
 #include <QSqlQuery>
 #include <QDebug>
+#include <QSqlError>
 #include <QMessageBox>
 
 #include "editdebtordialog.h"
@@ -19,6 +20,7 @@ EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog( parent, Qt::Tool 
     QSqlQuery query;
     query.prepare("SELECT * FROM agent");
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
     while ( query.next() ) {
@@ -65,6 +67,7 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
     query.bindValue( ":serial", serial );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 
@@ -142,6 +145,7 @@ void EditDebtorDialog::saveDebtor() {
     query.bindValue( ":date",     dateCalendar->selectedDate().toString(Qt::ISODate) );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
     
@@ -157,6 +161,7 @@ void EditDebtorDialog::deleteDebtor() {
     query.bindValue( ":id", tableWidget->item( currentRow, ID )->text() );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 

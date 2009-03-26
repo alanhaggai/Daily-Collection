@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlError>
 
 #include "edittransactiondialog.h"
 
@@ -25,6 +26,7 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
     query.bindValue( ":debtor_serial", serial );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 
@@ -54,6 +56,7 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
     query.bindValue( ":serial", serial );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 

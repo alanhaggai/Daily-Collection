@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QDebug>
 
 const int ID      = 0;
@@ -23,6 +24,7 @@ void EditAgentDialog::populateTableWidget() {
     QSqlQuery query;
     query.prepare("SELECT * FROM agent");
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 
@@ -89,6 +91,7 @@ void EditAgentDialog::save() {
     query.bindValue( ":phone",   phoneEdit->text() );
 
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 

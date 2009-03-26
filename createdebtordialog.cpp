@@ -1,4 +1,5 @@
 #include <QSqlQuery>
+#include <QSqlError>
 
 #include "createdebtordialog.h"
 
@@ -8,6 +9,7 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::T
     QSqlQuery query;
     query.prepare("SELECT * FROM agent");
     if ( !query.exec() ) {
+        qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
     while ( query.next() ) {
@@ -35,14 +37,13 @@ void CreateDebtorDialog::save(void) {
     QString agentId = re.cap(1);
 
     QSqlQuery query;
-    query.prepare("INSERT INTO debtor( serial, name, agent_id, address, amount, paid, phone, date )"
-            "VALUES ( :serial, :name, :agent_id, :address, :amount, :paid, :phone, :date )");
+    query.prepare("INSERT INTO debtor( serial, name, agent_id, address, amount, phone, date )"
+            "VALUES ( :serial, :name, :agent_id, :address, :amount, :phone, :date )");
     query.bindValue( ":serial",   serialEdit->text() );
     query.bindValue( ":name",     nameEdit->text() );
     query.bindValue( ":agent_id", agentId );
     query.bindValue( ":address",  addressEdit->toPlainText() );
     query.bindValue( ":amount",   amountEdit->text() );
-    query.bindValue( ":paid",     0 );
     query.bindValue( ":phone",    phoneEdit->text() );
     query.bindValue( ":date",     dateCalendar->selectedDate().toString(Qt::ISODate) );
 
