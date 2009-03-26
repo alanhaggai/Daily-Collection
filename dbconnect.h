@@ -11,16 +11,11 @@
 #define PASSWORD     "cubegin"
 
 inline bool dbConnect() {
-    //QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("dailycollection.db");
-    db.setDatabaseName(":memory:");
-    /*
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName(HOSTNAME);
     db.setDatabaseName(DATABASENAME);
     db.setUserName(USERNAME);
     db.setPassword(PASSWORD);
-    */
 
     if ( !db.open() ) {
         qDebug() << db.lastError();
