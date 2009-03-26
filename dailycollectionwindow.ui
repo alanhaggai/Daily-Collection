@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DailyCollectionWindow</class>
+ <widget class="QMainWindow" name="DailyCollectionWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>560</width>
+    <height>469</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Daily Collection</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>560</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Daily_Collection">
+    <property name="title">
+     <string>&amp;Daily Collection</string>
+    </property>
+    <addaction name="actionTransactions"/>
+    <addaction name="separator"/>
+    <addaction name="actionBackup"/>
+    <addaction name="actionRestore"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuCreate">
+    <property name="title">
+     <string>&amp;Create</string>
+    </property>
+    <addaction name="action_CreateAgent"/>
+    <addaction name="action_CreateDebtor"/>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_EditAgent"/>
+    <addaction name="action_EditDebtor"/>
+    <addaction name="action_EditTransaction"/>
+   </widget>
+   <widget class="QMenu" name="menuDay_book">
+    <property name="title">
+     <string>Day&amp;book</string>
+    </property>
+    <addaction name="action_DaybookAgent"/>
+    <addaction name="action_DaybookAllAgents"/>
+    <addaction name="action_DaybookBalance"/>
+   </widget>
+   <widget class="QMenu" name="menuD_ebtor">
+    <property name="title">
+     <string>D&amp;ebtor</string>
+    </property>
+    <addaction name="action_DebtorInstallment"/>
+    <addaction name="action_DebtorDetails"/>
+    <addaction name="action_DebtorTransactions"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>&amp;About</string>
+    </property>
+    <addaction name="action_AboutDailyCollection"/>
+   </widget>
+   <addaction name="menu_Daily_Collection"/>
+   <addaction name="menuCreate"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menuDay_book"/>
+   <addaction name="menuD_ebtor"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionTransactions">
+   <property name="text">
+    <string>&amp;Transactions</string>
+   </property>
+  </action>
+  <action name="actionBackup">
+   <property name="text">
+    <string>&amp;Backup</string>
+   </property>
+  </action>
+  <action name="actionRestore">
+   <property name="text">
+    <string>&amp;Restore</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_CreateAgent">
+   <property name="text">
+    <string>&amp;Agent</string>
+   </property>
+  </action>
+  <action name="action_CreateDebtor">
+   <property name="text">
+    <string>&amp;Debtor</string>
+   </property>
+  </action>
+  <action name="action_EditAgent">
+   <property name="text">
+    <string>&amp;Agent</string>
+   </property>
+  </action>
+  <action name="action_EditDebtor">
+   <property name="text">
+    <string>&amp;Debtor</string>
+   </property>
+  </action>
+  <action name="action_EditTransaction">
+   <property name="text">
+    <string>&amp;Transaction</string>
+   </property>
+  </action>
+  <action name="action_DaybookAgent">
+   <property name="text">
+    <string>&amp;Agent</string>
+   </property>
+  </action>
+  <action name="action_DaybookAllAgents">
+   <property name="text">
+    <string>A&amp;ll Agents</string>
+   </property>
+  </action>
+  <action name="action_DaybookBalance">
+   <property name="text">
+    <string>&amp;Balance</string>
+   </property>
+  </action>
+  <action name="action_DebtorInstallment">
+   <property name="text">
+    <string>&amp;Installment</string>
+   </property>
+  </action>
+  <action name="action_DebtorDetails">
+   <property name="text">
+    <string>&amp;Details</string>
+   </property>
+  </action>
+  <action name="action_DebtorTransactions">
+   <property name="text">
+    <string>&amp;Transactions</string>
+   </property>
+  </action>
+  <action name="action_AboutDailyCollection">
+   <property name="text">
+    <string>About &amp;Daily Collection</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>activated()</signal>
+   <receiver>DailyCollectionWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>265</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
