@@ -3,3 +3,4 @@
 *.o
 moc_*
 ui_*
+Makefile
