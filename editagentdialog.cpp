@@ -28,8 +28,6 @@ void EditAgentDialog::populateTableWidget() {
         qFatal("Failed to execute query.");
     }
 
-    tableWidget->setRowCount(query.size());
-
     tableWidget->setColumnWidth( ID,      50);
     tableWidget->setColumnWidth( NAME,    200);
     tableWidget->setColumnWidth( ADDRESS, 200);
@@ -52,6 +50,8 @@ void EditAgentDialog::populateTableWidget() {
         nameItem->setText( query.value(NAME).toString() );
         addressItem->setText( query.value(ADDRESS).toString() );
         phoneItem->setText( query.value(PHONE).toString() );
+
+        tableWidget->setRowCount(row + 1);
 
         tableWidget->setItem( row,   ID,      idItem );
         tableWidget->setItem( row,   NAME,    nameItem );

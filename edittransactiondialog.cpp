@@ -30,8 +30,6 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
         qFatal("Failed to execute query.");
     }
 
-    tableWidget->setRowCount(query.size());
-
     int row = 0;
 
     while ( query.next() ) {
@@ -46,6 +44,8 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
         idItem->setText( query.value(ID).toString() );
         dateItem->setText( query.value(DATE).toString() );
         transactionItem->setText( query.value(TRANSACTION).toString() );
+
+        tableWidget->setRowCount(row + 1);
 
         tableWidget->setItem( row,   ID,          idItem );
         tableWidget->setItem( row,   DATE,        dateItem );

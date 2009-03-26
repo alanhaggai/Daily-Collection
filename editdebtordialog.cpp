@@ -71,8 +71,6 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
         qFatal("Failed to execute query.");
     }
 
-    tableWidget->setRowCount(query.size());
-
     int row = 0;
 
     while ( query.next() ) {
@@ -102,6 +100,8 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
         amountItem->setText( query.value(AMOUNT).toString() );
         phoneItem->setText( query.value(PHONE).toString() );
         dateItem->setText( query.value(DATE).toString() );
+
+        tableWidget->setRowCount(row + 1);
 
         tableWidget->setItem( row,   ID,      idItem );
         tableWidget->setItem( row,   SERIAL,  serialItem );
