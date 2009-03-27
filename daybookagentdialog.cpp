@@ -50,6 +50,10 @@ void DaybookAgentDialog::populateTableWidget(int currentIndex) {
 
     int row = 0;
 
+    int totalAmount  = 0;
+    int totalPaid    = 0;
+    int totalBalance = 0;
+
     while ( query.next() ) {
         QString debtorSerial  = query.value(SERIAL).toString();
         QString debtorName    = query.value(NAME).toString();
@@ -81,5 +85,13 @@ void DaybookAgentDialog::populateTableWidget(int currentIndex) {
         tableWidget->setItem( row,   AMOUNT,  amountItem );
         tableWidget->setItem( row,   PAID,    paidItem );
         tableWidget->setItem( row++, BALANCE, balanceItem );
+
+        totalAmount  += debtorAmount.toInt();
+        totalPaid    += debtorPaid.toInt();
+        totalBalance += debtorBalance.toInt();
     }
+
+    totalAmountEdit->setText( QString::number(totalAmount) );
+    totalPaidEdit->setText( QString::number(totalPaid) );
+    totalBalanceEdit->setText( QString::number(totalBalance) );
 }
