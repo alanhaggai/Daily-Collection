@@ -6,6 +6,9 @@
 class DaybookAgentDialog : public QDialog, public Ui::DaybookAgentDialog {
     public:
         DaybookAgentDialog( QDialog *parent = 0 );
+
+    private:
+        QMap<int, QString> agentMap;
 };
 
 #endif
