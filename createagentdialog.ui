@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>CreateAgentDialog</class>
  <widget class="QDialog" name="CreateAgentDialog">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>276</height>
+    <width>400</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,6 +54,18 @@
      </item>
      <item row="2" column="1">
       <widget class="QTextEdit" name="addressEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="tabChangesFocus">
         <bool>true</bool>
        </property>
@@ -58,7 +73,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -71,19 +86,32 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <widget class="QPushButton" name="saveButton">
      <property name="text">
       <string>Save</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="2" column="2">
     <widget class="QPushButton" name="clearButton">
      <property name="text">
       <string>Clear</string>
      </property>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
