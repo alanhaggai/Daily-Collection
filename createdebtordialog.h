@@ -15,6 +15,7 @@ class CreateDebtorDialog : public QDialog, public Ui::CreateDebtorDialog {
 
     private:
         QSqlDatabase db;
+        QMap<int, QString> agentMap;
 };
 
 #endif

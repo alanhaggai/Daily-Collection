@@ -13,9 +13,8 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::T
         qFatal("Failed to execute query.");
     }
     while ( query.next() ) {
-         agentCombo->addItem(
-             "(" + query.value(0).toString() + ") " + query.value(1).toString()
-         );
+         agentCombo->addItem( query.value(1).toString() );
+         agentMap[query.value(0).toInt()] = query.value(1).toString();
     }
     agentCombo->setCurrentIndex(-1);
 
@@ -25,7 +24,7 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::T
 void CreateDebtorDialog::save(void) {
     qDebug() << "CreateDebtorDialog::save() - " << "Serial: "  + serialEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Name: "    + nameEdit->text();
-    qDebug() << "CreateDebtorDialog::save() - " << "Agent:"    + agentCombo->currentText();
+    qDebug() << "CreateDebtorDialog::save() - " << "Agent: "   + agentMap[ query.value(AGENT).toString().toInt() ];
     qDebug() << "CreateDebtorDialog::save() - " << "Address: " + addressEdit->toPlainText();
     qDebug() << "CreateDebtorDialog::save() - " << "Amount: "  + amountEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Phone: "   + phoneEdit->text();
@@ -41,7 +40,7 @@ void CreateDebtorDialog::save(void) {
             "VALUES ( :serial, :name, :agent_id, :address, :amount, :phone, :date )");
     query.bindValue( ":serial",   serialEdit->text() );
     query.bindValue( ":name",     nameEdit->text() );
-    query.bindValue( ":agent_id", agentId );
+    query.bindValue( ":agent_id", agentMap.key( agentCombo->currentText() ) );
     query.bindValue( ":address",  addressEdit->toPlainText() );
     query.bindValue( ":amount",   amountEdit->text() );
     query.bindValue( ":phone",    phoneEdit->text() );
