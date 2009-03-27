@@ -16,6 +16,7 @@ class DailyCollectionWindow : public QMainWindow, public Ui::DailyCollectionWind
         void spawnEditDebtor();
         void spawnEditTransaction();
         void spawnDaybookAgent();
+        void spawnDaybookAllAgents();
 };
 
 #endif
