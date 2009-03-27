@@ -60,7 +60,6 @@ void DaybookAgentDialog::populateTableWidget(int currentIndex) {
         QString debtorAmount  = query.value(AMOUNT).toString();
         QString debtorPaid    = query.value(PAID).toString();
         QString debtorBalance = QString::number( query.value(AMOUNT).toInt() - query.value(PAID).toInt() );
-        //QString debtorBalance = "";
 
         QTableWidgetItem *serialItem  = new QTableWidgetItem;
         QTableWidgetItem *nameItem    = new QTableWidgetItem;
