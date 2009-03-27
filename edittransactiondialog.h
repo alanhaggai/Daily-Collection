@@ -13,9 +13,10 @@ class EditTransactionDialog : public QDialog, public Ui::EditTransactionDialog {
         void populateTableWidgetSerialEdit(const QString&);
         void fetchItem(QTableWidgetItem *);
         void clearTransaction();
+        void saveTransaction();
 
     private:
-        int currentRow, debtorId;
+        int currentRow, transactionId;
         QString debtorName;
 };
 

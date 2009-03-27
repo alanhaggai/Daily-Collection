@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -14,10 +15,43 @@ EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog( parent,
     tableWidget->hideColumn(ID);
 
     connect( tableWidget, SIGNAL( itemClicked(QTableWidgetItem *) ), this, SLOT( fetchItem(QTableWidgetItem *) ) );
-    //connect( saveButton,   SIGNAL(clicked()),                         this, SLOT(saveTransaction()) );
+    connect( saveButton,   SIGNAL(clicked()),                         this, SLOT(saveTransaction()) );
     //connect( deleteButton, SIGNAL(clicked()),                         this, SLOT(deleteTransaction()) );
     connect( clearButton,  SIGNAL(clicked()),                         this, SLOT(clearTransaction()) );
     connect( serialEdit,  SIGNAL(textChanged(const QString&)),       this, SLOT(populateTableWidgetSerialEdit(const QString&)) );
+}
+
+void EditTransactionDialog::saveTransaction() {
+    if ( "" == serialEdit->text() || "" == nameEdit->text() || "" == transactionEdit->text() ) {
+        QMessageBox *msgbox = new QMessageBox(
+            QMessageBox::Information, "Incomplete Fields",
+            "All fields are to be filled.", QMessageBox::Ok );
+        msgbox->show();
+
+        return;
+    }
+
+    qDebug() << "EditTransactionDialog::save() - " << "Serial: "      + serialEdit->text();
+    qDebug() << "EditTransactionDialog::save() - " << "Name: "        + nameEdit->text();
+    qDebug() << "EditTransactionDialog::save() - " << "Date: "        + dateCalendar->selectedDate().toString(Qt::ISODate);
+    qDebug() << "EditTransactionDialog::save() - " << "Transaction: " + transactionEdit->text();
+
+    QSqlQuery query;
+    query.prepare("UPDATE transaction SET date = :date, paid = :paid WHERE id = :id");
+
+    query.bindValue( ":date", dateCalendar->selectedDate().toString(Qt::ISODate) );
+    query.bindValue( ":paid", transactionEdit->text() );
+    query.bindValue( ":id",   transactionId );
+
+    if ( !query.exec() ) {
+        qDebug() << query.lastError();
+        qFatal("Failed to execute query.");
+    }
+
+    transactionEdit->clear();
+    populateTableWidgetSerialEdit( serialEdit->text() );
+
+    nameEdit->setFocus();
 }
 
 void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial) {
@@ -68,6 +102,7 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
 void EditTransactionDialog::fetchItem(QTableWidgetItem *item) {
     currentRow = tableWidget->row(item);
 
+    transactionId = tableWidget->item( currentRow, ID )->text().toInt();
     QDate date = QDate::fromString( tableWidget->item( currentRow, DATE)->text(), "yyyy-MM-dd" );
     dateCalendar->setSelectedDate(date);
     transactionEdit->setText( tableWidget->item( currentRow, TRANSACTION )->text() );
