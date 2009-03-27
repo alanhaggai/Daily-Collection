@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
 
@@ -22,6 +23,14 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::T
 }
 
 void CreateDebtorDialog::save(void) {
+    if ( "" == serialEdit->text() || "" == nameEdit->text() || -1 == agentCombo->currentIndex() || "" == addressEdit->toPlainText() || "" == amountEdit->text() ) {
+        QMessageBox *msgbox = new QMessageBox(
+            QMessageBox::Information, "Incomplete Fields",
+            "All fields are to be filled.", QMessageBox::Ok );
+        msgbox->show();
+        return;
+    }
+
     qDebug() << "CreateDebtorDialog::save() - " << "Serial: "  + serialEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Name: "    + nameEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Agent: "   + agentCombo->currentText();
