@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>500</width>
     <height>500</height>
    </rect>
   </property>
@@ -105,9 +105,6 @@
      <property name="columnCount">
       <number>5</number>
      </property>
-     <attribute name="verticalHeaderVisible">
-      <bool>true</bool>
-     </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>true</bool>
      </attribute>
