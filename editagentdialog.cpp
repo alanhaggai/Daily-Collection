@@ -1,9 +1,9 @@
-#include "editagentdialog.h"
-
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+
+#include "editagentdialog.h"
 
 const int ID      = 0;
 const int NAME    = 1;

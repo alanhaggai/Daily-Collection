@@ -6,8 +6,11 @@
 #include <QDebug>
 
 inline bool dbConnect() {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("dailycollection.db");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName(HOSTNAME);
+    db.setDatabaseName(DATABASENAME);
+    db.setUserName(USERNAME);
+    db.setPassword(PASSWORD);
 
     if ( !db.open() ) {
         qDebug() << db.lastError();
