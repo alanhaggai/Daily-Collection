@@ -6,6 +6,8 @@
 class DaybookAllAgentsDialog : public QDialog, public Ui::DaybookAllAgentsDialog {
     public:
         DaybookAllAgentsDialog( QDialog *parent = 0 );
+
+        void populateTableWidget();
 };
 
 #endif
