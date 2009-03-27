@@ -24,7 +24,7 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::T
 void CreateDebtorDialog::save(void) {
     qDebug() << "CreateDebtorDialog::save() - " << "Serial: "  + serialEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Name: "    + nameEdit->text();
-    qDebug() << "CreateDebtorDialog::save() - " << "Agent: "   + agentMap[ query.value(AGENT).toString().toInt() ];
+    qDebug() << "CreateDebtorDialog::save() - " << "Agent: "   + agentCombo->currentText();
     qDebug() << "CreateDebtorDialog::save() - " << "Address: " + addressEdit->toPlainText();
     qDebug() << "CreateDebtorDialog::save() - " << "Amount: "  + amountEdit->text();
     qDebug() << "CreateDebtorDialog::save() - " << "Phone: "   + phoneEdit->text();
