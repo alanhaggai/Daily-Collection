@@ -12,7 +12,7 @@ CreateAgentDialog::CreateAgentDialog(QDialog *parent) : QDialog(parent, Qt::Tool
 }
 
 void CreateAgentDialog::save() {
-    if ( nameEdit->text() == "" || addressEdit->toPlainText() == "" || phoneEdit->text() == "" ) {
+    if ( "" == nameEdit->text() || "" == addressEdit->toPlainText() ) {
         QMessageBox *msgbox = new QMessageBox(
             QMessageBox::Information, "Incomplete Fields",
             "All fields are to be filled.", QMessageBox::Ok );

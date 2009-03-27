@@ -116,7 +116,7 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
 }
 
 void EditDebtorDialog::saveDebtor() {
-    if ( "" == serialEdit->text() || "" == nameEdit->text() || -1 == agentCombo->currentIndex() || "" == addressEdit->toPlainText() || "" == amountEdit->text() || "" == phoneEdit->text() ) {
+    if ( "" == serialEdit->text() || "" == nameEdit->text() || -1 == agentCombo->currentIndex() || "" == addressEdit->toPlainText() || "" == amountEdit->text() ) {
         QMessageBox *msgbox = new QMessageBox(
             QMessageBox::Information, "Incomplete Fields",
             "All fields are to be filled.", QMessageBox::Ok );
