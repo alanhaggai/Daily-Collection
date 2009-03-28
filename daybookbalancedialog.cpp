@@ -8,10 +8,14 @@
 
 const int SERIAL  = 0;
 const int NAME    = 1;
+const int AMOUNT  = 2;
 const int BALANCE = 2;
+const int PAID    = 3;
 
 DaybookBalanceDialog::DaybookBalanceDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
     setupUi(this);
+
+    dateCalendar->setGridVisible(true);
 
     QSqlQuery query;
     query.prepare("SELECT * FROM agent");
@@ -43,8 +47,7 @@ void DaybookBalanceDialog::populateTableWidget() {
     }
 
     QSqlQuery query;
-    query.prepare("SELECT DISTINCT debtor.serial, debtor.name, transaction.paid FROM debtor, agent, transaction WHERE transaction.agent_id = agent.id AND debtor.id = transaction.debtor_id AND transaction.date <= :transactionDate AND agent.id = :agentId GROUP BY debtor.serial ORDER BY debtor.serial");
-
+    query.prepare("SELECT debtor.serial, debtor.name, debtor.amount, SUM(transaction.paid) FROM debtor, transaction WHERE debtor.agent_id = :agentId AND debtor.id = transaction.debtor_id AND transaction.date <= :transactionDate GROUP BY debtor.serial ORDER BY debtor.serial");
     query.bindValue( ":agentId",         agentMap.key(agentCombo->currentText()) );
     query.bindValue( ":transactionDate", dateCalendar->selectedDate().toString(Qt::ISODate) );
 
@@ -52,9 +55,12 @@ void DaybookBalanceDialog::populateTableWidget() {
         qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
+    //
+    qDebug() << dateCalendar->selectedDate().toString(Qt::ISODate);
 
     QProgressDialog progressDialog( "Retrieving data...", "Abort Fetch", 0, query.size(), this );
     progressDialog.setWindowModality(Qt::WindowModal);
+    progressDialog.setMinimumDuration(0);
 
     int row = 0, counter = 0;
 
@@ -65,37 +71,26 @@ void DaybookBalanceDialog::populateTableWidget() {
         if ( progressDialog.wasCanceled() )
             break;
 
+        QString debtorSerial  = query.value(SERIAL).toString();
+        QString debtorName    = query.value(NAME).toString();
+        QString debtorBalance = QString::number( query.value(AMOUNT).toInt() - query.value(PAID).toInt() );
+
         QTableWidgetItem *serialItem  = new QTableWidgetItem;
         QTableWidgetItem *nameItem    = new QTableWidgetItem;
         QTableWidgetItem *balanceItem = new QTableWidgetItem;
         
-        QSqlQuery queryBalance;
-        queryBalance.prepare("SELECT debtor.amount, SUM(transaction.paid) FROM debtor, transaction WHERE debtor.id = transaction.debtor_id AND transaction.date <= :date AND debtor.serial = :serial GROUP BY debtor.id");
+        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Serial: "  << debtorSerial;
+        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Name: "    << debtorName;
+        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Balance: " << debtorBalance << endl;
 
-        queryBalance.bindValue( ":date",   dateCalendar->selectedDate().toString(Qt::ISODate) );
-        queryBalance.bindValue( ":serial", query.value(SERIAL).toString() );
-
-        if ( !queryBalance.exec() ) {
-            qDebug() << queryBalance.lastError();
-            qFatal("Failed to execute query.");
-        }
-
-        queryBalance.next();
-
-        int balance = queryBalance.value(0).toInt() - queryBalance.value(1).toInt();
-
-        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Serial: "  << query.value(SERIAL).toString();
-        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Name: "    << query.value(NAME).toString();
-        qDebug() << "DaybookBalanceDialog::populateTableWidget() - " << "Balance: " << balance << endl;
-
-        if ( balance == 0 )
+        if ( debtorBalance == "0" )
             continue;
 
         tableWidget->setRowCount(row + 1);
 
-        serialItem->setText( query.value(SERIAL).toString() );
-        nameItem->setText( query.value(NAME).toString() );
-        balanceItem->setText( QString::number(balance) );
+        serialItem->setText(debtorSerial);
+        nameItem->setText(debtorName);
+        balanceItem->setText(debtorBalance);
 
         tableWidget->setItem( row,   SERIAL,  serialItem );
         tableWidget->setItem( row,   NAME,    nameItem );
@@ -103,4 +98,6 @@ void DaybookBalanceDialog::populateTableWidget() {
     }
 
     progressDialog.setValue(row);
+
+    tableWidget->clearContents();
 }
