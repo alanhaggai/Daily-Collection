@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Daily Collection</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="dailycollection.qrc">
+    <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -166,7 +170,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="dailycollection.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>
