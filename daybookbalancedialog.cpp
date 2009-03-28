@@ -55,14 +55,14 @@ void DaybookBalanceDialog::populateTableWidget() {
         qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
-    //
-    qDebug() << dateCalendar->selectedDate().toString(Qt::ISODate);
 
     QProgressDialog progressDialog( "Retrieving data...", "Abort Fetch", 0, query.size(), this );
     progressDialog.setWindowModality(Qt::WindowModal);
     progressDialog.setMinimumDuration(0);
 
     int row = 0, counter = 0;
+
+    tableWidget->clearContents();
 
     while ( query.next() ) {
         progressDialog.setValue(counter++);
@@ -98,6 +98,4 @@ void DaybookBalanceDialog::populateTableWidget() {
     }
 
     progressDialog.setValue(row);
-
-    tableWidget->clearContents();
 }
