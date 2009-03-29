@@ -23,9 +23,6 @@
    </item>
    <item row="0" column="1" colspan="4">
     <widget class="QLineEdit" name="serialEdit">
-     <property name="inputMask">
-      <string> ; </string>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
