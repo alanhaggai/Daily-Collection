@@ -6,6 +6,7 @@
 #include "edittransactiondialog.h"
 #include "daybookagentdialog.h"
 #include "daybookallagentsdialog.h"
+#include "daybookbalancedialog.h"
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) : QMainWindow(parent) {
     setupUi(this);
@@ -18,6 +19,7 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) : QMainWindow(
     connect( action_EditTransaction,  SIGNAL(activated()), this, SLOT(spawnEditTransaction()) );
     connect( action_DaybookAgent,     SIGNAL(activated()), this, SLOT(spawnDaybookAgent()) );
     connect( action_DaybookAllAgents, SIGNAL(activated()), this, SLOT(spawnDaybookAllAgents()) );
+    connect( action_DaybookBalance,   SIGNAL(activated()), this, SLOT(spawnDaybookBalance()) );
 }
 
 void DailyCollectionWindow::spawnCreateAgent() {
@@ -53,4 +55,9 @@ void DailyCollectionWindow::spawnDaybookAgent() {
 void DailyCollectionWindow::spawnDaybookAllAgents() {
     DaybookAllAgentsDialog *daybookAllAgentsDialog = new DaybookAllAgentsDialog;
     daybookAllAgentsDialog->show();
+}
+
+void DailyCollectionWindow::spawnDaybookBalance() {
+    DaybookBalanceDialog *daybookBalanceDialog = new DaybookBalanceDialog;
+    daybookBalanceDialog->show();
 }
