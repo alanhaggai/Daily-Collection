@@ -3,7 +3,7 @@
 #include <QSqlError>
 #include <QDebug>
 
-#include "editagentdialog.h"
+#include "EditAgentDialog.h"
 
 const int ID      = 0;
 const int NAME    = 1;

@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QProgressDialog>
 
-#include "daybookbalancedialog.h"
+#include "DaybookBalanceDialog.h"
 
 const int SERIAL  = 0;
 const int NAME    = 1;

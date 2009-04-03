@@ -3,7 +3,7 @@
 
 #include <QMap>
 
-#include "ui_editdebtordialog.h"
+#include "ui_EditDebtorDialog.h"
 
 class EditDebtorDialog : public QDialog, public Ui::EditDebtorDialog {
     Q_OBJECT

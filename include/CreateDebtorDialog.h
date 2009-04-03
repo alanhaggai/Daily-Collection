@@ -1,8 +1,8 @@
 #ifndef CREATEDEBTORDIALOG_H
 #define CREATEDEBTORDIALOG_H
 
-#include "ui_createdebtordialog.h"
-#include "dbconnect.h"
+#include "ui_CreateDebtorDialog.h"
+#include "DbConnect.h"
 
 class CreateDebtorDialog : public QDialog, public Ui::CreateDebtorDialog {
     Q_OBJECT

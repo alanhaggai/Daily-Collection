@@ -1,7 +1,7 @@
 #include <QApplication>
 
-#include "dbconnect.h"
-#include "dailycollectionwindow.h"
+#include "DbConnect.h"
+#include "DailyCollectionWindow.h"
 
 int main( int argc, char *argv[] ) {
     QApplication app( argc, argv );

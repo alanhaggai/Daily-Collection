@@ -1,7 +1,7 @@
 #ifndef CREATEAGENTDIALOG_H
 #define CREATEAGENTDIALOG_H
 
-#include "ui_createagentdialog.h"
+#include "ui_CreateAgentDialog.h"
 
 class CreateAgentDialog : public QDialog, public Ui::CreateAgentDialog {
     Q_OBJECT

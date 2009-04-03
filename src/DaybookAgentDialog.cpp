@@ -2,7 +2,7 @@
 #include <QSqlError>
 #include <QDebug>
 
-#include "daybookagentdialog.h"
+#include "DaybookAgentDialog.h"
 
 const int SERIAL  = 0;
 const int NAME    = 1;

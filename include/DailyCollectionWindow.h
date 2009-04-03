@@ -1,7 +1,7 @@
 #ifndef DAILYCOLLECTIONWINDOW_H
 #define DAILYCOLLECTIONWINDOW_H
 
-#include "ui_dailycollectionwindow.h"
+#include "ui_DailyCollectionWindow.h"
 
 class DailyCollectionWindow : public QMainWindow, public Ui::DailyCollectionWindow {
     Q_OBJECT

@@ -1,13 +1,13 @@
-#include "dailycollectionwindow.h"
-#include "createagentdialog.h"
-#include "createdebtordialog.h"
-#include "editagentdialog.h"
-#include "editdebtordialog.h"
-#include "edittransactiondialog.h"
-#include "daybookagentdialog.h"
-#include "daybookallagentsdialog.h"
-#include "daybookbalancedialog.h"
-#include "debtorinstallmentdialog.h"
+#include "DailyCollectionWindow.h"
+#include "CreateAgentDialog.h"
+#include "CreateDebtorDialog.h"
+#include "EditAgentDialog.h"
+#include "EditDebtorDialog.h"
+#include "EditTransactionDialog.h"
+#include "DaybookAgentDialog.h"
+#include "DaybookAllAgentsDialog.h"
+#include "DaybookBalanceDialog.h"
+#include "DebtorInstallmentDialog.h"
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) : QMainWindow(parent) {
     setupUi(this);

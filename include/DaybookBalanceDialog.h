@@ -1,7 +1,7 @@
 #ifndef DAYBOOKBALANCEDIALOG_H
 #define DAYBOOKBALANCEDIALOG_H
 
-#include "ui_daybookbalancedialog.h"
+#include "ui_DaybookBalanceDialog.h"
 
 class DaybookBalanceDialog : public QDialog, public Ui::DaybookBalanceDialog {
     Q_OBJECT

@@ -4,7 +4,7 @@
 #include <QSqlError>
 #include <QMessageBox>
 
-#include "editdebtordialog.h"
+#include "EditDebtorDialog.h"
 
 const int ID      = 0;
 const int SERIAL  = 1;

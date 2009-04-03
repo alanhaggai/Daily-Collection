@@ -2,7 +2,7 @@
 #include <QSqlError>
 #include <QDebug>
 
-#include "daybookallagentsdialog.h"
+#include "DaybookAllAgentsDialog.h"
 
 const int NAME           = 0;
 const int AMOUNTGIVEN    = 1;

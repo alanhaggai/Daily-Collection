@@ -2,7 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-#include "createdebtordialog.h"
+#include "CreateDebtorDialog.h"
 
 CreateDebtorDialog::CreateDebtorDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
     setupUi(this);

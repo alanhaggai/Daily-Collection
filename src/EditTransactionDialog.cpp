@@ -3,7 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-#include "edittransactiondialog.h"
+#include "EditTransactionDialog.h"
 
 const int ID          = 0;
 const int DATE        = 1;

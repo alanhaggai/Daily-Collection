@@ -1,7 +1,7 @@
 #ifndef DEBTORINSTALLMENTDIALOG_H
 #define DEBTORINSTALLMENTDIALOG_H
 
-#include "ui_debtorinstallmentdialog.h"
+#include "ui_DebtorInstallmentDialog.h"
 
 class DebtorInstallmentDialog : public QDialog, public Ui::DebtorInstallmentDialog {
     public:

@@ -1,7 +1,7 @@
 #ifndef AGENTEDITDIALOG_H
 #define AGENTEDITDIALOG_H
 
-#include "ui_editagentdialog.h"
+#include "ui_EditAgentDialog.h"
 
 class EditAgentDialog : public QDialog, public Ui::EditAgentDialog {
     Q_OBJECT

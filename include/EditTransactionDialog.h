@@ -1,7 +1,7 @@
 #ifndef EDITTRANSACTIONDIALOG_H
 #define EDITTRANSACTIONDIALOG_H
 
-#include "ui_edittransactiondialog.h"
+#include "ui_EditTransactionDialog.h"
 
 class EditTransactionDialog : public QDialog, public Ui::EditTransactionDialog {
     Q_OBJECT

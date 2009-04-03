@@ -1,7 +1,7 @@
 #ifndef DAYBOOKALLAGENTSDIALOG_H
 #define DAYBOOKALLAGENTSDIALOG_H
 
-#include "ui_daybookallagentsdialog.h"
+#include "ui_DaybookAllAgentsDialog.h"
 
 class DaybookAllAgentsDialog : public QDialog, public Ui::DaybookAllAgentsDialog {
     public:
