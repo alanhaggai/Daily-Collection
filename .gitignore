@@ -7,3 +7,6 @@ ui_*
 Makefile
 dailycollection
 qrc_*
+.ui/
+.obj/
+.moc/
