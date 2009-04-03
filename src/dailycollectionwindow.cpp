@@ -7,19 +7,21 @@
 #include "daybookagentdialog.h"
 #include "daybookallagentsdialog.h"
 #include "daybookbalancedialog.h"
+#include "debtorinstallmentdialog.h"
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) : QMainWindow(parent) {
     setupUi(this);
     setWindowState(Qt::WindowMaximized);
 
-    connect( action_CreateAgent,      SIGNAL(activated()), this, SLOT(spawnCreateAgent()) );
-    connect( action_CreateDebtor,     SIGNAL(activated()), this, SLOT(spawnCreateDebtor()) );
-    connect( action_EditAgent,        SIGNAL(activated()), this, SLOT(spawnEditAgent()) );
-    connect( action_EditDebtor,       SIGNAL(activated()), this, SLOT(spawnEditDebtor()) );
-    connect( action_EditTransaction,  SIGNAL(activated()), this, SLOT(spawnEditTransaction()) );
-    connect( action_DaybookAgent,     SIGNAL(activated()), this, SLOT(spawnDaybookAgent()) );
-    connect( action_DaybookAllAgents, SIGNAL(activated()), this, SLOT(spawnDaybookAllAgents()) );
-    connect( action_DaybookBalance,   SIGNAL(activated()), this, SLOT(spawnDaybookBalance()) );
+    connect( action_CreateAgent,       SIGNAL(activated()), this, SLOT(spawnCreateAgent()) );
+    connect( action_CreateDebtor,      SIGNAL(activated()), this, SLOT(spawnCreateDebtor()) );
+    connect( action_EditAgent,         SIGNAL(activated()), this, SLOT(spawnEditAgent()) );
+    connect( action_EditDebtor,        SIGNAL(activated()), this, SLOT(spawnEditDebtor()) );
+    connect( action_EditTransaction,   SIGNAL(activated()), this, SLOT(spawnEditTransaction()) );
+    connect( action_DaybookAgent,      SIGNAL(activated()), this, SLOT(spawnDaybookAgent()) );
+    connect( action_DaybookAllAgents,  SIGNAL(activated()), this, SLOT(spawnDaybookAllAgents()) );
+    connect( action_DaybookBalance,    SIGNAL(activated()), this, SLOT(spawnDaybookBalance()) );
+    connect( action_DebtorInstallment, SIGNAL(activated()), this, SLOT(spawnDebtorInstallment()) );
 }
 
 void DailyCollectionWindow::spawnCreateAgent() {
@@ -60,4 +62,9 @@ void DailyCollectionWindow::spawnDaybookAllAgents() {
 void DailyCollectionWindow::spawnDaybookBalance() {
     DaybookBalanceDialog *daybookBalanceDialog = new DaybookBalanceDialog;
     daybookBalanceDialog->show();
+}
+
+void DailyCollectionWindow::spawnDebtorInstallment() {
+    DebtorInstallmentDialog *debtorInstallmentDialog = new DebtorInstallmentDialog;
+    debtorInstallmentDialog->show();
 }
