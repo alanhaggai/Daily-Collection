@@ -1,24 +1,48 @@
+/*!
+ * \file  DailyCollectionWindow.h
+ * \brief Declarations for DailyCollectionWindow.cpp
+ *
+ * \ingroup Main
+ */
 #ifndef DAILYCOLLECTIONWINDOW_H
 #define DAILYCOLLECTIONWINDOW_H
 
 #include "ui_DailyCollectionWindow.h"
 
 class DailyCollectionWindow : public QMainWindow, public Ui::DailyCollectionWindow {
-    Q_OBJECT
+    Q_OBJECT  // so that `moc` gets invoked
 
     public:
+        //! Constructor
         DailyCollectionWindow( QMainWindow *parent = 0 );
 
     public slots:
-        void spawnCreateAgent();
-        void spawnCreateDebtor();
-        void spawnEditAgent();
-        void spawnEditDebtor();
-        void spawnEditTransaction();
-        void spawnDaybookAgent();
-        void spawnDaybookAllAgents();
-        void spawnDaybookBalance();
-        void spawnDebtorInstallment();
+        //! Spawns a dialog for creating an agent
+        void SpawnCreateAgentDialog();
+
+        //! Spawns a dialog for creating a debtor
+        void SpawnCreateDebtorDialog();
+
+        //! Spawns a dialog for editing an agent
+        void SpawnEditAgentDialog();
+
+        //! Spawns a dialog for editing a debtor
+        void SpawnEditDebtorDialog();
+
+        //! Spawns a dialog for editing a transaction
+        void SpawnEditTransactionDialog();
+
+        //! Spawns a dialog that displays daybook of an agent
+        void SpawnDaybookAgentDialog();
+
+        //! Spawns a dialog that displays daybook of all agents
+        void SpawnDaybookAllAgentsDialog();
+
+        //! Spawns a dialog that displays daybook balance
+        void SpawnDaybookBalanceDialog();
+
+        //! Spawns a dialog for making debtor installments
+        void SpawnDebtorInstallmentDialog();
 };
 
 #endif

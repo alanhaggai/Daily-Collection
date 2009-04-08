@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="serialEdit">
+    <widget class="QLineEdit" name="serial_edit">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -36,7 +36,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="nameEdit"/>
+    <widget class="QLineEdit" name="name_edit"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
@@ -46,7 +46,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QComboBox" name="agentCombo">
+    <widget class="QComboBox" name="agent_combo">
      <property name="currentIndex">
       <number>-1</number>
      </property>
@@ -60,7 +60,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QTextEdit" name="addressEdit">
+    <widget class="QTextEdit" name="address_edit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -86,7 +86,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLineEdit" name="amountEdit"/>
+    <widget class="QLineEdit" name="amount_edit"/>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_6">
@@ -96,7 +96,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QLineEdit" name="phoneEdit"/>
+    <widget class="QLineEdit" name="phone_edit"/>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_7">
@@ -106,7 +106,7 @@
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QCalendarWidget" name="dateCalendar">
+    <widget class="QCalendarWidget" name="date_calendar">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -131,14 +131,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="saveButton">
+      <widget class="QPushButton" name="save_button">
        <property name="text">
         <string>Save</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="clearButton">
+      <widget class="QPushButton" name="clear_button">
        <property name="text">
         <string>Clear</string>
        </property>
@@ -164,9 +164,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>phoneEdit</receiver>
+   <receiver>phone_edit</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -180,9 +180,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>amountEdit</receiver>
+   <receiver>amount_edit</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -196,9 +196,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>addressEdit</receiver>
+   <receiver>address_edit</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -212,9 +212,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>agentCombo</receiver>
+   <receiver>agent_combo</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -228,9 +228,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>serialEdit</receiver>
+   <receiver>serial_edit</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -244,9 +244,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>clearButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
-   <receiver>nameEdit</receiver>
+   <receiver>name_edit</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">

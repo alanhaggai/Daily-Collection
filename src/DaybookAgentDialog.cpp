@@ -1,96 +1,162 @@
+/*!
+ * \file  DaybookAgentDialog.cpp
+ * \brief Displays daybook of each agent
+ *
+ * \ingroup Daybook
+ */
+
+#include "DaybookAgentDialog.h"
+
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
 
-#include "DaybookAgentDialog.h"
+//! Enumerator constants for representing Table Widget columns
+enum
+{
+    SERIAL,
+    NAME,
+    AMOUNT,
+    PAID,
+    BALANCE,
+};
 
-const int SERIAL  = 0;
-const int NAME    = 1;
-const int AMOUNT  = 2;
-const int PAID    = 3;
-const int BALANCE = 4;
-
-DaybookAgentDialog::DaybookAgentDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
+/*!
+ * Constructor that creates a Tool Window for displaying daybook of agents.
+ * UI is setup. Agent ids and names are selected from agent table. Agent Combo
+ * Box is populated with agent names and mapping of agent names to agent ids is
+ * done. Table Widget column widths are set.
+ */
+DaybookAgentDialog::DaybookAgentDialog(QDialog* parent) :
+    QDialog( parent, Qt::Tool )
+{
     setupUi(this);
 
+    // Get all agent ids and names from agent table
     QSqlQuery query;
-    query.prepare("SELECT * FROM agent");
-    if ( !query.exec() ) {
+    query.prepare("SELECT id, name FROM agent");
+    if ( !query.exec() )
+    {
+        // Query execution failed
         qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
-    while ( query.next() ) {
-         agentCombo->addItem( query.value(1).toString() );
-         agentMap[query.value(0).toInt()] = query.value(1).toString();
+    // Cycle through result rows
+    while ( query.next() )
+    {
+        // Add agent name to Combo Box
+        agent_combo->addItem( query.value(1).toString() );
+
+        // Create a mapping with id as key and name as value
+        agent_map[ query.value(0).toInt() ] = query.value(1).toString();
     }
-    agentCombo->setCurrentIndex(-1);
+    agent_combo->setCurrentIndex(-1);  // Clear Combo Box selection
 
-    tableWidget->setColumnWidth( SERIAL,  50);
-    tableWidget->setColumnWidth( NAME,    200);
-    tableWidget->setColumnWidth( AMOUNT,  70);
-    tableWidget->setColumnWidth( PAID,    70);
-    tableWidget->setColumnWidth( BALANCE, 70);
+    // Set column widths for Table Widget
+    table_widget->setColumnWidth( SERIAL,  50);
+    table_widget->setColumnWidth( NAME,    200);
+    table_widget->setColumnWidth( AMOUNT,  70);
+    table_widget->setColumnWidth( PAID,    70);
+    table_widget->setColumnWidth( BALANCE, 70);
 
-    connect( agentCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(populateTableWidget(int)) );
+    connect( agent_combo, SIGNAL( currentIndexChanged(int) ), this,
+        SLOT( PopulateTableWidget(int) ) );
 }
 
-void DaybookAgentDialog::populateTableWidget(int currentIndex) {
-    int agentId = agentMap.key( agentCombo->itemText(currentIndex) );
+/*!
+ * Get id of currently selected agent name. Calculate total amount given to a
+ * debtor, total amount paid by the debtor and balance amount to be paid by the
+ * debtor. Calculate the grand total of the above amounts and display.
+ */
+void
+DaybookAgentDialog::PopulateTableWidget(int current_index)
+{
+    // Get the id of the agent whose name has been selected in the Combo Box
+    int agent_id = agent_map.key( agent_combo->itemText(current_index) );
 
+    // Calculate the total sum paid by a debtor under the agent whose name has
+    // been selected in the Combo Box
     QSqlQuery query;
-    query.prepare("SELECT debtor.serial, debtor.name, debtor.amount, SUM(transaction.paid) FROM debtor, transaction WHERE debtor.agent_id = :agentId AND debtor.id = transaction.debtor_id GROUP BY debtor.serial ORDER BY debtor.serial");
-    query.bindValue( ":agent_id", agentId );
-
-    if ( !query.exec() ) {
+    query.prepare("SELECT debtor.serial, debtor.name, debtor.amount,\
+        SUM(transaction.paid) FROM debtor, transaction WHERE debtor.agent_id =\
+        :agent_id AND debtor.id = transaction.debtor_id GROUP BY debtor.serial\
+        ORDER BY debtor.serial");
+    query.bindValue( ":agent_id", agent_id );
+    if ( !query.exec() )
+    {
+        // Query execution failed
         qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
 
-    tableWidget->setRowCount(query.size());
+    // Set row count to the query result size
+    table_widget->setRowCount(query.size());
 
-    int row = 0;
+    int row = 0;  // Row count
 
-    int totalAmount  = 0;
-    int totalPaid    = 0;
-    int totalBalance = 0;
+    int total_amount  = 0;  // Total amount received by debtors from an agent
+    int total_paid    = 0;  // Total amount paid by debtors to an agent
+    int total_balance = 0;  // Equals: total_amount - total_paid
 
-    while ( query.next() ) {
-        QString debtorSerial  = query.value(SERIAL).toString();
-        QString debtorName    = query.value(NAME).toString();
-        QString debtorAmount  = query.value(AMOUNT).toString();
-        QString debtorPaid    = query.value(PAID).toString();
-        QString debtorBalance = QString::number( query.value(AMOUNT).toInt() - query.value(PAID).toInt() );
+    // Loop through result rows
+    while ( query.next() )
+    {
+        QString debtor_serial;   // Debtor serial number
+        QString debtor_name;     // Debtor name
+        QString debtor_amount;   // Amount received by debtor
+        QString debtor_paid;     // Total amount paid by debtor
+        QString debtor_balance;  // Balance amount to be paid by debtor
+        
+        // Copy results into respective QStrings
+        debtor_serial  = query.value(SERIAL).toString();
+        debtor_name    = query.value(NAME).toString();
+        debtor_amount  = query.value(AMOUNT).toString();
+        debtor_paid    = query.value(PAID).toString();
+        debtor_balance = QString::number( query.value(AMOUNT).toInt() -
+            query.value(PAID).toInt() );
 
-        QTableWidgetItem *serialItem  = new QTableWidgetItem;
-        QTableWidgetItem *nameItem    = new QTableWidgetItem;
-        QTableWidgetItem *amountItem  = new QTableWidgetItem;
-        QTableWidgetItem *paidItem    = new QTableWidgetItem;
-        QTableWidgetItem *balanceItem = new QTableWidgetItem;
+        // Declare items that will be assigned to the Table Widget
+        QTableWidgetItem* serial_item  = new QTableWidgetItem;
+        QTableWidgetItem* name_item    = new QTableWidgetItem;
+        QTableWidgetItem* amount_item  = new QTableWidgetItem;
+        QTableWidgetItem* paid_item    = new QTableWidgetItem;
+        QTableWidgetItem* balance_item = new QTableWidgetItem;
 
-        qDebug() << "DaybookAgentDialog::populateTableWidget() - " << "Serial: "  + debtorSerial;
-        qDebug() << "DaybookAgentDialog::populateTableWidget() - " << "Name: "    + debtorName;
-        qDebug() << "DaybookAgentDialog::populateTableWidget() - " << "Amount: "  + debtorAmount;
-        qDebug() << "DaybookAgentDialog::populateTableWidget() - " << "Paid: "    + debtorPaid;
-        qDebug() << "DaybookAgentDialog::populateTableWidget() - " << "Balance: " + debtorBalance;
+        // Debug information
+        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
+            "Serial: " + debtor_serial;
+        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
+            "Name: " + debtor_name;
+        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
+            "Amount: " + debtor_amount;
+        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
+            "Paid: " + debtor_paid;
+        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
+            "Balance: " + debtor_balance << endl;
 
-        serialItem->setText(debtorSerial);
-        nameItem->setText(debtorName);
-        amountItem->setText(debtorAmount);
-        paidItem->setText(debtorPaid);
-        balanceItem->setText(debtorBalance);
+        // Set values for items
+        serial_item->setText(debtor_serial);
+        name_item->setText(debtor_name);
+        amount_item->setText(debtor_amount);
+        paid_item->setText(debtor_paid);
+        balance_item->setText(debtor_balance);
 
-        tableWidget->setItem( row,   SERIAL,  serialItem );
-        tableWidget->setItem( row,   NAME,    nameItem );
-        tableWidget->setItem( row,   AMOUNT,  amountItem );
-        tableWidget->setItem( row,   PAID,    paidItem );
-        tableWidget->setItem( row++, BALANCE, balanceItem );
+        // Set items for Table Widget and increment the row
+        table_widget->setItem( row,   SERIAL,  serial_item );
+        table_widget->setItem( row,   NAME,    name_item );
+        table_widget->setItem( row,   AMOUNT,  amount_item );
+        table_widget->setItem( row,   PAID,    paid_item );
+        table_widget->setItem( row++, BALANCE, balance_item );
 
-        totalAmount  += debtorAmount.toInt();
-        totalPaid    += debtorPaid.toInt();
-        totalBalance += debtorBalance.toInt();
+        // Calculate grand total of amount given to debtors, amount paid by
+        // debtors and balance amount to be paid by debtors
+        total_amount  += debtor_amount.toInt();
+        total_paid    += debtor_paid.toInt();
+        total_balance += debtor_balance.toInt();
     }
 
-    totalAmountEdit->setText( QString::number(totalAmount) );
-    totalPaidEdit->setText( QString::number(totalPaid) );
-    totalBalanceEdit->setText( QString::number(totalBalance) );
+    // Set Line Edits with their respective values
+    total_amount_edit->setText( QString::number(total_amount) );
+    total_paid_edit->setText( QString::number(total_paid) );
+    total_balance_edit->setText( QString::number(total_balance) );
 }

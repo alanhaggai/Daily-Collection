@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QComboBox" name="agentCombo">
+    <widget class="QComboBox" name="agent_combo">
      <property name="currentIndex">
       <number>-1</number>
      </property>
@@ -36,12 +36,15 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QCalendarWidget" name="dateCalendar">
+    <widget class="QCalendarWidget" name="date_calendar">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="gridVisible">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -53,7 +56,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="totalBalanceEdit">
+    <widget class="QLineEdit" name="total_balance_edit">
      <property name="readOnly">
       <bool>true</bool>
      </property>
@@ -75,14 +78,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="listButton">
+      <widget class="QPushButton" name="list_button">
        <property name="text">
         <string>List</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="openReportInBrowserButton">
+      <widget class="QPushButton" name="open_report_in_browser">
        <property name="text">
         <string>Open report in browser</string>
        </property>
@@ -91,7 +94,7 @@
     </layout>
    </item>
    <item row="4" column="0" colspan="2">
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="table_widget">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>

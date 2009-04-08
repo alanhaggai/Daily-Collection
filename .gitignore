@@ -10,3 +10,4 @@ qrc_*
 .ui/
 .obj/
 .moc/
+doc/

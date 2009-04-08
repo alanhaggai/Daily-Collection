@@ -1,21 +1,30 @@
+/*!
+ * \file  CreateDebtorDialog.h
+ * \brief Declarations for CreateDebtorDialog.cpp
+ *
+ * \ingroup Create
+ */
+
 #ifndef CREATEDEBTORDIALOG_H
 #define CREATEDEBTORDIALOG_H
 
 #include "ui_CreateDebtorDialog.h"
-#include "DbConnect.h"
 
+//! Declares members and slots for CreateDebtorDialog.cpp
 class CreateDebtorDialog : public QDialog, public Ui::CreateDebtorDialog {
-    Q_OBJECT
+    Q_OBJECT  // so that `moc` gets invoked
 
     public:
+        //! Constructor
         CreateDebtorDialog( QDialog *parent = 0 );
 
     public slots:
-        void save(void);
+        //! Fetch input data of agent and save to database.
+        void SaveDebtor();
 
     private:
-        QSqlDatabase db;
-        QMap<int, QString> agentMap;
+        //! Stores agent id as key and agent name as value.
+        QMap<int, QString> agent_map;
 };
 
 #endif
