@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item row="0" column="1" colspan="4">
-    <widget class="QLineEdit" name="serialEdit">
+    <widget class="QLineEdit" name="serial_edit">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -36,7 +36,11 @@
     </widget>
    </item>
    <item row="1" column="1" colspan="4">
-    <widget class="QLineEdit" name="nameEdit"/>
+    <widget class="QLineEdit" name="name_edit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
@@ -46,24 +50,34 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QRadioButton" name="fiftyRadio">
+    <widget class="QRadioButton" name="fifty_radio">
      <property name="text">
       <string>Rs. 50</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QRadioButton" name="hundredRadio">
+    <widget class="QRadioButton" name="hundred_radio">
      <property name="text">
       <string>Rs. 100</string>
      </property>
     </widget>
    </item>
    <item row="2" column="3">
-    <widget class="QLineEdit" name="installmentEdit"/>
+    <widget class="QLineEdit" name="installment_edit">
+     <property name="text">
+      <string>1</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </item>
    <item row="2" column="4">
-    <widget class="QLineEdit" name="amountEdit">
+    <widget class="QLineEdit" name="amount_edit">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>
@@ -77,7 +91,7 @@
     </widget>
    </item>
    <item row="3" column="1" colspan="4">
-    <widget class="QCalendarWidget" name="dateCalendar">
+    <widget class="QCalendarWidget" name="date_calendar">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -115,14 +129,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="saveButton">
+      <widget class="QPushButton" name="save_button">
        <property name="text">
         <string>Save</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="clearButton">
+      <widget class="QPushButton" name="clear_button">
        <property name="text">
         <string>Clear</string>
        </property>
@@ -133,15 +147,15 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>serialEdit</tabstop>
-  <tabstop>nameEdit</tabstop>
-  <tabstop>fiftyRadio</tabstop>
-  <tabstop>hundredRadio</tabstop>
-  <tabstop>installmentEdit</tabstop>
-  <tabstop>amountEdit</tabstop>
-  <tabstop>dateCalendar</tabstop>
-  <tabstop>saveButton</tabstop>
-  <tabstop>clearButton</tabstop>
+  <tabstop>serial_edit</tabstop>
+  <tabstop>name_edit</tabstop>
+  <tabstop>fifty_radio</tabstop>
+  <tabstop>hundred_radio</tabstop>
+  <tabstop>installment_edit</tabstop>
+  <tabstop>amount_edit</tabstop>
+  <tabstop>date_calendar</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>clear_button</tabstop>
  </tabstops>
  <resources/>
  <connections/>
