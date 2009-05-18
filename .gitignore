@@ -1,4 +1,3 @@
-*.pro
 .*.swp
 *.o
 moc_*
