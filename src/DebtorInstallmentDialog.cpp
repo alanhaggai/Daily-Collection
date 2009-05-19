@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+#include <QMessageBox>
 
 enum
 {
@@ -37,6 +38,8 @@ DebtorInstallmentDialog::DebtorInstallmentDialog(QDialog* parent) :
             SLOT( FiftyRadioToggled(bool) ) );
     connect( hundred_radio, SIGNAL( toggled(bool) ), this,
             SLOT( HundredRadioToggled(bool) ) );
+    connect( save_button, SIGNAL( clicked() ), this,
+            SLOT( SaveInstallment() ) );
 }
 
 /*
@@ -82,6 +85,9 @@ DebtorInstallmentDialog::PopulateValuesOnSerialChange(const QString&
     }
 }
 
+/**
+ * Calculate the amount which will be paid then
+ */
 void
 DebtorInstallmentDialog::CalculateAmount(const QString& number_of_installments)
 {
@@ -89,6 +95,9 @@ DebtorInstallmentDialog::CalculateAmount(const QString& number_of_installments)
             installment ) );
 }
 
+/**
+ * Change installment to 50 and recalculate amount
+ */
 void
 DebtorInstallmentDialog::FiftyRadioToggled(bool checked)
 {
@@ -104,6 +113,9 @@ DebtorInstallmentDialog::FiftyRadioToggled(bool checked)
     }
 }
 
+/**
+ * Change installment to 100 and recalculate amount
+ */
 void
 DebtorInstallmentDialog::HundredRadioToggled(bool checked)
 {
@@ -120,6 +132,9 @@ DebtorInstallmentDialog::HundredRadioToggled(bool checked)
     }
 }
 
+/**
+ * Clear fields
+ */
 void
 DebtorInstallmentDialog::Clear()
 {
@@ -132,4 +147,99 @@ DebtorInstallmentDialog::Clear()
     hundred_radio->setDown(false);
 
     serial_edit->setFocus();
+}
+
+/**
+ * Save the installment made to table transaction
+ */
+void
+DebtorInstallmentDialog::SaveInstallment() {
+    if ( serial_edit->text() != "" && name_edit->text() != "" )
+    {
+        qint16 amount, paid, amount_rented;
+
+        ( fifty_radio->isChecked() == true )
+            ? ( amount = 50 )
+            : ( amount = 100 );
+
+        // Calculate amout which will be paid
+        if ( installment_edit->text() != "" ) {
+            amount *= installment_edit->text().toInt();
+        }
+
+        paid = amount;
+
+        QSqlQuery query;
+        query.prepare( "SELECT SUM(transaction.paid) FROM debtor, transaction\
+                WHERE debtor.id = transaction.debtor_id AND debtor.serial = :debtor_serial" );
+        query.bindValue( ":debtor_serial", serial_edit->text() );
+
+        if ( !query.exec() ) {
+            qDebug() << query.lastError();
+            qFatal("Failed to execute query.");
+        }
+
+        query.next();
+
+        QString sum = query.value(0).toString();
+
+        query.prepare( "SELECT id, agent_id FROM debtor WHERE debtor.serial = :debtor_serial" );
+        query.bindValue( ":debtor_serial", serial_edit->text() );
+
+        if ( !query.exec() ) {
+            qDebug() << query.lastError();
+            qFatal("Failed to execute query.");
+        }
+
+        query.next();
+
+        QString debtor_id = query.value(0).toString();
+        QString agent_id  = query.value(1).toString();
+
+        qDebug() << "Agent ID: " << agent_id;
+        qDebug() << "Debtor ID: " << debtor_id;
+        
+        query.prepare( "INSERT INTO transaction ( agent_id, debtor_id, paid,\
+            date ) VALUES ( :agent_id, :debtor_id, :paid, :date )" );
+
+        query.bindValue( ":agent_id", agent_id );
+        query.bindValue( ":debtor_id", debtor_id );
+        query.bindValue( ":paid", amount );
+        query.bindValue( ":date", date_calendar->selectedDate().toString(Qt::ISODate) );
+
+        if ( !query.exec() ) {
+            qDebug() << query.lastError();
+            qFatal("Failed to execute query.");
+        }
+
+        query.prepare( "SELECT amount FROM debtor WHERE id = :id" );
+        query.bindValue( ":id", debtor_id );
+
+        if ( !query.exec() ) {
+            qDebug() << query.lastError();
+            qFatal("Failed to execute query.");
+        }
+
+        query.next();
+
+        amount_rented = query.value(0).toInt();
+        if ( amount_rented == amount ) {
+            query.prepare( "UPDATE debtor SET deleted = 1 WHERE id = :id" );
+            query.bindValue( ":id", debtor_id );
+        }
+
+        if ( !query.exec() ) {
+            qDebug() << query.lastError();
+            qFatal("Failed to execute query.");
+        }
+
+        Clear();
+    }
+    else
+    {
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Information, "Incomplete Fields",
+                "All fields are to be filled.", QMessageBox::Ok );
+        msgbox->show();  // Fire up a message box
+    }
 }

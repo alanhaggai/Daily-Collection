@@ -13,6 +13,7 @@ class DebtorInstallmentDialog : public QDialog,
         void CalculateAmount(const QString& number_of_installments);
         void FiftyRadioToggled(bool checked);
         void HundredRadioToggled(bool checked);
+        void SaveInstallment();
         void Clear();
 
     public:

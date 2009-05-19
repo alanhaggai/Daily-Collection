@@ -88,8 +88,8 @@ CreateDebtorDialog::SaveDebtor() {
     // debtor
     QSqlQuery query;
     query.prepare("INSERT INTO debtor( serial, name, agent_id, address, amount,"
-            "phone, date ) VALUES ( :serial, :name, :agent_id, :address,\
-            :amount, :phone, :date )");
+            "phone, date, deleted ) VALUES ( :serial, :name, :agent_id, :address,\
+            :amount, :phone, :date, 0 )");
     query.bindValue( ":serial",   serial_edit->text() );
     query.bindValue( ":name",     name_edit->text() );
     query.bindValue( ":agent_id", agent_map.key( agent_combo->currentText() ) );
@@ -104,6 +104,25 @@ CreateDebtorDialog::SaveDebtor() {
         qDebug() << query.lastError();
         qFatal("Failed to execute query.");
     }
+
+    query.prepare( "SELECT id FROM debtor WHERE serial = :debtor_serial" );
+    query.bindValue( ":debtor_serial", serial_edit->text() );
+
+    if ( !query.exec() ) {
+        // Query failed to execute
+        qDebug() << query.lastError();
+        qFatal("Failed to execute query.");
+    }
+    
+    query.next();
+    QString debtor_id = query.value(0).toString();
+
+    query.prepare( "INSERT INTO transaction ( debtor_id, agent_id, date, paid )\
+            VALUES ( :debtor_id, :agent_id, :date, 0 )" );
+
+    query.bindValue( ":debtor_id", debtor_id );
+    query.bindValue( ":agent_id", agent_map.key( agent_combo->currentText() ) );
+    query.bindValue( ":date", date_calendar->selectedDate().toString(Qt::ISODate) );
 
     // Clear Line Edits and Combo Box
     serial_edit->clear();
