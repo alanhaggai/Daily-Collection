@@ -73,8 +73,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial)
     paid_edit->setText( QString::number(debtor_paid) );
     balance_edit->setText( QString::number(debtor_balance) );
 
-    query.prepare("SELECT transaction.date, paid FROM debtor, transaction WHERE\
-            debtor.serial = :debtor_serial AND debtor.id\
+    query.prepare("SELECT transaction.date, transaction.paid FROM debtor,\
+            transaction WHERE debtor.serial = :debtor_serial AND debtor.id\
             = transaction.debtor_id ORDER BY transaction.date");
     query.bindValue( ":debtor_serial", debtor_serial );
 

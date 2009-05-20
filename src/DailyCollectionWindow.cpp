@@ -18,6 +18,7 @@
 #include "DebtorInstallmentDialog.h"
 #include "DebtorDetailsDialog.h"
 #include "DebtorTransactionsDialog.h"
+#include "TransactionsDialog.h"
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     QMainWindow(parent)
@@ -47,6 +48,8 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         SIGNAL( activated() ), this, SLOT( SpawnDebtorDetailsDialog() ) );
     connect( action_DebtorTransactions,
         SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
+    connect( action_Transactions,
+        SIGNAL( activated() ), this, SLOT( SpawnTransactionsDialog() ) );
 }
 
 // Spawn{,,,,,} all those dialogs
@@ -126,4 +129,11 @@ DailyCollectionWindow::SpawnDebtorTransactionsDialog()
 {
     DebtorTransactionsDialog* debtor_transactions_dialog = new DebtorTransactionsDialog;
     debtor_transactions_dialog->show();
+}
+
+void
+DailyCollectionWindow::SpawnTransactionsDialog()
+{
+    TransactionsDialog* transactions_dialog = new TransactionsDialog;
+    transactions_dialog->show();
 }

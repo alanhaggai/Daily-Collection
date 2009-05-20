@@ -14,7 +14,7 @@
    <string>Daily Collection</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="dailycollection.qrc">
+   <iconset>
     <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
@@ -31,7 +31,7 @@
     <property name="title">
      <string>&amp;Daily Collection</string>
     </property>
-    <addaction name="actionTransactions"/>
+    <addaction name="action_Transactions"/>
     <addaction name="separator"/>
     <addaction name="actionBackup"/>
     <addaction name="actionRestore"/>
@@ -83,7 +83,7 @@
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionTransactions">
+  <action name="action_Transactions">
    <property name="text">
     <string>&amp;Transactions</string>
    </property>

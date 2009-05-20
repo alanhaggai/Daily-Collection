@@ -1,0 +1,44 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: sans-serif;
+}
+
+body {
+    margin: 20px;
+}
+
+#container {
+    text-align: left;
+	width: 600px;
+}
+
+h2 {
+	font-size: 16px;
+	text-align: center;
+}
+
+table {
+	width: 600px;
+	font-size: 12px;
+    border: 1px solid #ccc;
+    margin: 20px 0px;
+}
+
+th {
+    background-color: #9DC7F7;
+    padding: 5px;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+td.centre {
+    text-align: center;
+}
+
+td.right {
+    text-align: right;
+}
