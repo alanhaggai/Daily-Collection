@@ -2,12 +2,12 @@ QT += sql
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += . forms include res src
-INCLUDEPATH += . include             
+INCLUDEPATH += include
 
 OBJECTS_DIR = .obj
-UI_DIR = .ui      
-MOC_DIR = .moc    
-RCC_DIR = .res    
+UI_DIR = .ui
+MOC_DIR = .moc
+RCC_DIR = .res
 
 # Input
 HEADERS += include/CreateAgentDialog.h \
@@ -17,7 +17,9 @@ HEADERS += include/CreateAgentDialog.h \
            include/DaybookAllAgentsDialog.h \
            include/DaybookBalanceDialog.h \
            include/DbConnect.h \
+           include/DebtorDetailsDialog.h \
            include/DebtorInstallmentDialog.h \
+           include/DebtorTransactionsDialog.h \
            include/EditAgentDialog.h \
            include/EditDebtorDialog.h \
            include/EditTransactionDialog.h
@@ -27,7 +29,9 @@ FORMS += forms/CreateAgentDialog.ui \
          forms/DaybookAgentDialog.ui \
          forms/DaybookAllAgentsDialog.ui \
          forms/DaybookBalanceDialog.ui \
+         forms/DebtorDetailsDialog.ui \
          forms/DebtorInstallmentDialog.ui \
+         forms/DebtorTransactionsDialog.ui \
          forms/EditAgentDialog.ui \
          forms/EditDebtorDialog.ui \
          forms/EditTransactionDialog.ui
@@ -37,7 +41,9 @@ SOURCES += src/CreateAgentDialog.cpp \
            src/DaybookAgentDialog.cpp \
            src/DaybookAllAgentsDialog.cpp \
            src/DaybookBalanceDialog.cpp \
+           src/DebtorDetailsDialog.cpp \
            src/DebtorInstallmentDialog.cpp \
+           src/DebtorTransactionsDialog.cpp \
            src/EditAgentDialog.cpp \
            src/EditDebtorDialog.cpp \
            src/EditTransactionDialog.cpp \

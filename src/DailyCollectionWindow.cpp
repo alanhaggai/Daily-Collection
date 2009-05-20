@@ -16,6 +16,8 @@
 #include "DaybookAllAgentsDialog.h"
 #include "DaybookBalanceDialog.h"
 #include "DebtorInstallmentDialog.h"
+#include "DebtorDetailsDialog.h"
+#include "DebtorTransactionsDialog.h"
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     QMainWindow(parent)
@@ -26,8 +28,7 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     // Connect menu actions to slots that spawn respective dialogs
     connect( action_CreateAgent,
         SIGNAL( activated() ), this, SLOT( SpawnCreateAgentDialog() ) );
-    connect( action_CreateDebtor,
-        SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
+    connect( action_CreateDebtor, SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
     connect( action_EditAgent,
         SIGNAL( activated() ), this, SLOT( SpawnEditAgentDialog() ) );
     connect( action_EditDebtor,
@@ -42,6 +43,10 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         SIGNAL( activated() ), this, SLOT( SpawnDaybookBalanceDialog() ) );
     connect( action_DebtorInstallment,
         SIGNAL( activated() ), this, SLOT( SpawnDebtorInstallmentDialog() ) );
+    connect( action_DebtorDetails,
+        SIGNAL( activated() ), this, SLOT( SpawnDebtorDetailsDialog() ) );
+    connect( action_DebtorTransactions,
+        SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
 }
 
 // Spawn{,,,,,} all those dialogs
@@ -107,4 +112,18 @@ DailyCollectionWindow::SpawnDebtorInstallmentDialog()
 {
     DebtorInstallmentDialog* debtor_installment_dialog = new DebtorInstallmentDialog;
     debtor_installment_dialog->show();
+}
+
+void
+DailyCollectionWindow::SpawnDebtorDetailsDialog()
+{
+    DebtorDetailsDialog* debtor_details_dialog = new DebtorDetailsDialog;
+    debtor_details_dialog->show();
+}
+
+void
+DailyCollectionWindow::SpawnDebtorTransactionsDialog()
+{
+    DebtorTransactionsDialog* debtor_transactions_dialog = new DebtorTransactionsDialog;
+    debtor_transactions_dialog->show();
 }

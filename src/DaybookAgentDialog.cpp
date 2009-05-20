@@ -90,7 +90,7 @@ DaybookAgentDialog::PopulateTableWidget(int current_index)
     }
 
     // Set row count to the query result size
-    table_widget->setRowCount(query.size());
+    table_widget->setRowCount( query.size() );
 
     int row = 0;  // Row count
 
