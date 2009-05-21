@@ -33,10 +33,10 @@
     </property>
     <addaction name="action_Transactions"/>
     <addaction name="separator"/>
-    <addaction name="actionBackup"/>
-    <addaction name="actionRestore"/>
+    <addaction name="action_Backup"/>
+    <addaction name="action_Restore"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuCreate">
     <property name="title">
@@ -88,17 +88,17 @@
     <string>&amp;Transactions</string>
    </property>
   </action>
-  <action name="actionBackup">
+  <action name="action_Backup">
    <property name="text">
     <string>&amp;Backup</string>
    </property>
   </action>
-  <action name="actionRestore">
+  <action name="action_Restore">
    <property name="text">
     <string>&amp;Restore</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="action_Exit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
@@ -175,7 +175,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>actionExit</sender>
+   <sender>action_Exit</sender>
    <signal>activated()</signal>
    <receiver>DailyCollectionWindow</receiver>
    <slot>close()</slot>

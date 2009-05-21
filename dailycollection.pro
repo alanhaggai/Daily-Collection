@@ -9,6 +9,9 @@ UI_DIR = .ui
 MOC_DIR = .moc
 RCC_DIR = .res
 
+#DEFINES += __WIN32
+DEFINES += __LINUX
+
 # Input
 HEADERS += include/CreateAgentDialog.h \
            include/CreateDebtorDialog.h \

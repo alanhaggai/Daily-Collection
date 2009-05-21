@@ -42,15 +42,18 @@ main( int argc, char *argv[] ) {
     QApplication app( argc, argv );  // Create a QApplication object by passing
                                      // commandline arguments.
 
-    if (DbConnect()) {
-        // Create a main window if connection to the database is successful.
-        DailyCollectionWindow *window = new DailyCollectionWindow;
-        window->show();  // Display the created window.
+    app.setApplicationName("Daily Collection");
+    app.setApplicationVersion("0.02");
+    app.setOrganizationDomain("http://cubegin.com/");
+    app.setOrganizationName("CubeGin");
+
+    DailyCollectionWindow *window = new DailyCollectionWindow;
+
+    if ( !DbConnect() ) {
+        window->Restore();
     }
-    else {
-        // Exit if the connection to the database was not successful.
-        exit(0);
-    }
+
+    window->show();  // Display the created window.
 
     return app.exec();
 }

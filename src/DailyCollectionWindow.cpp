@@ -19,6 +19,11 @@
 #include "DebtorDetailsDialog.h"
 #include "DebtorTransactionsDialog.h"
 #include "TransactionsDialog.h"
+#include "DbConnect.h"
+
+#include <QFileDialog>
+#include <QSettings>
+#include <QDateTime>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     QMainWindow(parent)
@@ -29,7 +34,8 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     // Connect menu actions to slots that spawn respective dialogs
     connect( action_CreateAgent,
         SIGNAL( activated() ), this, SLOT( SpawnCreateAgentDialog() ) );
-    connect( action_CreateDebtor, SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
+    connect( action_CreateDebtor,
+        SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
     connect( action_EditAgent,
         SIGNAL( activated() ), this, SLOT( SpawnEditAgentDialog() ) );
     connect( action_EditDebtor,
@@ -50,6 +56,11 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
     connect( action_Transactions,
         SIGNAL( activated() ), this, SLOT( SpawnTransactionsDialog() ) );
+    connect( action_Backup,
+        SIGNAL( activated() ), this, SLOT( Backup() ) );
+    connect( action_Restore,
+        SIGNAL( activated() ), this, SLOT( Restore() ) );
+    connect( qApp, SIGNAL( aboutToQuit() ), this, SLOT( AutoBackup() ) );
 }
 
 // Spawn{,,,,,} all those dialogs
@@ -136,4 +147,99 @@ DailyCollectionWindow::SpawnTransactionsDialog()
 {
     TransactionsDialog* transactions_dialog = new TransactionsDialog;
     transactions_dialog->show();
+}
+
+void
+DailyCollectionWindow::Backup()
+{
+    QString suggested_filename = "./backups/" + QDateTime::currentDateTime().toString()
+            + ".db";
+    QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
+            suggested_filename, "Database Files (*.db)" );
+    //system( "\"C:\\Program Files\\MySQL\\MySQL Server 5.1\\bin\\mysqldump.exe\" daily_collection -uroot -pcubegin" )
+
+    QSettings settings;
+    QString mysqldump = settings.value("MySQL/mysqldump").toString();
+    QString database  = settings.value("MySQL/database").toString();
+    QString username  = settings.value("MySQL/username").toString();
+    QString password  = settings.value("MySQL/password").toString();
+
+    QString command = "\"" + mysqldump + "\" " + database + " -u" + username
+            + " -p" + password + " > " + "\"" + filename + "\"";
+    system( command.toAscii() );
+}
+
+void
+DailyCollectionWindow::AutoBackup()
+{
+    QSettings settings;
+    QString mysqldump = settings.value("MySQL/mysqldump").toString();
+    QString database  = settings.value("MySQL/database").toString();
+    QString username  = settings.value("MySQL/username").toString();
+    QString password  = settings.value("MySQL/password").toString();
+
+#ifdef __WIN32
+    system("mkdir .\\backups\\auto");
+    QString filename = ".\\backups\\auto\\" + QDateTime::currentDateTime().toString()
+            + ".db";
+#elif __LINUX
+    system("mkdir -p ./backups/auto");
+    QString filename = "./backups/auto/" + QDateTime::currentDateTime().toString()
+            + ".db";
+#endif
+
+    QString command = "\"" + mysqldump + "\" " + database + " -u" + username
+            + " -p" + password + " > " + "\"" + filename + "\"";
+    system( command.toAscii() );
+}
+
+void
+DailyCollectionWindow::Restore()
+{
+    QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
+            ".", "Database Files (*.db)" );
+
+    QSettings settings;
+    QString mysql     = settings.value("MySQL/mysql").toString();
+    QString database  = settings.value("MySQL/database").toString();
+    QString username  = settings.value("MySQL/username").toString();
+    QString password  = settings.value("MySQL/password").toString();
+
+    QString command;
+
+    if ( !DbConnect() )
+    {
+        QString execute = "CREATE DATABASE " + database;
+        command = "\"" + mysql + "\" -u" + username + " -p" + password
+                + " -e \"" + execute + "\"";
+        system( command.toAscii() );
+
+        command = "\"" + mysql + "\" " + database + " -u" + username
+                + " -p" + password + " < " + "\"" + filename + "\"";
+        system( command.toAscii() );
+
+        execute = "ALTER TABLE debtor DROP paid";
+        command = "\"" + mysql + "\" " + database + " -u" + username
+                + " -p" + password + " -e \"" + execute + "\"";
+        system( command.toAscii() );
+        qDebug() << command;
+
+        execute = "CREATE VIEW debtor_transaction AS SELECT debtor.serial,\
+               debtor.name, debtor.amount, SUM(transaction.paid) AS paid,\
+               (debtor.amount - paid) AS balance, debtor.agent_id,\
+               transaction.date FROM debtor, transaction WHERE debtor.id\
+               = transaction.debtor_id GROUP BY debtor.serial ORDER BY\
+               debtor.serial;";
+        command = "\"" + mysql + "\" " + database + " -u" + username + " -p"
+                + password + " -e \"" + execute + "\"";
+        system( command.toAscii() );
+        qDebug() << command;
+
+        DbConnect();
+    }
+    else {
+        command = "\"" + mysql + "\" " + database + " -u" + username
+                + " -p" + password + " < " + "\"" + filename + "\"";
+        system( command.toAscii() );
+    }
 }

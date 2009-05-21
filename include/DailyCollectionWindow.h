@@ -52,6 +52,10 @@ class DailyCollectionWindow : public QMainWindow, public Ui::DailyCollectionWind
 
         //! Spawns a dialog that displays transactions by debtors under an agent
         void SpawnTransactionsDialog();
+
+        void Backup();
+        void AutoBackup();
+        void Restore();
 };
 
 #endif

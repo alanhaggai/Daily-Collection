@@ -33,7 +33,7 @@ DbConnect() {
         // If connection to database failed, spit out the error message and
         // return false.
         qDebug() << db.lastError();
-        qFatal("Failed to connect.");
+        //qFatal("Failed to connect.");
         return false;
     }
     else {

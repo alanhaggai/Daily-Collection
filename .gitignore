@@ -10,3 +10,5 @@ qrc_*
 .obj/
 .moc/
 doc/
+transactions.html
+*.db
