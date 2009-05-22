@@ -24,7 +24,17 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include <QMessageBox>
-#include <QDebug>
+#include <QProcess>
+#include <QStringList>
+
+
+#ifdef Q_OS_WIN32
+QString mysql     = "C:\\\\MySQL\\bin\\mysql.exe";
+QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
+#else
+QString mysql     = "/usr/bin/mysql";
+QString mysqldump = "/usr/bin/mysqldump";
+#endif
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     QMainWindow(parent)
@@ -158,19 +168,16 @@ DailyCollectionWindow::Backup()
     QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
             suggested_filename, "Database Files (*.db)" );
 
-#ifdef Q_OS_WIN32
-    QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
-#else
-    QString mysqldump = "mysqldump";
-#endif
-
     QString database = DbConnect::database;
     QString username = DbConnect::username;
     QString password = DbConnect::password;
 
-    QString command = "\"" + mysqldump + "\" " + database + " -u" + username
-            + " -p" + password + " > " + "\"" + filename + "\"";
-    system( command.toAscii() );
+    QProcess* mysqldump_process = new QProcess;
+    mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
+    mysqldump_process->start( mysqldump, QStringList() << database << "-u"
+            + username << "-p" + password );
+    if ( !mysqldump_process->waitForFinished() )
+        exit(0);
 }
 
 void
@@ -178,29 +185,29 @@ DailyCollectionWindow::AutoBackup()
 {
     DbConnect::Disconnect();
 
-#ifdef Q_OS_WIN32
-    QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
-#else
-    QString mysqldump = "mysqldump";
-#endif
-
     QString database = DbConnect::database;
     QString username = DbConnect::username;
     QString password = DbConnect::password;
 
+    QProcess* mkdir_process = new QProcess;
 #ifdef Q_OS_WIN32
-    system("mkdir .\\backups\\auto");
-    QString filename = ".\\backups\\auto\\" + QDateTime::currentDateTime().toString()
-            + ".db";
+    QString dir = "backups\\auto\\";
+    mkdir_process->start( "cmd.exe", QStringList() << "\\c"
+            << "mkdir" << dir );
 #else
-    system("mkdir -p ./backups/auto");
-    QString filename = "./backups/auto/" + QDateTime::currentDateTime().toString()
-            + ".db";
+    QString dir = "backups/auto/";
+    mkdir_process->start( "mkdir", QStringList() << "-p" << dir );
 #endif
+    if ( !mkdir_process->waitForFinished() )
+        exit(0);
+    QString filename = dir + QDateTime::currentDateTime().toString() + ".db";
 
-    QString command = "\"" + mysqldump + "\" " + database + " -u" + username
-            + " -p" + password + " > " + "\"" + filename + "\"";
-    system( command.toAscii() );
+    QProcess* mysqldump_process = new QProcess;
+    mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
+    mysqldump_process->start( mysqldump, QStringList() << database << "-u"
+            + username << "-p" + password );
+    if ( !mysqldump_process->waitForFinished() )
+        exit(0);
 }
 
 void
@@ -209,66 +216,35 @@ DailyCollectionWindow::Restore()
     QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
             ".", "Database Files (*.db)" );
 
-#ifdef Q_OS_WIN32
-    QString mysql = "C:\\\\MySQL\\bin\\mysql.exe";
-#else
-    QString mysql = "mysql";
-#endif
-
     QString database = DbConnect::database;
     QString username = DbConnect::username;
     QString password = DbConnect::password;
 
     QString command;
-
-    if ( !DbConnect::Connect() )
+    if ( DbConnect::Connect() )
     {
-        QString execute = "CREATE DATABASE " + database;
-        command = "\"" + mysql + "\" -u" + username + " -p" + password
-                + " -e \"" + execute + "\"";
-        system( command.toAscii() );
+        QProcess* mysql_process = new QProcess;
+        mysql_process->setStandardInputFile(filename);
+        mysql_process->start( mysql, QStringList() << "-u" + username << "-p"
+                + password );
+        if ( !mysql_process->waitForFinished() )
+            exit(0);
 
-        command = "\"" + mysql + "\" " + database + " -u" + username
-                + " -p" + password + " < " + "\"" + filename + "\"";
-        system( command.toAscii() );
-
-        execute = "ALTER TABLE debtor DROP paid";
-        command = "\"" + mysql + "\" " + database + " -u" + username
-                + " -p" + password + " -e \"" + execute + "\"";
-        system( command.toAscii() );
-        qDebug() << command;
-
-        execute = "CREATE VIEW debtor_transaction AS SELECT debtor.serial,\
-               debtor.name, debtor.amount, SUM(transaction.paid) AS paid,\
-               (debtor.amount - paid) AS balance, debtor.agent_id,\
-               transaction.date FROM debtor, transaction WHERE debtor.id\
-               = transaction.debtor_id GROUP BY debtor.serial ORDER BY\
-               debtor.serial;";
-        command = "\"" + mysql + "\" " + database + " -u" + username + " -p"
-                + password + " -e \"" + execute + "\"";
-        system( command.toAscii() );
-        qDebug() << command;
-
-        if ( DbConnect::Connect() )
+        if ( mysql_process->exitCode() == 1 )
         {
             QMessageBox* msgbox = new QMessageBox(
                     QMessageBox::Information, "Restoration Successful",
                     "Database has been restored successfully.",
                     QMessageBox::Ok );
             msgbox->exec();
-        }
-        else
-        {
-            QMessageBox* msgbox = new QMessageBox(
-                    QMessageBox::Critical, "Restoration Failure",
-                    "Database restoration has failed.",
-                    QMessageBox::Ok );
-            msgbox->exec();
+
+            return;
         }
     }
-    else {
-        command = "\"" + mysql + "\" " + database + " -u" + username
-                + " -p" + password + " < " + "\"" + filename + "\"";
-        system( command.toAscii() );
-    }
+
+    QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Critical, "Restoration Failure",
+            "Database restoration has failed.",
+            QMessageBox::Ok );
+    msgbox->exec();
 }
