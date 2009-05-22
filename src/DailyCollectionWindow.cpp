@@ -157,7 +157,6 @@ DailyCollectionWindow::Backup()
             + ".db";
     QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
             suggested_filename, "Database Files (*.db)" );
-    //system( "\"C:\\Program Files\\MySQL\\MySQL Server 5.1\\bin\\mysqldump.exe\" daily_collection -uroot -pcubegin" )
 
 #ifdef Q_OS_WIN32
     QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
