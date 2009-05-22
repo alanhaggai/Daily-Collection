@@ -49,9 +49,7 @@ main( int argc, char *argv[] ) {
 
     DailyCollectionWindow *window = new DailyCollectionWindow;
 
-    if ( !DbConnect() ) {
-        window->Restore();
-    }
+    DbConnect::Connect();
 
     window->show();  // Display the created window.
 

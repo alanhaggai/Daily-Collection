@@ -9,9 +9,6 @@ UI_DIR = .ui
 MOC_DIR = .moc
 RCC_DIR = .res
 
-#DEFINES += __WIN32
-DEFINES += __LINUX
-
 # Input
 HEADERS += include/CreateAgentDialog.h \
            include/CreateDebtorDialog.h \
@@ -46,6 +43,7 @@ SOURCES += src/CreateAgentDialog.cpp \
            src/DaybookAgentDialog.cpp \
            src/DaybookAllAgentsDialog.cpp \
            src/DaybookBalanceDialog.cpp \
+           src/DbConnect.cpp \
            src/DebtorDetailsDialog.cpp \
            src/DebtorInstallmentDialog.cpp \
            src/DebtorTransactionsDialog.cpp \

@@ -22,8 +22,9 @@
 #include "DbConnect.h"
 
 #include <QFileDialog>
-#include <QSettings>
 #include <QDateTime>
+#include <QMessageBox>
+#include <QDebug>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     QMainWindow(parent)
@@ -158,11 +159,15 @@ DailyCollectionWindow::Backup()
             suggested_filename, "Database Files (*.db)" );
     //system( "\"C:\\Program Files\\MySQL\\MySQL Server 5.1\\bin\\mysqldump.exe\" daily_collection -uroot -pcubegin" )
 
-    QSettings settings;
-    QString mysqldump = settings.value("MySQL/mysqldump").toString();
-    QString database  = settings.value("MySQL/database").toString();
-    QString username  = settings.value("MySQL/username").toString();
-    QString password  = settings.value("MySQL/password").toString();
+#ifdef Q_OS_WIN32
+    QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
+#else
+    QString mysqldump = "mysqldump";
+#endif
+
+    QString database = DbConnect::database;
+    QString username = DbConnect::username;
+    QString password = DbConnect::password;
 
     QString command = "\"" + mysqldump + "\" " + database + " -u" + username
             + " -p" + password + " > " + "\"" + filename + "\"";
@@ -172,17 +177,23 @@ DailyCollectionWindow::Backup()
 void
 DailyCollectionWindow::AutoBackup()
 {
-    QSettings settings;
-    QString mysqldump = settings.value("MySQL/mysqldump").toString();
-    QString database  = settings.value("MySQL/database").toString();
-    QString username  = settings.value("MySQL/username").toString();
-    QString password  = settings.value("MySQL/password").toString();
+    DbConnect::Disconnect();
 
-#ifdef __WIN32
+#ifdef Q_OS_WIN32
+    QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
+#else
+    QString mysqldump = "mysqldump";
+#endif
+
+    QString database = DbConnect::database;
+    QString username = DbConnect::username;
+    QString password = DbConnect::password;
+
+#ifdef Q_OS_WIN32
     system("mkdir .\\backups\\auto");
     QString filename = ".\\backups\\auto\\" + QDateTime::currentDateTime().toString()
             + ".db";
-#elif __LINUX
+#else
     system("mkdir -p ./backups/auto");
     QString filename = "./backups/auto/" + QDateTime::currentDateTime().toString()
             + ".db";
@@ -199,15 +210,19 @@ DailyCollectionWindow::Restore()
     QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
             ".", "Database Files (*.db)" );
 
-    QSettings settings;
-    QString mysql     = settings.value("MySQL/mysql").toString();
-    QString database  = settings.value("MySQL/database").toString();
-    QString username  = settings.value("MySQL/username").toString();
-    QString password  = settings.value("MySQL/password").toString();
+#ifdef Q_OS_WIN32
+    QString mysql = "C:\\\\MySQL\\bin\\mysql.exe";
+#else
+    QString mysql = "mysql";
+#endif
+
+    QString database = DbConnect::database;
+    QString username = DbConnect::username;
+    QString password = DbConnect::password;
 
     QString command;
 
-    if ( !DbConnect() )
+    if ( !DbConnect::Connect() )
     {
         QString execute = "CREATE DATABASE " + database;
         command = "\"" + mysql + "\" -u" + username + " -p" + password
@@ -235,7 +250,22 @@ DailyCollectionWindow::Restore()
         system( command.toAscii() );
         qDebug() << command;
 
-        DbConnect();
+        if ( DbConnect::Connect() )
+        {
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Information, "Restoration Successful",
+                    "Database has been restored successfully.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+        }
+        else
+        {
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Restoration Failure",
+                    "Database restoration has failed.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+        }
     }
     else {
         command = "\"" + mysql + "\" " + database + " -u" + username
