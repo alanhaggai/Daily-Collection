@@ -13,10 +13,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QDateTime>
-
-#include <iostream>
-#include <fstream>
-#include <stdlib.h>
+#include <QFile>
+#include <QTextStream>
 
 enum
 {
@@ -188,15 +186,13 @@ TransactionsDialog::ListTransactions()
 
     total_edit->setText( QString::number(total) );
 
+    QFile file("transactions.html");
+    if ( file.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-        using namespace std;
+        QTextStream out(&file);
+        out << html;
 
-        ofstream outfile( "transactions.html", ios::out );
-        if ( outfile.is_open() )
-        {
-            outfile << html.toStdString();
-            outfile.close();
-        }
+        file.close();
     }
 }
 
