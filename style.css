@@ -10,17 +10,17 @@ body {
 
 #container {
     text-align: left;
-	width: 600px;
+    width: 600px;
 }
 
 h2 {
-	font-size: 16px;
-	text-align: center;
+    font-size: 16px;
+    text-align: center;
 }
 
 table {
-	width: 600px;
-	font-size: 12px;
+    width: 600px;
+    font-size: 12px;
     border: 1px solid #ccc;
     margin: 20px 0px;
 }
