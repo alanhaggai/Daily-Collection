@@ -47,11 +47,13 @@ main( int argc, char *argv[] ) {
     app.setOrganizationDomain("http://cubegin.com/");
     app.setOrganizationName("CubeGin");
 
-    DailyCollectionWindow *window = new DailyCollectionWindow;
-
-    DbConnect::Connect();
-
-    window->show();  // Display the created window.
+    if ( DbConnect::Connect() )
+    {
+        DailyCollectionWindow *window = new DailyCollectionWindow;
+        window->show();  // Display the created window.
+    }
+    else
+        exit(1);
 
     return app.exec();
 }
