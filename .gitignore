@@ -12,3 +12,4 @@ qrc_*
 doc/
 transactions.html
 *.db
+!schema.db
