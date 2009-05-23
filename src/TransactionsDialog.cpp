@@ -24,6 +24,8 @@ enum
     PAID,
 };
 
+bool flag = false;
+
 //! Constructor
 TransactionsDialog::TransactionsDialog(QDialog* parent) :
         QDialog( parent, Qt::Tool )
@@ -67,6 +69,8 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
 void
 TransactionsDialog::ListTransactions()
 {
+    flag = true;
+
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
@@ -86,7 +90,7 @@ TransactionsDialog::ListTransactions()
         QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Information, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();  // Popup message box to let the user know about it
+        msgbox->exec();  // Popup message box to let the user know about it
         return;
     }
 
@@ -200,12 +204,22 @@ TransactionsDialog::ListTransactions()
 void
 TransactionsDialog::OpenReportInBrowser()
 {
-    ListTransactions();
+    if ( flag == false )
+    {
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Information, "Data required to produce report",
+                "Please list the transactions before opening the report.", QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
+    }
 
     QProcess* browser_process = new QProcess;
 #ifdef Q_OS_WIN32
     QString file = QDir::currentPath() + "\\transactions.html";
-    browser_process->start( "firefox " + file );
+    browser_process->start(
+            "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
+            + file );
 #else
     QString file = QDir::currentPath() + "/transactions.html";
     browser_process->start( "firefox " + file );
