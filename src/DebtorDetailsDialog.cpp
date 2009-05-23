@@ -9,7 +9,7 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QMessageBox>
 
 //! Enumerator constants for representing Table Widget columns
 enum
@@ -77,8 +77,13 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial)
 
     if ( !query.exec() )
     {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     table_widget->setRowCount( query.size() );
@@ -126,8 +131,6 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial)
 
         if ( !query_sum.exec() )
         {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
         }
 
         query_sum.next();
@@ -183,8 +186,13 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name)
 
     if ( !query.exec() )
     {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     table_widget->setRowCount( query.size() );
@@ -232,8 +240,6 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name)
 
         if ( !query_sum.exec() )
         {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
         }
 
         query_sum.next();

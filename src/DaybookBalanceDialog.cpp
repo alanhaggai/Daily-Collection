@@ -11,7 +11,6 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
 #include <QProgressDialog>
 
 //! Enumerated constants to represent Table Widget columns
@@ -36,9 +35,13 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
     query.prepare("SELECT id, name FROM agent");
     if ( !query.exec() )
     {
-        // Query execution failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Cycle through the result rows
@@ -77,9 +80,9 @@ DaybookBalanceDialog::PopulateTableWidget()
     if ( -1 == agent_combo->currentIndex() )
     {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();
+        msgbox->exec();
 
         return;
     }
@@ -105,9 +108,13 @@ DaybookBalanceDialog::PopulateTableWidget()
 
     if ( !query.exec() )
     {
-        // Query execution failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Initialise a Progress Dialog which will be later used for displaying 
@@ -158,14 +165,6 @@ DaybookBalanceDialog::PopulateTableWidget()
         QTableWidgetItem* name_item    = new QTableWidgetItem;
         QTableWidgetItem* balance_item = new QTableWidgetItem;
         
-        // Debug information
-        qDebug() << "DaybookBalanceDialog::PopulateTableWidget() - " <<
-                "Serial: " << debtor_serial;
-        qDebug() << "DaybookBalanceDialog::PopulateTableWidget() - " <<
-                "Name: " << debtor_name;
-        qDebug() << "DaybookBalanceDialog::PopulateTableWidget() - " <<
-                "Balance: " << debtor_balance << endl;
-
         // Set text of Line Edits
         serial_item->setText(debtor_serial);
         name_item->setText(debtor_name);

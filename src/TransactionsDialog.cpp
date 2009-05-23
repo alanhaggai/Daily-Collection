@@ -10,7 +10,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
-#include <QDebug>
 #include <QDir>
 #include <QDateTime>
 #include <QFile>
@@ -37,9 +36,13 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
     query.prepare("SELECT id, name FROM agent");
 
     if ( !query.exec() ) {
-        // Execution of query failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Loop through the results
@@ -88,7 +91,7 @@ TransactionsDialog::ListTransactions()
     if ( -1 == agent_combo->currentIndex() )
     {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
         msgbox->exec();  // Popup message box to let the user know about it
         return;
@@ -107,8 +110,13 @@ TransactionsDialog::ListTransactions()
 
     if ( !query.exec() )
     {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     table_widget->setRowCount( query.size() );
@@ -207,7 +215,7 @@ TransactionsDialog::OpenReportInBrowser()
     if ( flag == false )
     {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Data required to produce report",
+                QMessageBox::Warning, "Data required to produce report",
                 "Please list the transactions before opening the report.", QMessageBox::Ok );
         msgbox->exec();
 

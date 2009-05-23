@@ -1,5 +1,4 @@
 #include <QMessageBox>
-#include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
 
@@ -24,17 +23,12 @@ EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog( parent,
 void EditTransactionDialog::saveTransaction() {
     if ( "" == serialEdit->text() || "" == nameEdit->text() || "" == transactionEdit->text() ) {
         QMessageBox *msgbox = new QMessageBox(
-            QMessageBox::Information, "Incomplete Fields",
+            QMessageBox::Warning, "Incomplete Fields",
             "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();
+        msgbox->exec();
 
         return;
     }
-
-    qDebug() << "EditTransactionDialog::save() - " << "Serial: "      + serialEdit->text();
-    qDebug() << "EditTransactionDialog::save() - " << "Name: "        + nameEdit->text();
-    qDebug() << "EditTransactionDialog::save() - " << "Date: "        + dateCalendar->selectedDate().toString(Qt::ISODate);
-    qDebug() << "EditTransactionDialog::save() - " << "Transaction: " + transactionEdit->text();
 
     QSqlQuery query;
     query.prepare("UPDATE transaction SET date = :date, paid = :paid WHERE id = :id");
@@ -44,8 +38,13 @@ void EditTransactionDialog::saveTransaction() {
     query.bindValue( ":id",   transactionId );
 
     if ( !query.exec() ) {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     transactionEdit->clear();
@@ -60,8 +59,13 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
     query.bindValue( ":debtor_serial", serial );
 
     if ( !query.exec() ) {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     tableWidget->setRowCount(query.size());
@@ -72,10 +76,6 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
         QTableWidgetItem *idItem          = new QTableWidgetItem;
         QTableWidgetItem *dateItem        = new QTableWidgetItem;
         QTableWidgetItem *transactionItem = new QTableWidgetItem;
-
-        qDebug() << "EditTransactionDialog::populateTableWidget() - " << "ID: "          << query.value(ID).toString();
-        qDebug() << "EditTransactionDialog::populateTableWidget() - " << "Date: "        << query.value(DATE).toString();
-        qDebug() << "EditTransactionDialog::populateTableWidget() - " << "Transaction: " << query.value(TRANSACTION).toString();
 
         idItem->setText( query.value(ID).toString() );
         dateItem->setText( query.value(DATE).toString() );
@@ -90,13 +90,17 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
     query.bindValue( ":serial", serial );
 
     if ( !query.exec() ) {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     query.next();
     nameEdit->setText( query.value(0).toString() );
-    qDebug() << query.value(1).toString();
 }
 
 void EditTransactionDialog::fetchItem(QTableWidgetItem *item) {

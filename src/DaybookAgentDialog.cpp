@@ -9,7 +9,7 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QMessageBox>
 
 //! Enumerator constants for representing Table Widget columns
 enum
@@ -37,9 +37,13 @@ DaybookAgentDialog::DaybookAgentDialog(QDialog* parent) :
     query.prepare("SELECT id, name FROM agent");
     if ( !query.exec() )
     {
-        // Query execution failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
     // Cycle through result rows
     while ( query.next() )
@@ -84,9 +88,13 @@ DaybookAgentDialog::PopulateTableWidget(int current_index)
     query.bindValue( ":agent_id", agent_id );
     if ( !query.exec() )
     {
-        // Query execution failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Set row count to the query result size
@@ -121,18 +129,6 @@ DaybookAgentDialog::PopulateTableWidget(int current_index)
         QTableWidgetItem* amount_item  = new QTableWidgetItem;
         QTableWidgetItem* paid_item    = new QTableWidgetItem;
         QTableWidgetItem* balance_item = new QTableWidgetItem;
-
-        // Debug information
-        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
-            "Serial: " + debtor_serial;
-        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
-            "Name: " + debtor_name;
-        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
-            "Amount: " + debtor_amount;
-        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
-            "Paid: " + debtor_paid;
-        qDebug() << "DaybookAgentDialog::PopulateTableWidget() - " <<
-            "Balance: " + debtor_balance << endl;
 
         // Set values for items
         serial_item->setText(debtor_serial);

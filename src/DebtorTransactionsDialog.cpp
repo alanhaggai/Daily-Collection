@@ -9,7 +9,7 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QMessageBox>
 
 enum
 {
@@ -52,8 +52,13 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial)
     query.bindValue( ":debtor_serial", debtor_serial );
         
     if ( !query.exec() ) {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
     query.next();
 
@@ -79,8 +84,13 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial)
     query.bindValue( ":debtor_serial", debtor_serial );
 
     if ( !query.exec() ) {
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     installments_edit->setText( QString::number( query.size() ) );

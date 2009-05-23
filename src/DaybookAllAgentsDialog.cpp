@@ -9,7 +9,7 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QMessageBox>
 
 //! Represent individual columns in Table Widget
 enum
@@ -49,9 +49,13 @@ DaybookAllAgentsDialog::PopulateTableWidget()
 
     if ( !agent_query.exec() )
     {
-        // Query failed to execute due to an error
-        qDebug() << agent_query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + agent_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Set the number of rows for Table Widget by using the query result size
@@ -71,9 +75,12 @@ DaybookAllAgentsDialog::PopulateTableWidget()
         amount_query.bindValue( ":agent_id", agent_id );
         if ( !amount_query.exec() )
         {
-            // Query execution failed
-            qDebug() << amount_query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + amount_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
             return;
         }
 
@@ -87,24 +94,18 @@ DaybookAllAgentsDialog::PopulateTableWidget()
         transaction_query.bindValue( ":agent_id", agent_id );
         if ( !transaction_query.exec() )
         {
-            // Query execution failed
-            qDebug() << transaction_query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + transaction_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         transaction_query.next();  // Cycle through the results
         int agent_amount_remitted = transaction_query.value(0).toInt();
         int agent_balance         = agent_amount_given - agent_amount_remitted;
-
-         // Output debug information
-        qDebug() << "DaybookAllAgentsDialog::PopulateTableWidget() - "
-            << "Name: " << agent_name;
-        qDebug() << "DaybookAllAgentsDialog::PopulateTableWidget() - "
-            << "Amount Given: " << agent_amount_given;
-        qDebug() << "DaybookAllAgentsDialog::PopulateTableWidget() - "
-            << "Amount Remitted: " << agent_amount_remitted;
-        qDebug() << "DaybookAllAgentsDialog::PopulateTableWidget() - "
-            << "Balance: " << agent_balance;
 
        // Create Table Widget items
         QTableWidgetItem* name_item            = new QTableWidgetItem;

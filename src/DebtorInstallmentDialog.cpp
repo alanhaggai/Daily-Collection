@@ -9,7 +9,6 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
 #include <QMessageBox>
 
 enum
@@ -57,9 +56,13 @@ DebtorInstallmentDialog::PopulateValuesOnSerialChange(const QString&
     query.bindValue( ":debtor_serial", debtor_serial );
     if ( !query.exec() )
     {
-        // Query execution failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
     if ( query.next() )
     {
@@ -175,8 +178,13 @@ DebtorInstallmentDialog::SaveInstallment() {
         query.bindValue( ":debtor_serial", serial_edit->text() );
 
         if ( !query.exec() ) {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         query.next();
@@ -187,8 +195,13 @@ DebtorInstallmentDialog::SaveInstallment() {
         query.bindValue( ":debtor_serial", serial_edit->text() );
 
         if ( !query.exec() ) {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         query.next();
@@ -196,9 +209,6 @@ DebtorInstallmentDialog::SaveInstallment() {
         QString debtor_id = query.value(0).toString();
         QString agent_id  = query.value(1).toString();
 
-        qDebug() << "Agent ID: " << agent_id;
-        qDebug() << "Debtor ID: " << debtor_id;
-        
         query.prepare( "INSERT INTO transaction ( agent_id, debtor_id, paid,\
             date ) VALUES ( :agent_id, :debtor_id, :paid, :date )" );
 
@@ -208,16 +218,26 @@ DebtorInstallmentDialog::SaveInstallment() {
         query.bindValue( ":date", date_calendar->selectedDate().toString(Qt::ISODate) );
 
         if ( !query.exec() ) {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         query.prepare( "SELECT amount FROM debtor WHERE id = :id" );
         query.bindValue( ":id", debtor_id );
 
         if ( !query.exec() ) {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         query.next();
@@ -229,8 +249,13 @@ DebtorInstallmentDialog::SaveInstallment() {
         }
 
         if ( !query.exec() ) {
-            qDebug() << query.lastError();
-            qFatal("Failed to execute query.");
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query Execution Failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                    QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
         }
 
         Clear();
@@ -238,8 +263,8 @@ DebtorInstallmentDialog::SaveInstallment() {
     else
     {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();  // Fire up a message box
+        msgbox->exec();  // Fire up a message box
     }
 }

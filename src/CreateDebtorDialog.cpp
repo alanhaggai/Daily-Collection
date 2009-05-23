@@ -7,7 +7,6 @@
 
 #include "CreateDebtorDialog.h"
 
-#include <QDebug>
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -17,7 +16,7 @@
  * agent_map with names and ids of agents.
  */
 CreateDebtorDialog::CreateDebtorDialog(QDialog* parent)
-    : QDialog( parent, Qt::Tool )
+    : QDialog( parent, Qt::Window )
 {
     setupUi(this);
 
@@ -25,9 +24,13 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog* parent)
     QSqlQuery query;
     query.prepare("SELECT id, name FROM agent");
     if ( !query.exec() ) {
-        // Execution of query failed
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
     // Loop through the results
     while ( query.next() ) {
@@ -62,27 +65,11 @@ CreateDebtorDialog::SaveDebtor() {
             "" == amount_edit->text() )
     {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();  // Popup message box to let the user know about it
+        msgbox->exec();  // Popup message box to let the user know about it
         return;
     }
-
-    // Output debug information
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Serial: " <<
-            serial_edit->text();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Name: " <<
-            name_edit->text();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Agent: " <<
-            agent_combo->currentText();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Address: " <<
-            address_edit->toPlainText();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Amount: " <<
-            amount_edit->text();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Phone: " <<
-            phone_edit->text();
-    qDebug() << "CreateDebtorDialog::SaveDebtor() - " << "Date: " <<
-            date_calendar->selectedDate().toString(Qt::ISODate);
 
     // Insert serial, name, agent_id, address, amount, phone and date into table
     // debtor
@@ -100,18 +87,26 @@ CreateDebtorDialog::SaveDebtor() {
         date_calendar->selectedDate().toString(Qt::ISODate) );
 
     if ( !query.exec() ) {
-        // Query failed to execute
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     query.prepare( "SELECT id FROM debtor WHERE serial = :debtor_serial" );
     query.bindValue( ":debtor_serial", serial_edit->text() );
 
     if ( !query.exec() ) {
-        // Query failed to execute
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
     
     query.next();

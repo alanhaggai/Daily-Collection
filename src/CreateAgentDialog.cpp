@@ -7,7 +7,6 @@
 
 #include "CreateAgentDialog.h"
 
-#include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
@@ -34,17 +33,12 @@ CreateAgentDialog::SaveAgent() {
     // Check if name and address have been entered or not
     if ( "" == agent_name || "" == agent_address ) {
         QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Information, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->show();  // Fire up a message box
+        msgbox->exec();  // Fire up a message box
+
         return;
     }
-
-    // Output debug information
-    qDebug() << "CreateAgentDialog::SaveAgent() - " << "Name: " << agent_name;
-    qDebug() << "CreateAgentDialog::SaveAgent() - " << "Address: " <<
-            agent_address;
-    qDebug() << "CreateAgentDialog::SaveAgent() - " << "Phone: " << agent_phone;
 
     // Insert name, address and phone of agent into the database
     QSqlQuery query;
@@ -55,9 +49,13 @@ CreateAgentDialog::SaveAgent() {
     query.bindValue( ":phone",   agent_phone );
 
     if ( !query.exec() ) {
-        // Query execution failed: Exit with fatal error
-        qDebug() << query.lastError();
-        qFatal("Failed to execute query.");
+        QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query Execution Failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Ok );
+        msgbox->exec();
+
+        return;
     }
 
     // Clear Line Edit controls and set focus on name_edit
