@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QTextStream>
+#include <QProcess>
 
 enum
 {
@@ -201,7 +202,15 @@ TransactionsDialog::OpenReportInBrowser()
 {
     ListTransactions();
 
-    QString file = QDir::toNativeSeparators( QDir::currentPath() +
-            "/transactions.html" );
-    system( "firefox " + file.toAscii() );
+    QProcess* browser_process = new QProcess;
+#ifdef Q_OS_WIN32
+    QString file = QDir::currentPath() + "\\transactions.html";
+    browser_process->start( "firefox " + file );
+#else
+    QString file = QDir::currentPath() + "/transactions.html";
+    browser_process->start( "firefox " + file );
+#endif
+
+    if ( !browser_process->waitForFinished() )
+        exit(0);
 }
