@@ -97,14 +97,14 @@
      <item>
       <widget class="QPushButton" name="list_transactions_button">
        <property name="text">
-        <string>List Transactions</string>
+        <string>&amp;List Transactions</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="open_report_in_browser_button">
        <property name="text">
-        <string>Open Report in Browser</string>
+        <string>&amp;Open Report in Browser</string>
        </property>
       </widget>
      </item>

@@ -80,14 +80,14 @@
      <item>
       <widget class="QPushButton" name="list_button">
        <property name="text">
-        <string>List</string>
+        <string>&amp;List</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="open_report_in_browser">
        <property name="text">
-        <string>Open report in browser</string>
+        <string>&amp;Open report in browser</string>
        </property>
       </widget>
      </item>

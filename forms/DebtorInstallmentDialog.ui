@@ -52,14 +52,14 @@
    <item row="2" column="1">
     <widget class="QRadioButton" name="fifty_radio">
      <property name="text">
-      <string>Rs. 50</string>
+      <string>Rs. &amp;50</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QRadioButton" name="hundred_radio">
      <property name="text">
-      <string>Rs. 100</string>
+      <string>Rs. &amp;100</string>
      </property>
     </widget>
    </item>
@@ -131,14 +131,14 @@
      <item>
       <widget class="QPushButton" name="save_button">
        <property name="text">
-        <string>Save</string>
+        <string>&amp;Save</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="clear_button">
        <property name="text">
-        <string>Clear</string>
+        <string>&amp;Clear</string>
        </property>
       </widget>
      </item>
