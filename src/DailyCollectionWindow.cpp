@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QStringList>
+#include <QDir>
 
 
 #ifdef Q_OS_WIN32
@@ -189,19 +190,21 @@ DailyCollectionWindow::AutoBackup()
     QString username = DbConnect::username;
     QString password = DbConnect::password;
 
-    QProcess* mkdir_process = new QProcess;
-#ifdef Q_OS_WIN32
-    QString dir = "backups\\auto\\";
-    mkdir_process->start( "cmd.exe", QStringList() << "\\c"
-            << "mkdir" << dir );
-#else
-    QString dir = "backups/auto/";
-    mkdir_process->start( "mkdir", QStringList() << "-p" << dir );
-#endif
-    if ( !mkdir_process->waitForFinished() )
-        exit(0);
-    QString filename = dir + QDateTime::currentDateTime().toString() + ".db";
+    QDir dir("backups/auto");
+    if ( !dir.exists() ) {
+        if ( !dir.mkpath(".") ) {
+            QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Warning, "Automatic Backup Failed",
+                    "Database has not been automatically backed up.",
+                    QMessageBox::Ok );
+            msgbox->exec();
 
+            return;
+        }
+    }
+
+    QString filename = dir.absolutePath() + "/"
+            + QDateTime::currentDateTime().toString() + ".db";
     QProcess* mysqldump_process = new QProcess;
     mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
     mysqldump_process->start( mysqldump, QStringList() << database << "-u"
