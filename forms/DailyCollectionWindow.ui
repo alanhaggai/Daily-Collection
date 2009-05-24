@@ -35,7 +35,7 @@
    </property>
    <widget class="QMenu" name="menu_Daily_Collection">
     <property name="title">
-     <string>&amp;Daily Collection</string>
+     <string>D&amp;aily Collection</string>
     </property>
     <addaction name="action_Transactions"/>
     <addaction name="separator"/>
@@ -69,7 +69,7 @@
    </widget>
    <widget class="QMenu" name="menuD_ebtor">
     <property name="title">
-     <string>D&amp;ebtor</string>
+     <string>&amp;Debtor</string>
     </property>
     <addaction name="action_DebtorInstallment"/>
     <addaction name="action_DebtorDetails"/>
@@ -77,13 +77,13 @@
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>&amp;About</string>
+     <string>&amp;Help</string>
     </property>
-    <addaction name="action_AboutDailyCollection"/>
+    <addaction name="action_HelpAboutDailyCollection"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
-     <string>Window</string>
+     <string>&amp;Window</string>
     </property>
     <addaction name="action_WindowCascade"/>
     <addaction name="action_WindowTile"/>
@@ -181,9 +181,9 @@
     <string>&amp;Transactions</string>
    </property>
   </action>
-  <action name="action_AboutDailyCollection">
+  <action name="action_HelpAboutDailyCollection">
    <property name="text">
-    <string>About &amp;Daily Collection</string>
+    <string>&amp;About Daily Collection</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -206,7 +206,7 @@
   </action>
   <action name="action_CloseAllWindows">
    <property name="text">
-    <string>Close All Windows</string>
+    <string>Close &amp;All Windows</string>
    </property>
   </action>
   <action name="action_CloseWindow">
@@ -218,10 +218,16 @@
    <property name="text">
     <string>Next Window</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Shift+Right</string>
+   </property>
   </action>
   <action name="action_PreviousWindow">
    <property name="text">
     <string>Previous Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+Left</string>
    </property>
   </action>
  </widget>
