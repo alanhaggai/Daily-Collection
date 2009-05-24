@@ -38,132 +38,118 @@ QString mysqldump = "/usr/bin/mysqldump";
 #endif
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
-    QMainWindow(parent)
-{
+        QMainWindow(parent) {
     setupUi(this);
     setWindowState(Qt::WindowMaximized);
 
     // Connect menu actions to slots that spawn respective dialogs
     connect( action_CreateAgent,
-        SIGNAL( activated() ), this, SLOT( SpawnCreateAgentDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnCreateAgentDialog() ) );
     connect( action_CreateDebtor,
-        SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnCreateDebtorDialog() ) );
     connect( action_EditAgent,
-        SIGNAL( activated() ), this, SLOT( SpawnEditAgentDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnEditAgentDialog() ) );
     connect( action_EditDebtor,
-        SIGNAL( activated() ), this, SLOT( SpawnEditDebtorDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnEditDebtorDialog() ) );
     connect( action_EditTransaction,
-        SIGNAL( activated() ), this, SLOT( SpawnEditTransactionDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnEditTransactionDialog() ) );
     connect( action_DaybookAgent,
-        SIGNAL( activated() ), this, SLOT( SpawnDaybookAgentDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDaybookAgentDialog() ) );
     connect( action_DaybookAllAgents,
-        SIGNAL( activated() ), this, SLOT( SpawnDaybookAllAgentsDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDaybookAllAgentsDialog() ) );
     connect( action_DaybookBalance,
-        SIGNAL( activated() ), this, SLOT( SpawnDaybookBalanceDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDaybookBalanceDialog() ) );
     connect( action_DebtorInstallment,
-        SIGNAL( activated() ), this, SLOT( SpawnDebtorInstallmentDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDebtorInstallmentDialog() ) );
     connect( action_DebtorDetails,
-        SIGNAL( activated() ), this, SLOT( SpawnDebtorDetailsDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDebtorDetailsDialog() ) );
     connect( action_DebtorTransactions,
-        SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
     connect( action_Transactions,
-        SIGNAL( activated() ), this, SLOT( SpawnTransactionsDialog() ) );
+            SIGNAL( activated() ), this, SLOT( SpawnTransactionsDialog() ) );
     connect( action_Backup,
-        SIGNAL( activated() ), this, SLOT( Backup() ) );
+            SIGNAL( activated() ), this, SLOT( Backup() ) );
     connect( action_Restore,
-        SIGNAL( activated() ), this, SLOT( Restore() ) );
+            SIGNAL( activated() ), this, SLOT( Restore() ) );
     connect( qApp, SIGNAL( aboutToQuit() ), this, SLOT( AutoBackup() ) );
 }
 
 // Spawn{,,,,,} all those dialogs
 
 void
-DailyCollectionWindow::SpawnCreateAgentDialog()
-{
+DailyCollectionWindow::SpawnCreateAgentDialog() {
     CreateAgentDialog* create_agent_dialog  = new CreateAgentDialog;
     create_agent_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnCreateDebtorDialog()
-{
+DailyCollectionWindow::SpawnCreateDebtorDialog() {
     CreateDebtorDialog* create_debtor_dialog  = new CreateDebtorDialog;
     create_debtor_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnEditAgentDialog()
-{
+DailyCollectionWindow::SpawnEditAgentDialog() {
     EditAgentDialog* edit_agent_dialog  = new EditAgentDialog;
     edit_agent_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnEditDebtorDialog()
-{
+DailyCollectionWindow::SpawnEditDebtorDialog() {
     EditDebtorDialog* edit_debtor_dialog = new EditDebtorDialog;
     edit_debtor_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnEditTransactionDialog()
-{
+DailyCollectionWindow::SpawnEditTransactionDialog() {
     EditTransactionDialog* edit_transaction_dialog = new EditTransactionDialog;
     edit_transaction_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDaybookAgentDialog()
-{
+DailyCollectionWindow::SpawnDaybookAgentDialog() {
     DaybookAgentDialog* daybook_agent_dialog = new DaybookAgentDialog;
     daybook_agent_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDaybookAllAgentsDialog()
-{
+DailyCollectionWindow::SpawnDaybookAllAgentsDialog() {
     DaybookAllAgentsDialog* daybook_all_agents_dialog = new DaybookAllAgentsDialog;
     daybook_all_agents_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDaybookBalanceDialog()
-{
+DailyCollectionWindow::SpawnDaybookBalanceDialog() {
     DaybookBalanceDialog* daybook_balance_dialog = new DaybookBalanceDialog;
     daybook_balance_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDebtorInstallmentDialog()
-{
+DailyCollectionWindow::SpawnDebtorInstallmentDialog() {
     DebtorInstallmentDialog* debtor_installment_dialog = new DebtorInstallmentDialog;
     debtor_installment_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDebtorDetailsDialog()
-{
+DailyCollectionWindow::SpawnDebtorDetailsDialog() {
     DebtorDetailsDialog* debtor_details_dialog = new DebtorDetailsDialog;
     debtor_details_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnDebtorTransactionsDialog()
-{
+DailyCollectionWindow::SpawnDebtorTransactionsDialog() {
     DebtorTransactionsDialog* debtor_transactions_dialog = new DebtorTransactionsDialog;
     debtor_transactions_dialog->show();
 }
 
 void
-DailyCollectionWindow::SpawnTransactionsDialog()
-{
+DailyCollectionWindow::SpawnTransactionsDialog() {
     TransactionsDialog* transactions_dialog = new TransactionsDialog;
     transactions_dialog->show();
 }
 
 void
-DailyCollectionWindow::Backup()
-{
+DailyCollectionWindow::Backup() {
     QString suggested_filename = "./backups/" + QDateTime::currentDateTime().toString()
             + ".db";
     QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
@@ -177,13 +163,13 @@ DailyCollectionWindow::Backup()
     mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
     mysqldump_process->start( mysqldump, QStringList() << database << "-u"
             + username << "-p" + password );
+
     if ( !mysqldump_process->waitForFinished() )
         exit(0);
 }
 
 void
-DailyCollectionWindow::AutoBackup()
-{
+DailyCollectionWindow::AutoBackup() {
     DbConnect::Disconnect();
 
     QString database = DbConnect::database;
@@ -191,17 +177,18 @@ DailyCollectionWindow::AutoBackup()
     QString password = DbConnect::password;
 
     QDir dir("backups/auto");
-    if ( !dir.exists() ) {
-        if ( !dir.mkpath(".") ) {
-            QMessageBox* msgbox = new QMessageBox(
-                    QMessageBox::Warning, "Automatic Backup Failed",
-                    "Database has not been automatically backed up.",
-                    QMessageBox::Ok );
-            msgbox->exec();
 
-            return;
+    if ( !dir.exists() ) {
+            if ( !dir.mkpath(".") ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Warning, "Automatic Backup Failed",
+                        "Database has not been automatically backed up.",
+                        QMessageBox::Ok );
+                    msgbox->exec();
+
+                    return;
+                }
         }
-    }
 
     QString filename = dir.absolutePath() + "/"
             + QDateTime::currentDateTime().toString() + ".db";
@@ -209,13 +196,13 @@ DailyCollectionWindow::AutoBackup()
     mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
     mysqldump_process->start( mysqldump, QStringList() << database << "-u"
             + username << "-p" + password );
+
     if ( !mysqldump_process->waitForFinished() )
         exit(0);
 }
 
 void
-DailyCollectionWindow::Restore()
-{
+DailyCollectionWindow::Restore() {
     QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
             ".", "Database Files (*.db)" );
 
@@ -224,30 +211,30 @@ DailyCollectionWindow::Restore()
     QString password = DbConnect::password;
 
     QString command;
-    if ( DbConnect::Connect() )
-    {
-        QProcess* mysql_process = new QProcess;
-        mysql_process->setStandardInputFile(filename);
-        mysql_process->start( mysql, QStringList() << "-u" + username << "-p"
-                + password );
-        if ( !mysql_process->waitForFinished() )
-            exit(0);
 
-        if ( mysql_process->exitCode() == 1 )
-        {
-            QMessageBox* msgbox = new QMessageBox(
-                    QMessageBox::Information, "Restoration Successful",
-                    "Database has been restored successfully.",
-                    QMessageBox::Ok );
-            msgbox->exec();
+    if ( DbConnect::Connect() ) {
+            QProcess* mysql_process = new QProcess;
+            mysql_process->setStandardInputFile(filename);
+            mysql_process->start( mysql, QStringList() << "-u" + username << "-p"
+                    + password );
 
-            return;
+            if ( !mysql_process->waitForFinished() )
+                exit(0);
+
+            if ( mysql_process->exitCode() == 1 ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Information, "Restoration Successful",
+                        "Database has been restored successfully.",
+                        QMessageBox::Ok );
+                    msgbox->exec();
+
+                    return;
+                }
         }
-    }
 
     QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Critical, "Restoration Failure",
-            "Database restoration has failed.",
-            QMessageBox::Ok );
+        QMessageBox::Critical, "Restoration Failure",
+        "Database restoration has failed.",
+        QMessageBox::Ok );
     msgbox->exec();
 }

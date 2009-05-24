@@ -12,8 +12,7 @@
 #include <QMessageBox>
 
 //! Enumerator constants for representing Table Widget columns
-enum
-{
+enum {
     SERIAL,
     NAME,
     AGENT,
@@ -30,8 +29,7 @@ enum
  * UI is setup. Table Widget column widths are set.
  */
 DebtorDetailsDialog::DebtorDetailsDialog(QDialog* parent) :
-    QDialog( parent, Qt::Tool )
-{
+        QDialog( parent, Qt::Tool ) {
     setupUi(this);
 
     // Set column widths for Table Widget
@@ -56,17 +54,15 @@ DebtorDetailsDialog::DebtorDetailsDialog(QDialog* parent) :
  * digits of their serials.
  */
 void
-DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial)
-{
+DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
     // Why should we waste time/resource on populating the Table Widget with an
     // unwanted humongous list?
-    if ( debtor_serial.length() < 3 )
-    {
-        return;
-    }
+    if ( debtor_serial.length() < 3 ) {
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, agent.name, debtor.address,\
@@ -75,89 +71,86 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial)
             LIKE :debtor_serial ORDER BY serial ASC");
     query.bindValue( ":debtor_serial", "%" + debtor_serial + "%" );
 
-    if ( !query.exec() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     table_widget->setRowCount( query.size() );
 
     qint16 row = 0;
 
-    while ( query.next() )
-    {
-        QString debtor_serial;
-        QString debtor_name;
-        QString debtor_agent_name;
-        QString debtor_address;
-        qint16  debtor_amount;
-        qint16  debtor_paid;
-        qint16  debtor_balance;
-        QString debtor_phone;
-        QString debtor_date;
-        QString agent_id;
-        QString debtor_id;
-        
-        debtor_serial     = query.value(0).toString();
-        debtor_name       = query.value(1).toString();
-        debtor_agent_name = query.value(2).toString();
-        debtor_address    = query.value(3).toString();
-        debtor_amount     = query.value(4).toInt();
-        debtor_phone      = query.value(5).toString();
-        debtor_date       = query.value(6).toString();
-        agent_id          = query.value(7).toString();
-        debtor_id         = query.value(8).toString();
+    while ( query.next() ) {
+            QString debtor_serial;
+            QString debtor_name;
+            QString debtor_agent_name;
+            QString debtor_address;
+            qint16  debtor_amount;
+            qint16  debtor_paid;
+            qint16  debtor_balance;
+            QString debtor_phone;
+            QString debtor_date;
+            QString agent_id;
+            QString debtor_id;
 
-        QTableWidgetItem* serial_item  = new QTableWidgetItem;
-        QTableWidgetItem* name_item    = new QTableWidgetItem;
-        QTableWidgetItem* agent_item   = new QTableWidgetItem;
-        QTableWidgetItem* address_item = new QTableWidgetItem;
-        QTableWidgetItem* amount_item  = new QTableWidgetItem;
-        QTableWidgetItem* paid_item    = new QTableWidgetItem;
-        QTableWidgetItem* balance_item = new QTableWidgetItem;
-        QTableWidgetItem* phone_item   = new QTableWidgetItem;
-        QTableWidgetItem* date_item    = new QTableWidgetItem;
+            debtor_serial     = query.value(0).toString();
+            debtor_name       = query.value(1).toString();
+            debtor_agent_name = query.value(2).toString();
+            debtor_address    = query.value(3).toString();
+            debtor_amount     = query.value(4).toInt();
+            debtor_phone      = query.value(5).toString();
+            debtor_date       = query.value(6).toString();
+            agent_id          = query.value(7).toString();
+            debtor_id         = query.value(8).toString();
 
-        QSqlQuery query_sum;
-        query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
+            QTableWidgetItem* serial_item  = new QTableWidgetItem;
+            QTableWidgetItem* name_item    = new QTableWidgetItem;
+            QTableWidgetItem* agent_item   = new QTableWidgetItem;
+            QTableWidgetItem* address_item = new QTableWidgetItem;
+            QTableWidgetItem* amount_item  = new QTableWidgetItem;
+            QTableWidgetItem* paid_item    = new QTableWidgetItem;
+            QTableWidgetItem* balance_item = new QTableWidgetItem;
+            QTableWidgetItem* phone_item   = new QTableWidgetItem;
+            QTableWidgetItem* date_item    = new QTableWidgetItem;
+
+            QSqlQuery query_sum;
+            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
                 debtor_id = :debtor_id");
-        query_sum.bindValue( ":debtor_id", debtor_id );
+            query_sum.bindValue( ":debtor_id", debtor_id );
 
-        if ( !query_sum.exec() )
-        {
+            if ( !query_sum.exec() ) {
+                }
+
+            query_sum.next();
+
+            debtor_paid    = query_sum.value(0).toInt();
+            debtor_balance = debtor_amount - debtor_paid;
+
+            serial_item->setText(debtor_serial);
+            name_item->setText(debtor_name);
+            agent_item->setText(debtor_agent_name);
+            address_item->setText(debtor_address);
+            amount_item->setText( QString::number(debtor_amount) );
+            paid_item->setText( QString::number(debtor_paid) );
+            balance_item->setText( QString::number(debtor_balance) );
+            phone_item->setText(debtor_phone);
+            date_item->setText(debtor_date);
+
+            table_widget->setItem( row,   SERIAL,  serial_item );
+            table_widget->setItem( row,   NAME,    name_item );
+            table_widget->setItem( row,   AGENT,   agent_item );
+            table_widget->setItem( row,   ADDRESS, address_item );
+            table_widget->setItem( row,   AMOUNT,  amount_item );
+            table_widget->setItem( row,   PAID,    paid_item );
+            table_widget->setItem( row,   BALANCE, balance_item );
+            table_widget->setItem( row,   PHONE,   phone_item );
+            table_widget->setItem( row++, DATE,    date_item );
         }
-
-        query_sum.next();
-
-        debtor_paid    = query_sum.value(0).toInt();
-        debtor_balance = debtor_amount - debtor_paid;
-
-        serial_item->setText(debtor_serial);
-        name_item->setText(debtor_name);
-        agent_item->setText(debtor_agent_name);
-        address_item->setText(debtor_address);
-        amount_item->setText( QString::number(debtor_amount) );
-        paid_item->setText( QString::number(debtor_paid) );
-        balance_item->setText( QString::number(debtor_balance) );
-        phone_item->setText(debtor_phone);
-        date_item->setText(debtor_date);
-
-        table_widget->setItem( row,   SERIAL,  serial_item );
-        table_widget->setItem( row,   NAME,    name_item );
-        table_widget->setItem( row,   AGENT,   agent_item );
-        table_widget->setItem( row,   ADDRESS, address_item );
-        table_widget->setItem( row,   AMOUNT,  amount_item );
-        table_widget->setItem( row,   PAID,    paid_item );
-        table_widget->setItem( row,   BALANCE, balance_item );
-        table_widget->setItem( row,   PHONE,   phone_item );
-        table_widget->setItem( row++, DATE,    date_item );
-    }
 }
 
 /*!
@@ -165,17 +158,15 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial)
  * digits of their serials.
  */
 void
-DebtorDetailsDialog::NameEditTextChanged(QString debtor_name)
-{
+DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
     // Why should we waste time/resource on populating the Table Widget with an
     // unwanted humongous list?
-    if ( debtor_name.length() < 3 )
-    {
-        return;
-    }
+    if ( debtor_name.length() < 3 ) {
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, agent.name,\
@@ -184,87 +175,84 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name)
             = agent.id AND debtor.name LIKE :debtor_name ORDER BY serial ASC");
     query.bindValue( ":debtor_name", "%" + debtor_name + "%" );
 
-    if ( !query.exec() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     table_widget->setRowCount( query.size() );
 
     qint16 row = 0;
 
-    while ( query.next() )
-    {
-        QString debtor_serial;
-        QString debtor_name;
-        QString debtor_agent_name;
-        QString debtor_address;
-        qint16  debtor_amount;
-        qint16  debtor_paid;
-        qint16  debtor_balance;
-        QString debtor_phone;
-        QString debtor_date;
-        QString agent_id;
-        QString debtor_id;
-        
-        debtor_serial     = query.value(0).toString();
-        debtor_name       = query.value(1).toString();
-        debtor_agent_name = query.value(2).toString();
-        debtor_address    = query.value(3).toString();
-        debtor_amount     = query.value(4).toInt();
-        debtor_phone      = query.value(5).toString();
-        debtor_date       = query.value(6).toString();
-        agent_id          = query.value(7).toString();
-        debtor_id         = query.value(8).toString();
+    while ( query.next() ) {
+            QString debtor_serial;
+            QString debtor_name;
+            QString debtor_agent_name;
+            QString debtor_address;
+            qint16  debtor_amount;
+            qint16  debtor_paid;
+            qint16  debtor_balance;
+            QString debtor_phone;
+            QString debtor_date;
+            QString agent_id;
+            QString debtor_id;
 
-        QTableWidgetItem* serial_item  = new QTableWidgetItem;
-        QTableWidgetItem* name_item    = new QTableWidgetItem;
-        QTableWidgetItem* agent_item   = new QTableWidgetItem;
-        QTableWidgetItem* address_item = new QTableWidgetItem;
-        QTableWidgetItem* amount_item  = new QTableWidgetItem;
-        QTableWidgetItem* paid_item    = new QTableWidgetItem;
-        QTableWidgetItem* balance_item = new QTableWidgetItem;
-        QTableWidgetItem* phone_item   = new QTableWidgetItem;
-        QTableWidgetItem* date_item    = new QTableWidgetItem;
+            debtor_serial     = query.value(0).toString();
+            debtor_name       = query.value(1).toString();
+            debtor_agent_name = query.value(2).toString();
+            debtor_address    = query.value(3).toString();
+            debtor_amount     = query.value(4).toInt();
+            debtor_phone      = query.value(5).toString();
+            debtor_date       = query.value(6).toString();
+            agent_id          = query.value(7).toString();
+            debtor_id         = query.value(8).toString();
 
-        QSqlQuery query_sum;
-        query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
+            QTableWidgetItem* serial_item  = new QTableWidgetItem;
+            QTableWidgetItem* name_item    = new QTableWidgetItem;
+            QTableWidgetItem* agent_item   = new QTableWidgetItem;
+            QTableWidgetItem* address_item = new QTableWidgetItem;
+            QTableWidgetItem* amount_item  = new QTableWidgetItem;
+            QTableWidgetItem* paid_item    = new QTableWidgetItem;
+            QTableWidgetItem* balance_item = new QTableWidgetItem;
+            QTableWidgetItem* phone_item   = new QTableWidgetItem;
+            QTableWidgetItem* date_item    = new QTableWidgetItem;
+
+            QSqlQuery query_sum;
+            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
                 debtor_id = :debtor_id");
-        query_sum.bindValue( ":debtor_id", debtor_id );
+            query_sum.bindValue( ":debtor_id", debtor_id );
 
-        if ( !query_sum.exec() )
-        {
+            if ( !query_sum.exec() ) {
+                }
+
+            query_sum.next();
+
+            debtor_paid    = query_sum.value(0).toInt();
+            debtor_balance = debtor_amount - debtor_paid;
+
+            serial_item->setText(debtor_serial);
+            name_item->setText(debtor_name);
+            agent_item->setText(debtor_agent_name);
+            address_item->setText(debtor_address);
+            amount_item->setText( QString::number(debtor_amount) );
+            paid_item->setText( QString::number(debtor_paid) );
+            balance_item->setText( QString::number(debtor_balance) );
+            phone_item->setText(debtor_phone);
+            date_item->setText(debtor_date);
+
+            table_widget->setItem( row,   SERIAL,  serial_item );
+            table_widget->setItem( row,   NAME,    name_item );
+            table_widget->setItem( row,   AGENT,   agent_item );
+            table_widget->setItem( row,   ADDRESS, address_item );
+            table_widget->setItem( row,   AMOUNT,  amount_item );
+            table_widget->setItem( row,   PAID,    paid_item );
+            table_widget->setItem( row,   BALANCE, balance_item );
+            table_widget->setItem( row,   PHONE,   phone_item );
+            table_widget->setItem( row++, DATE,    date_item );
         }
-
-        query_sum.next();
-
-        debtor_paid    = query_sum.value(0).toInt();
-        debtor_balance = debtor_amount - debtor_paid;
-
-        serial_item->setText(debtor_serial);
-        name_item->setText(debtor_name);
-        agent_item->setText(debtor_agent_name);
-        address_item->setText(debtor_address);
-        amount_item->setText( QString::number(debtor_amount) );
-        paid_item->setText( QString::number(debtor_paid) );
-        balance_item->setText( QString::number(debtor_balance) );
-        phone_item->setText(debtor_phone);
-        date_item->setText(debtor_date);
-
-        table_widget->setItem( row,   SERIAL,  serial_item );
-        table_widget->setItem( row,   NAME,    name_item );
-        table_widget->setItem( row,   AGENT,   agent_item );
-        table_widget->setItem( row,   ADDRESS, address_item );
-        table_widget->setItem( row,   AMOUNT,  amount_item );
-        table_widget->setItem( row,   PAID,    paid_item );
-        table_widget->setItem( row,   BALANCE, balance_item );
-        table_widget->setItem( row,   PHONE,   phone_item );
-        table_widget->setItem( row++, DATE,    date_item );
-    }
 }

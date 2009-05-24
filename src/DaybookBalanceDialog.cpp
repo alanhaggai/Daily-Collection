@@ -14,8 +14,7 @@
 #include <QProgressDialog>
 
 //! Enumerated constants to represent Table Widget columns
-enum
-{
+enum {
     SERIAL,
     NAME,
     BALANCE,
@@ -26,37 +25,35 @@ enum
  * with agent id as key and agent name as value. Set Table Widget column width.
  */
 DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool )
-{
+        QDialog( parent, Qt::Tool ) {
     setupUi(this);
 
     // Fetch ids and names of agents
     QSqlQuery query;
     query.prepare("SELECT id, name FROM agent");
-    if ( !query.exec() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     // Cycle through the result rows
-    while ( query.next() )
-    {
-        int agent_id;        // Agent id
-        QString agent_name;  // Agent name
+    while ( query.next() ) {
+            int agent_id;        // Agent id
+            QString agent_name;  // Agent name
 
-        agent_id   = query.value(0).toInt();
-        agent_name = query.value(1).toString();
+            agent_id   = query.value(0).toInt();
+            agent_name = query.value(1).toString();
 
-        // Add agent name to Combo Box and create mapping
-        agent_combo->addItem(agent_name);
-        agent_map[agent_id] = agent_name;
-    }
+            // Add agent name to Combo Box and create mapping
+            agent_combo->addItem(agent_name);
+            agent_map[agent_id] = agent_name;
+        }
 
     agent_combo->setCurrentIndex(-1);  // Clear selection in agent Combo Box
 
@@ -75,20 +72,18 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
  * on or before the selected date, under the selected agent.
  */
 void
-DaybookBalanceDialog::PopulateTableWidget()
-{
-    if ( -1 == agent_combo->currentIndex() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+DaybookBalanceDialog::PopulateTableWidget() {
+    if ( -1 == agent_combo->currentIndex() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
 
-    // Add to installation script for creation of `view' in the database 
+    // Add to installation script for creation of `view' in the database
     //      CREATE VIEW debtor_transaction
     //      AS SELECT debtor.serial, debtor.name, debtor.amount,
     //      SUM(transaction.paid) AS paid, (debtor.amount - paid) AS balance,
@@ -106,22 +101,21 @@ DaybookBalanceDialog::PopulateTableWidget()
     query.bindValue( ":transaction_date",
             date_calendar->selectedDate().toString(Qt::ISODate) );
 
-    if ( !query.exec() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
-    // Initialise a Progress Dialog which will be later used for displaying 
+    // Initialise a Progress Dialog which will be later used for displaying
     // progress in loop
     QProgressDialog progress_dialog( "Retrieving data...", "Abort Fetch", 0,
             query.size(), this );
-    
+
     // Set number of rows for the Table Widget
     table_widget->setRowCount( query.size() );
 
@@ -129,7 +123,7 @@ DaybookBalanceDialog::PopulateTableWidget()
     // Dialog is displayed
     progress_dialog.setWindowModality(Qt::WindowModal);
     progress_dialog.setMinimumDuration(0);  // Minimum duration after which the
-                                            // Progress Dialog is displayed
+    // Progress Dialog is displayed
 
     int row      = 0;  // Represents the current row
     int progress = 0;  // Keeps track of progress
@@ -137,44 +131,43 @@ DaybookBalanceDialog::PopulateTableWidget()
     table_widget->clearContents();  // Clear already listed contents
 
     int total_balance = 0;
-    while ( query.next() )
-    {
-        progress_dialog.setValue(progress++);  // Set value for Progress Dialog
-                                               // and increment it
-        qApp->processEvents();  // So that we get a responsive interface
 
-        if ( progress_dialog.wasCanceled() )
-        {
-            // If Progress Dialog's `Abort Fetch' button is clicked, end further
-            // processing by breaking out of the loop
-            break;
+    while ( query.next() ) {
+            progress_dialog.setValue(progress++);  // Set value for Progress Dialog
+            // and increment it
+            qApp->processEvents();  // So that we get a responsive interface
+
+            if ( progress_dialog.wasCanceled() ) {
+                    // If Progress Dialog's `Abort Fetch' button is clicked, end further
+                    // processing by breaking out of the loop
+                    break;
+                }
+
+            QString debtor_serial;   // Debtor serial number
+            QString debtor_name;     // Debtor name
+            int     debtor_balance;  // Remaining debts
+
+            debtor_serial  = query.value(SERIAL).toString();
+            debtor_name    = query.value(NAME).toString();
+            debtor_balance = query.value(BALANCE).toInt();
+
+            total_balance += debtor_balance;
+
+            // Set items for Table Widget
+            QTableWidgetItem* serial_item  = new QTableWidgetItem;
+            QTableWidgetItem* name_item    = new QTableWidgetItem;
+            QTableWidgetItem* balance_item = new QTableWidgetItem;
+
+            // Set text of Line Edits
+            serial_item->setText(debtor_serial);
+            name_item->setText(debtor_name);
+            balance_item->setText( QString::number(debtor_balance) );
+
+            // Set items for each of the columns
+            table_widget->setItem( row,   SERIAL,  serial_item );
+            table_widget->setItem( row,   NAME,    name_item );
+            table_widget->setItem( row++, BALANCE, balance_item );
         }
-
-        QString debtor_serial;   // Debtor serial number
-        QString debtor_name;     // Debtor name
-        int     debtor_balance;  // Remaining debts
-
-        debtor_serial  = query.value(SERIAL).toString();
-        debtor_name    = query.value(NAME).toString();
-        debtor_balance = query.value(BALANCE).toInt();
-
-        total_balance += debtor_balance;
-
-        // Set items for Table Widget
-        QTableWidgetItem* serial_item  = new QTableWidgetItem;
-        QTableWidgetItem* name_item    = new QTableWidgetItem;
-        QTableWidgetItem* balance_item = new QTableWidgetItem;
-        
-        // Set text of Line Edits
-        serial_item->setText(debtor_serial);
-        name_item->setText(debtor_name);
-        balance_item->setText( QString::number(debtor_balance) );
-
-        // Set items for each of the columns
-        table_widget->setItem( row,   SERIAL,  serial_item );
-        table_widget->setItem( row,   NAME,    name_item );
-        table_widget->setItem( row++, BALANCE, balance_item );
-    }
 
     // Display total balance in total_balance_edit Line Edit
     total_balance_edit->setText( QString::number(total_balance) );

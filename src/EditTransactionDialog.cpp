@@ -22,13 +22,13 @@ EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog( parent,
 
 void EditTransactionDialog::saveTransaction() {
     if ( "" == serialEdit->text() || "" == nameEdit->text() || "" == transactionEdit->text() ) {
-        QMessageBox *msgbox = new QMessageBox(
-            QMessageBox::Warning, "Incomplete Fields",
-            "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->exec();
+            QMessageBox *msgbox = new QMessageBox(
+                QMessageBox::Warning, "Incomplete Fields",
+                "All fields are to be filled.", QMessageBox::Ok );
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("UPDATE transaction SET date = :date, paid = :paid WHERE id = :id");
@@ -38,14 +38,14 @@ void EditTransactionDialog::saveTransaction() {
     query.bindValue( ":id",   transactionId );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     transactionEdit->clear();
     populateTableWidgetSerialEdit( serialEdit->text() );
@@ -59,45 +59,45 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
     query.bindValue( ":debtor_serial", serial );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     tableWidget->setRowCount(query.size());
 
     int row = 0;
 
     while ( query.next() ) {
-        QTableWidgetItem *idItem          = new QTableWidgetItem;
-        QTableWidgetItem *dateItem        = new QTableWidgetItem;
-        QTableWidgetItem *transactionItem = new QTableWidgetItem;
+            QTableWidgetItem *idItem          = new QTableWidgetItem;
+            QTableWidgetItem *dateItem        = new QTableWidgetItem;
+            QTableWidgetItem *transactionItem = new QTableWidgetItem;
 
-        idItem->setText( query.value(ID).toString() );
-        dateItem->setText( query.value(DATE).toString() );
-        transactionItem->setText( query.value(TRANSACTION).toString() );
+            idItem->setText( query.value(ID).toString() );
+            dateItem->setText( query.value(DATE).toString() );
+            transactionItem->setText( query.value(TRANSACTION).toString() );
 
-        tableWidget->setItem( row,   ID,          idItem );
-        tableWidget->setItem( row,   DATE,        dateItem );
-        tableWidget->setItem( row++, TRANSACTION, transactionItem );
-    }
+            tableWidget->setItem( row,   ID,          idItem );
+            tableWidget->setItem( row,   DATE,        dateItem );
+            tableWidget->setItem( row++, TRANSACTION, transactionItem );
+        }
 
     query.prepare("SELECT name FROM debtor WHERE serial = :serial");
     query.bindValue( ":serial", serial );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     query.next();
     nameEdit->setText( query.value(0).toString() );

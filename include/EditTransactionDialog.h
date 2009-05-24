@@ -4,7 +4,7 @@
 #include "ui_EditTransactionDialog.h"
 
 class EditTransactionDialog : public QDialog, public Ui::EditTransactionDialog {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         EditTransactionDialog( QDialog *parent = 0 );

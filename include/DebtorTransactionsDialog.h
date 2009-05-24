@@ -4,9 +4,8 @@
 #include "ui_DebtorTransactionsDialog.h"
 
 class DebtorTransactionsDialog : public QDialog,
-        public Ui::DebtorTransactionsDialog
-{
-    Q_OBJECT
+        public Ui::DebtorTransactionsDialog {
+        Q_OBJECT
 
     public slots:
         void SerialEditTextChanged(const QString& debtor_serial);

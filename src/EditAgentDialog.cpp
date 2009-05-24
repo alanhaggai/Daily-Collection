@@ -22,15 +22,16 @@ EditAgentDialog::EditAgentDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) 
 void EditAgentDialog::populateTableWidget() {
     QSqlQuery query;
     query.prepare("SELECT * FROM agent");
+
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     tableWidget->setRowCount(query.size());
 
@@ -42,21 +43,21 @@ void EditAgentDialog::populateTableWidget() {
     int row = 0;
 
     while ( query.next() ) {
-        QTableWidgetItem *idItem      = new QTableWidgetItem;
-        QTableWidgetItem *nameItem    = new QTableWidgetItem;
-        QTableWidgetItem *addressItem = new QTableWidgetItem;
-        QTableWidgetItem *phoneItem   = new QTableWidgetItem;
+            QTableWidgetItem *idItem      = new QTableWidgetItem;
+            QTableWidgetItem *nameItem    = new QTableWidgetItem;
+            QTableWidgetItem *addressItem = new QTableWidgetItem;
+            QTableWidgetItem *phoneItem   = new QTableWidgetItem;
 
-        idItem->setText( query.value(ID).toString() );
-        nameItem->setText( query.value(NAME).toString() );
-        addressItem->setText( query.value(ADDRESS).toString() );
-        phoneItem->setText( query.value(PHONE).toString() );
+            idItem->setText( query.value(ID).toString() );
+            nameItem->setText( query.value(NAME).toString() );
+            addressItem->setText( query.value(ADDRESS).toString() );
+            phoneItem->setText( query.value(PHONE).toString() );
 
-        tableWidget->setItem( row,   ID,      idItem );
-        tableWidget->setItem( row,   NAME,    nameItem );
-        tableWidget->setItem( row,   ADDRESS, addressItem );
-        tableWidget->setItem( row++, PHONE,   phoneItem );
-    }
+            tableWidget->setItem( row,   ID,      idItem );
+            tableWidget->setItem( row,   NAME,    nameItem );
+            tableWidget->setItem( row,   ADDRESS, addressItem );
+            tableWidget->setItem( row++, PHONE,   phoneItem );
+        }
 }
 
 void EditAgentDialog::fetchItem(QTableWidgetItem *item) {
@@ -69,13 +70,13 @@ void EditAgentDialog::fetchItem(QTableWidgetItem *item) {
 
 void EditAgentDialog::save() {
     if ( "" == nameEdit->text() || "" == addressEdit->toPlainText() || "" == phoneEdit->text() ) {
-        QMessageBox *msgbox = new QMessageBox(
-            QMessageBox::Warning, "Incomplete Fields",
-            "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->exec();
+            QMessageBox *msgbox = new QMessageBox(
+                QMessageBox::Warning, "Incomplete Fields",
+                "All fields are to be filled.", QMessageBox::Ok );
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("UPDATE agent SET name = :name, address = :address, phone = :phone WHERE id = :id");
@@ -86,20 +87,20 @@ void EditAgentDialog::save() {
     query.bindValue( ":phone",   phoneEdit->text() );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     nameEdit->clear();
     addressEdit->clear();
     phoneEdit->clear();
 
     populateTableWidget();
-    
+
     nameEdit->setFocus();
 }

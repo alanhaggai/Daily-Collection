@@ -6,7 +6,7 @@
 #include "ui_EditDebtorDialog.h"
 
 class EditDebtorDialog : public QDialog, public Ui::EditDebtorDialog {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         EditDebtorDialog( QDialog *parent = 0 );

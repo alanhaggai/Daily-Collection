@@ -10,8 +10,7 @@ QString DbConnect::username;
 QString DbConnect::password;
 
 bool
-DbConnect::Connect()
-{
+DbConnect::Connect() {
     if ( db.isOpen() )
         return true;
 
@@ -27,22 +26,20 @@ DbConnect::Connect()
     db.setPassword(password);
 
     // Check if connection to the database succeeded or not.
-    if ( !db.open() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( !db.open() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "MySQL Database Connection Error",
                 "Unable to connect to the database with the current settings.\
                 \n\nPlease check if MySQL server is running or not, and, start it if needed.\n\n", QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return false;
-    }
+            return false;
+        }
     else
         return true;
 }
 
 void
-DbConnect::Disconnect()
-{
+DbConnect::Disconnect() {
     db.close();
 }

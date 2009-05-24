@@ -11,8 +11,7 @@
 #include "ui_DaybookAllAgentsDialog.h"
 
 //! Declares members and function for DaybookAllAgentsDialog.cpp
-class DaybookAllAgentsDialog : public QDialog, public Ui::DaybookAllAgentsDialog
-{
+class DaybookAllAgentsDialog : public QDialog, public Ui::DaybookAllAgentsDialog {
     public:
         //! Constructor
         DaybookAllAgentsDialog( QDialog *parent = 0 );

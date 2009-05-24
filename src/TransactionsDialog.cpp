@@ -16,8 +16,7 @@
 #include <QTextStream>
 #include <QProcess>
 
-enum
-{
+enum {
     SERIAL,
     NAME,
     PAID,
@@ -27,8 +26,7 @@ bool flag = false;
 
 //! Constructor
 TransactionsDialog::TransactionsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool )
-{
+        QDialog( parent, Qt::Tool ) {
     setupUi(this);  // Setup UI
 
     // Get all agent ids and names from agent table
@@ -36,24 +34,24 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
     query.prepare("SELECT id, name FROM agent");
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     // Loop through the results
     while ( query.next() ) {
-        int agent_id       = query.value(0).toInt();
-        QString agent_name = query.value(1).toString();
+            int agent_id       = query.value(0).toInt();
+            QString agent_name = query.value(1).toString();
 
-        agent_combo->addItem(agent_name);
-        // Populate agent_map with id of agent as key and name as value
-        agent_map[agent_id] = agent_name;
-    }
+            agent_combo->addItem(agent_name);
+            // Populate agent_map with id of agent as key and name as value
+            agent_map[agent_id] = agent_name;
+        }
 
     // Set agent_combo's default index to -1 so that no names will be selected
     // by default
@@ -70,8 +68,7 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
 }
 
 void
-TransactionsDialog::ListTransactions()
-{
+TransactionsDialog::ListTransactions() {
     flag = true;
 
     table_widget->clearContents();
@@ -88,14 +85,13 @@ TransactionsDialog::ListTransactions()
     from_date  = from_calendar->selectedDate().toString(Qt::ISODate);
 
 
-    if ( -1 == agent_combo->currentIndex() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( -1 == agent_combo->currentIndex() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->exec();  // Popup message box to let the user know about it
-        return;
-    }
+            msgbox->exec();  // Popup message box to let the user know about it
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, sum(transaction.paid)\
@@ -108,16 +104,15 @@ TransactionsDialog::ListTransactions()
     query.bindValue( ":to_date", to_date );
     query.bindValue( ":agent_id", agent );
 
-    if ( !query.exec() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     table_widget->setRowCount( query.size() );
 
@@ -153,36 +148,35 @@ TransactionsDialog::ListTransactions()
                             <th>Serial</th><th>Name</th><th>Transaction</th>\n\
             ";
 
-    while ( query.next() )
-    {
-        QString serial;
-        QString name;
-        QString paid;
+    while ( query.next() ) {
+            QString serial;
+            QString name;
+            QString paid;
 
-        serial = query.value(SERIAL).toString();
-        name   = query.value(NAME).toString();
-        paid   = query.value(PAID).toString();
+            serial = query.value(SERIAL).toString();
+            name   = query.value(NAME).toString();
+            paid   = query.value(PAID).toString();
 
-        QTableWidgetItem* serial_item = new QTableWidgetItem;
-        QTableWidgetItem* name_item   = new QTableWidgetItem;
-        QTableWidgetItem* paid_item   = new QTableWidgetItem;
+            QTableWidgetItem* serial_item = new QTableWidgetItem;
+            QTableWidgetItem* name_item   = new QTableWidgetItem;
+            QTableWidgetItem* paid_item   = new QTableWidgetItem;
 
-        serial_item->setText(serial);
-        name_item->setText(name);
-        paid_item->setText(paid);
+            serial_item->setText(serial);
+            name_item->setText(name);
+            paid_item->setText(paid);
 
-        total += paid.toInt();
+            total += paid.toInt();
 
-        table_widget->setItem( row,   SERIAL, serial_item );
-        table_widget->setItem( row,   NAME,   name_item );
-        table_widget->setItem( row++, PAID,   paid_item );
+            table_widget->setItem( row,   SERIAL, serial_item );
+            table_widget->setItem( row,   NAME,   name_item );
+            table_widget->setItem( row++, PAID,   paid_item );
 
-        html += "\
+            html += "\
                     <tr style='$style'>\n\
                         <td class='right'>" + serial + "</td><td class='centre'>" + name + "</td><td class='right'>Rs. " + paid + "</td>\n\
                     </tr>\n\
                     ";
-    }
+        }
 
     html += "\
                             </table>\n\
@@ -200,34 +194,32 @@ TransactionsDialog::ListTransactions()
     total_edit->setText( QString::number(total) );
 
     QFile file("transactions.html");
-    if ( file.open( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        QTextStream out(&file);
-        out << html;
 
-        file.close();
-    }
+    if ( file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
+            QTextStream out(&file);
+            out << html;
+
+            file.close();
+        }
 }
 
 void
-TransactionsDialog::OpenReportInBrowser()
-{
-    if ( flag == false )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+TransactionsDialog::OpenReportInBrowser() {
+    if ( flag == false ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Data required to produce report",
                 "Please list the transactions before opening the report.", QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     QProcess* browser_process = new QProcess;
 #ifdef Q_OS_WIN32
     QString file = QDir::currentPath() + "\\transactions.html";
     browser_process->start(
-            "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
-            + file );
+        "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
+        + file );
 #else
     QString file = QDir::currentPath() + "/transactions.html";
     browser_process->start( "firefox " + file );

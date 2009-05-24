@@ -12,15 +12,15 @@
 
 //! Declares members and slots for CreateAgentDialog.cpp
 class CreateAgentDialog : public QDialog, public Ui::CreateAgentDialog {
-    Q_OBJECT  // so that `moc` gets invoked
+        Q_OBJECT  // so that `moc` gets invoked
 
     public:
         //! Constructor
         CreateAgentDialog( QDialog* parent = 0 );
-    
+
     public slots:
         //! Fetch input data of agent and save to database.
-        void SaveAgent();  
+        void SaveAgent();
 };
 
 #endif

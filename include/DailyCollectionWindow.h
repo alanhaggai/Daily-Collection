@@ -10,7 +10,7 @@
 #include "ui_DailyCollectionWindow.h"
 
 class DailyCollectionWindow : public QMainWindow, public Ui::DailyCollectionWindow {
-    Q_OBJECT  // so that `moc` gets invoked
+        Q_OBJECT  // so that `moc` gets invoked
 
     public:
         //! Constructor

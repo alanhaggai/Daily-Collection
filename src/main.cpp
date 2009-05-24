@@ -40,18 +40,17 @@
 int
 main( int argc, char *argv[] ) {
     QApplication app( argc, argv );  // Create a QApplication object by passing
-                                     // commandline arguments.
+    // commandline arguments.
 
     app.setApplicationName("Daily Collection");
     app.setApplicationVersion("0.02");
     app.setOrganizationDomain("http://cubegin.com/");
     app.setOrganizationName("CubeGin");
 
-    if ( DbConnect::Connect() )
-    {
-        DailyCollectionWindow *window = new DailyCollectionWindow;
-        window->show();  // Display the created window.
-    }
+    if ( DbConnect::Connect() ) {
+            DailyCollectionWindow *window = new DailyCollectionWindow;
+            window->show();  // Display the created window.
+        }
     else
         exit(1);
 

@@ -4,9 +4,8 @@
 #include "ui_TransactionsDialog.h"
 
 class TransactionsDialog : public QDialog,
-        public Ui::TransactionsDialog
-{
-    Q_OBJECT
+        public Ui::TransactionsDialog {
+        Q_OBJECT
 
     public slots:
         void ListTransactions();

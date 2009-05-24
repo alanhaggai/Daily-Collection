@@ -12,7 +12,7 @@
 
 //! Declares members and slots for CreateDebtorDialog.cpp
 class CreateDebtorDialog : public QDialog, public Ui::CreateDebtorDialog {
-    Q_OBJECT  // so that `moc` gets invoked
+        Q_OBJECT  // so that `moc` gets invoked
 
     public:
         //! Constructor

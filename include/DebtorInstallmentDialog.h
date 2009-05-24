@@ -4,9 +4,8 @@
 #include "ui_DebtorInstallmentDialog.h"
 
 class DebtorInstallmentDialog : public QDialog,
-        public Ui::DebtorInstallmentDialog
-{
-    Q_OBJECT
+        public Ui::DebtorInstallmentDialog {
+        Q_OBJECT
 
     public slots:
         void PopulateValuesOnSerialChange(const QString& debtor_serial);

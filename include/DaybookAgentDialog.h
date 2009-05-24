@@ -12,7 +12,7 @@
 
 //! Declares members, slot and map for DaybookAgentDialog.cpp
 class DaybookAgentDialog : public QDialog, public Ui::DaybookAgentDialog {
-    Q_OBJECT  // so that `moc` gets invoked
+        Q_OBJECT  // so that `moc` gets invoked
 
     public:
         //! Constructor

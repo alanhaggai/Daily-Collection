@@ -12,14 +12,14 @@
 
 //! Declares members, slot and map for DaybookBalance.cpp
 class DaybookBalanceDialog : public QDialog, public Ui::DaybookBalanceDialog {
-    Q_OBJECT  // Invoke `moc` for generation of slot code
+        Q_OBJECT  // Invoke `moc` for generation of slot code
 
     public:
         //! Constructor
         DaybookBalanceDialog( QDialog *parent = 0 );
 
     public slots:
-         //! \brief Calculate balance of each debtor under an agent and display
+        //! \brief Calculate balance of each debtor under an agent and display
         void PopulateTableWidget();
 
     private:

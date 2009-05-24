@@ -7,8 +7,7 @@
 
 #include <QSqlDatabase>
 
-class DbConnect
-{
+class DbConnect {
     public:
         static bool Connect();
         static void Disconnect();

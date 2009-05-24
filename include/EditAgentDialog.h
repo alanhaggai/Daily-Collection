@@ -4,7 +4,7 @@
 #include "ui_EditAgentDialog.h"
 
 class EditAgentDialog : public QDialog, public Ui::EditAgentDialog {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         EditAgentDialog( QDialog *parent = 0 );

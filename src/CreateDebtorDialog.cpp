@@ -16,31 +16,33 @@
  * agent_map with names and ids of agents.
  */
 CreateDebtorDialog::CreateDebtorDialog(QDialog* parent)
-    : QDialog( parent, Qt::Window )
-{
+        : QDialog( parent, Qt::Window ) {
     setupUi(this);
 
     // Get all agent ids and names from agent table
     QSqlQuery query;
     query.prepare("SELECT id, name FROM agent");
+
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
+
     // Loop through the results
     while ( query.next() ) {
-        int agent_id       = query.value(0).toInt();
-        QString agent_name = query.value(1).toString();
+            int agent_id       = query.value(0).toInt();
+            QString agent_name = query.value(1).toString();
 
-        agent_combo->addItem(agent_name);
-        // Populate agent_map with id of agent as key and name as value
-        agent_map[agent_id] = agent_name;
-    }
+            agent_combo->addItem(agent_name);
+            // Populate agent_map with id of agent as key and name as value
+            agent_map[agent_id] = agent_name;
+        }
+
     // Set agent_combo's default index to -1 so that no names will be selected
     // by default
     agent_combo->setCurrentIndex(-1);
@@ -62,14 +64,13 @@ CreateDebtorDialog::SaveDebtor() {
             "" == name_edit->text()           ||
             -1 == agent_combo->currentIndex() ||
             "" == address_edit->toPlainText() ||
-            "" == amount_edit->text() )
-    {
-        QMessageBox* msgbox = new QMessageBox(
+            "" == amount_edit->text() ) {
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-        msgbox->exec();  // Popup message box to let the user know about it
-        return;
-    }
+            msgbox->exec();  // Popup message box to let the user know about it
+            return;
+        }
 
     // Insert serial, name, agent_id, address, amount, phone and date into table
     // debtor
@@ -84,31 +85,31 @@ CreateDebtorDialog::SaveDebtor() {
     query.bindValue( ":amount",   amount_edit->text() );
     query.bindValue( ":phone",    phone_edit->text() );
     query.bindValue( ":date",
-        date_calendar->selectedDate().toString(Qt::ISODate) );
+            date_calendar->selectedDate().toString(Qt::ISODate) );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     query.prepare( "SELECT id FROM debtor WHERE serial = :debtor_serial" );
     query.bindValue( ":debtor_serial", serial_edit->text() );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
-    
+            return;
+        }
+
     query.next();
     QString debtor_id = query.value(0).toString();
 

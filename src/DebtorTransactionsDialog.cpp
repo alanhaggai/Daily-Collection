@@ -11,16 +11,14 @@
 #include <QSqlError>
 #include <QMessageBox>
 
-enum
-{
+enum {
     DATE,
     PAID,
 };
 
 //! Constructor
 DebtorTransactionsDialog::DebtorTransactionsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool )
-{
+        QDialog( parent, Qt::Tool ) {
 
     setupUi(this);  // Setup UI
 
@@ -35,31 +33,30 @@ DebtorTransactionsDialog::DebtorTransactionsDialog(QDialog* parent) :
  * proper installment.
  */
 void
-DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial)
-{
+DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
-    if ( debtor_serial.length() < 4 )
-    {
-        return;
-    }
+    if ( debtor_serial.length() < 4 ) {
+            return;
+        }
 
     QSqlQuery query;
     query.prepare("SELECT debtor.name, debtor.amount, SUM(transaction.paid)\
             FROM debtor, transaction WHERE debtor.serial = :debtor_serial\
             AND debtor.id = transaction.debtor_id ORDER BY transaction.date");
     query.bindValue( ":debtor_serial", debtor_serial );
-        
+
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
+
     query.next();
 
     qint16 row = 0;
@@ -84,40 +81,38 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial)
     query.bindValue( ":debtor_serial", debtor_serial );
 
     if ( !query.exec() ) {
-        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Critical, "Query Execution Failed",
                 "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
                 QMessageBox::Ok );
-        msgbox->exec();
+            msgbox->exec();
 
-        return;
-    }
+            return;
+        }
 
     installments_edit->setText( QString::number( query.size() ) );
     table_widget->setRowCount( query.size() );
 
-    while ( query.next() )
-    {
-        QString date;
-        QString paid;
+    while ( query.next() ) {
+            QString date;
+            QString paid;
 
-        date = query.value(DATE).toString();
-        paid = query.value(PAID).toString();
+            date = query.value(DATE).toString();
+            paid = query.value(PAID).toString();
 
-        QTableWidgetItem* date_item = new QTableWidgetItem;
-        QTableWidgetItem* paid_item = new QTableWidgetItem;
+            QTableWidgetItem* date_item = new QTableWidgetItem;
+            QTableWidgetItem* paid_item = new QTableWidgetItem;
 
-        date_item->setText(date);
-        paid_item->setText(paid);
+            date_item->setText(date);
+            paid_item->setText(paid);
 
-        table_widget->setItem( row,   DATE, date_item );
-        table_widget->setItem( row++, PAID, paid_item );
-    }
+            table_widget->setItem( row,   DATE, date_item );
+            table_widget->setItem( row++, PAID, paid_item );
+        }
 }
 
 void
-DebtorTransactionsDialog::Clear()
-{
+DebtorTransactionsDialog::Clear() {
     serial_edit->setText("");
     name_edit->setText("");
     amount_edit->setText("");
