@@ -69,8 +69,6 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
 
 void
 TransactionsDialog::ListTransactions() {
-    flag = true;
-
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
@@ -113,6 +111,8 @@ TransactionsDialog::ListTransactions() {
 
             return;
         }
+
+    flag = true;
 
     table_widget->setRowCount( query.size() );
 
