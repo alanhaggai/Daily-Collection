@@ -28,7 +28,6 @@
 #include <QStringList>
 #include <QDir>
 
-
 #ifdef Q_OS_WIN32
 QString mysql     = "C:\\\\MySQL\\bin\\mysql.exe";
 QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
@@ -79,72 +78,84 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
 void
 DailyCollectionWindow::SpawnCreateAgentDialog() {
     CreateAgentDialog* create_agent_dialog  = new CreateAgentDialog;
+    mdiArea->addSubWindow(create_agent_dialog);
     create_agent_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnCreateDebtorDialog() {
     CreateDebtorDialog* create_debtor_dialog  = new CreateDebtorDialog;
+    mdiArea->addSubWindow(create_debtor_dialog);
     create_debtor_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnEditAgentDialog() {
     EditAgentDialog* edit_agent_dialog  = new EditAgentDialog;
+    mdiArea->addSubWindow(edit_agent_dialog);
     edit_agent_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnEditDebtorDialog() {
     EditDebtorDialog* edit_debtor_dialog = new EditDebtorDialog;
+    mdiArea->addSubWindow(edit_debtor_dialog);
     edit_debtor_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnEditTransactionDialog() {
     EditTransactionDialog* edit_transaction_dialog = new EditTransactionDialog;
+    mdiArea->addSubWindow(edit_transaction_dialog);
     edit_transaction_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDaybookAgentDialog() {
     DaybookAgentDialog* daybook_agent_dialog = new DaybookAgentDialog;
+    mdiArea->addSubWindow(daybook_agent_dialog);
     daybook_agent_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDaybookAllAgentsDialog() {
     DaybookAllAgentsDialog* daybook_all_agents_dialog = new DaybookAllAgentsDialog;
+    mdiArea->addSubWindow(daybook_all_agents_dialog);
     daybook_all_agents_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDaybookBalanceDialog() {
     DaybookBalanceDialog* daybook_balance_dialog = new DaybookBalanceDialog;
+    mdiArea->addSubWindow(daybook_balance_dialog);
     daybook_balance_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDebtorInstallmentDialog() {
     DebtorInstallmentDialog* debtor_installment_dialog = new DebtorInstallmentDialog;
+    mdiArea->addSubWindow(debtor_installment_dialog);
     debtor_installment_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDebtorDetailsDialog() {
     DebtorDetailsDialog* debtor_details_dialog = new DebtorDetailsDialog;
+    mdiArea->addSubWindow(debtor_details_dialog);
     debtor_details_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDebtorTransactionsDialog() {
     DebtorTransactionsDialog* debtor_transactions_dialog = new DebtorTransactionsDialog;
+    mdiArea->addSubWindow(debtor_transactions_dialog);
     debtor_transactions_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnTransactionsDialog() {
     TransactionsDialog* transactions_dialog = new TransactionsDialog;
+    mdiArea->addSubWindow(transactions_dialog);
     transactions_dialog->show();
 }
 
