@@ -13,7 +13,7 @@
 
 //! Setup UI and connect save_button to slot SaveAgent.
 CreateAgentDialog::CreateAgentDialog(QDialog* parent)
-        : QDialog(parent, Qt::Tool) {
+        : QDialog(parent) {
     setupUi(this);
     connect( save_button, SIGNAL(clicked()), this, SLOT(SaveAgent()) );
 }

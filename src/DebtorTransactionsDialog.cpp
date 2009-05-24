@@ -18,7 +18,7 @@ enum {
 
 //! Constructor
 DebtorTransactionsDialog::DebtorTransactionsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
 
     setupUi(this);  // Setup UI
 

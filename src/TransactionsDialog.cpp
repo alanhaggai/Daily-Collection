@@ -26,7 +26,7 @@ bool flag = false;
 
 //! Constructor
 TransactionsDialog::TransactionsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
     setupUi(this);  // Setup UI
 
     // Get all agent ids and names from agent table

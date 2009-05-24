@@ -20,7 +20,7 @@ int installment;
 
 //! Constructor
 DebtorInstallmentDialog::DebtorInstallmentDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
 
     setupUi(this);  // Setup UI
     installment = 0;

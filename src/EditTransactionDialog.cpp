@@ -8,7 +8,7 @@ const int ID          = 0;
 const int DATE        = 1;
 const int TRANSACTION = 2;
 
-EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
+EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog(parent) {
     setupUi(this);
 
     tableWidget->hideColumn(ID);

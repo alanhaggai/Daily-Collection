@@ -9,7 +9,7 @@ const int NAME    = 1;
 const int ADDRESS = 2;
 const int PHONE   = 3;
 
-EditAgentDialog::EditAgentDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
+EditAgentDialog::EditAgentDialog(QDialog *parent) : QDialog(parent) {
     setupUi(this);
 
     tableWidget->hideColumn(ID);

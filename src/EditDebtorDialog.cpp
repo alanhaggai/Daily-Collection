@@ -13,7 +13,7 @@ const int AMOUNT  = 5;
 const int PHONE   = 6;
 const int DATE    = 7;
 
-EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog( parent, Qt::Tool ) {
+EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog(parent) {
     setupUi(this);
 
     QSqlQuery query;

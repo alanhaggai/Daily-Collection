@@ -27,7 +27,7 @@ enum {
  * done. Table Widget column widths are set.
  */
 DaybookAgentDialog::DaybookAgentDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
     setupUi(this);
 
     // Get all agent ids and names from agent table

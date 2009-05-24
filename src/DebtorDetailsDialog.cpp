@@ -29,7 +29,7 @@ enum {
  * UI is setup. Table Widget column widths are set.
  */
 DebtorDetailsDialog::DebtorDetailsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
     setupUi(this);
 
     // Set column widths for Table Widget

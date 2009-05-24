@@ -25,7 +25,7 @@ enum {
  * with agent id as key and agent name as value. Set Table Widget column width.
  */
 DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
     setupUi(this);
 
     // Fetch ids and names of agents

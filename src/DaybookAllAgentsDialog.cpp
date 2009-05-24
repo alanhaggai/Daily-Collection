@@ -21,7 +21,7 @@ enum {
 
 //! Constructor
 DaybookAllAgentsDialog::DaybookAllAgentsDialog(QDialog* parent) :
-        QDialog( parent, Qt::Tool ) {
+        QDialog(parent) {
     setupUi(this);
 
     // Populate Table Widget in the moment the dialog is created

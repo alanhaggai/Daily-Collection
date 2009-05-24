@@ -16,7 +16,7 @@
  * agent_map with names and ids of agents.
  */
 CreateDebtorDialog::CreateDebtorDialog(QDialog* parent)
-        : QDialog( parent, Qt::Window ) {
+        : QDialog(parent) {
     setupUi(this);
 
     // Get all agent ids and names from agent table
