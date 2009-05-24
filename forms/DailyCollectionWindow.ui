@@ -81,11 +81,25 @@
     </property>
     <addaction name="action_AboutDailyCollection"/>
    </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="action_WindowCascade"/>
+    <addaction name="action_WindowTile"/>
+    <addaction name="separator"/>
+    <addaction name="action_NextWindow"/>
+    <addaction name="action_PreviousWindow"/>
+    <addaction name="separator"/>
+    <addaction name="action_CloseWindow"/>
+    <addaction name="action_CloseAllWindows"/>
+   </widget>
    <addaction name="menu_Daily_Collection"/>
    <addaction name="menuCreate"/>
    <addaction name="menu_Edit"/>
    <addaction name="menuDay_book"/>
    <addaction name="menuD_ebtor"/>
+   <addaction name="menuWindow"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -175,6 +189,41 @@
     <string>F1</string>
    </property>
   </action>
+  <action name="action_WindowCascade">
+   <property name="text">
+    <string>Cascade</string>
+   </property>
+  </action>
+  <action name="action_WindowTile">
+   <property name="text">
+    <string>Tile</string>
+   </property>
+  </action>
+  <action name="actionSdf">
+   <property name="text">
+    <string>sdf</string>
+   </property>
+  </action>
+  <action name="action_CloseAllWindows">
+   <property name="text">
+    <string>Close All Windows</string>
+   </property>
+  </action>
+  <action name="action_CloseWindow">
+   <property name="text">
+    <string>Close Window</string>
+   </property>
+  </action>
+  <action name="action_NextWindow">
+   <property name="text">
+    <string>Next Window</string>
+   </property>
+  </action>
+  <action name="action_PreviousWindow">
+   <property name="text">
+    <string>Previous Window</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="dailycollection.qrc"/>
@@ -193,6 +242,102 @@
     <hint type="destinationlabel">
      <x>265</x>
      <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_WindowCascade</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>cascadeSubWindows()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_WindowTile</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>tileSubWindows()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_CloseAllWindows</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>closeAllSubWindows()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_CloseWindow</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>closeActiveSubWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_NextWindow</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>activateNextSubWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_PreviousWindow</sender>
+   <signal>activated()</signal>
+   <receiver>mdiArea</receiver>
+   <slot>activatePreviousSubWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>235</y>
     </hint>
    </hints>
   </connection>
