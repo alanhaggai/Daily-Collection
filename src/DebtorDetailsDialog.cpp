@@ -25,7 +25,7 @@ enum {
 };
 
 /*!
- * Constructor that creates a Tool Window for displaying details of debtors.
+ * Constructor that creates a window for displaying details of debtors.
  * UI is setup. Table Widget column widths are set.
  */
 DebtorDetailsDialog::DebtorDetailsDialog(QDialog* parent) :

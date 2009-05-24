@@ -21,7 +21,7 @@ enum {
 };
 
 /*!
- * Constructor that creates a Tool Window for displaying daybook of agents.
+ * Constructor that creates a window for displaying daybook of agents.
  * UI is setup. Agent ids and names are selected from agent table. Agent Combo
  * Box is populated with agent names and mapping of agent names to agent ids is
  * done. Table Widget column widths are set.
