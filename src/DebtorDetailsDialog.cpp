@@ -80,12 +80,11 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
 
             return;
         }
-
-    table_widget->setRowCount( query.size() );
-
-    qint16 row = 0;
+    qint32 row = 0;
 
     while ( query.next() ) {
+            table_widget->setRowCount( row + 1 );
+
             QString debtor_serial;
             QString debtor_name;
             QString debtor_agent_name;
@@ -119,7 +118,7 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
             QTableWidgetItem* date_item    = new QTableWidgetItem;
 
             QSqlQuery query_sum;
-            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
+            query_sum.prepare("SELECT SUM(transactions.paid) FROM transactions WHERE\
                 debtor_id = :debtor_id");
             query_sum.bindValue( ":debtor_id", debtor_id );
 
@@ -187,7 +186,7 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
 
     table_widget->setRowCount( query.size() );
 
-    qint16 row = 0;
+    qint32 row = 0;
 
     while ( query.next() ) {
             QString debtor_serial;

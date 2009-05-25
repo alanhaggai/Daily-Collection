@@ -42,9 +42,9 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
         }
 
     QSqlQuery query;
-    query.prepare("SELECT debtor.name, debtor.amount, SUM(transaction.paid)\
-            FROM debtor, transaction WHERE debtor.serial = :debtor_serial\
-            AND debtor.id = transaction.debtor_id ORDER BY transaction.date");
+    query.prepare("SELECT debtor.name, debtor.amount, SUM(transactions.paid)\
+            FROM debtor, transactions WHERE debtor.serial = :debtor_serial\
+            AND debtor.id = transactions.debtor_id ORDER BY transactions.date");
     query.bindValue( ":debtor_serial", debtor_serial );
 
     if ( !query.exec() ) {
@@ -59,7 +59,6 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
 
     query.next();
 
-    qint16 row = 0;
     QString debtor_name;
     qint16 debtor_amount;
     qint16 debtor_paid;
@@ -75,9 +74,9 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
     paid_edit->setText( QString::number(debtor_paid) );
     balance_edit->setText( QString::number(debtor_balance) );
 
-    query.prepare("SELECT transaction.date, transaction.paid FROM debtor,\
-            transaction WHERE debtor.serial = :debtor_serial AND debtor.id\
-            = transaction.debtor_id ORDER BY transaction.date");
+    query.prepare("SELECT transactions.date, transactions.paid FROM debtor,\
+            transactions WHERE debtor.serial = :debtor_serial AND debtor.id\
+            = transactions.debtor_id ORDER BY transactions.date");
     query.bindValue( ":debtor_serial", debtor_serial );
 
     if ( !query.exec() ) {
@@ -90,10 +89,11 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
             return;
         }
 
-    installments_edit->setText( QString::number( query.size() ) );
-    table_widget->setRowCount( query.size() );
+    qint32 row = 0;
 
     while ( query.next() ) {
+            table_widget->setRowCount( row + 1 );
+
             QString date;
             QString paid;
 
@@ -109,6 +109,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
             table_widget->setItem( row,   DATE, date_item );
             table_widget->setItem( row++, PAID, paid_item );
         }
+
+    installments_edit->setText( QString::number(row) );
 }
 
 void
@@ -119,8 +121,8 @@ DebtorTransactionsDialog::Clear() {
     paid_edit->setText("");
     balance_edit->setText("");
     installments_edit->setText("");
-
     table_widget->clearContents();
+    table_widget->setRowCount(0);
 
     serial_edit->setFocus();
 }

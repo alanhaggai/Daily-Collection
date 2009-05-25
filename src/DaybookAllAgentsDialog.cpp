@@ -54,13 +54,14 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
             return;
         }
 
-    // Set the number of rows for Table Widget by using the query result size
-    table_widget->setRowCount( agent_query.size() );
-
-    int row = 0;  // Row counter
+    qint32 row = 0;  // Row counter
 
     // Loop through the rows, providing a new agent each time
     while ( agent_query.next() ) {
+            // Set the number of rows for Table Widget by using the query result
+            // size
+            table_widget->setRowCount( row + 1 );
+
             QString agent_id   = agent_query.value(0).toString();
             QString agent_name = agent_query.value(1).toString();
 
@@ -84,7 +85,7 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
             int agent_amount_given = amount_query.value(0).toInt();
 
             // Sum paid column of each debtor whose agent is the current agent
-            transaction_query.prepare("SELECT SUM(paid) FROM transaction\
+            transaction_query.prepare("SELECT SUM(paid) FROM transactions\
             WHERE agent_id = :agent_id");
             transaction_query.bindValue( ":agent_id", agent_id );
 

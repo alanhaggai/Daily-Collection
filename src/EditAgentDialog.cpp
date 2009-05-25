@@ -33,16 +33,16 @@ void EditAgentDialog::populateTableWidget() {
             return;
         }
 
-    tableWidget->setRowCount(query.size());
-
     tableWidget->setColumnWidth( ID,      50);
     tableWidget->setColumnWidth( NAME,    200);
     tableWidget->setColumnWidth( ADDRESS, 200);
     tableWidget->setColumnWidth( PHONE,   150);
 
-    int row = 0;
+    qint32 row = 0;
 
     while ( query.next() ) {
+            tableWidget->setRowCount( row + 1 );
+
             QTableWidgetItem *idItem      = new QTableWidgetItem;
             QTableWidgetItem *nameItem    = new QTableWidgetItem;
             QTableWidgetItem *addressItem = new QTableWidgetItem;

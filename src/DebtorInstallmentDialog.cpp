@@ -161,8 +161,8 @@ DebtorInstallmentDialog::SaveInstallment() {
             paid = amount;
 
             QSqlQuery query;
-            query.prepare( "SELECT SUM(transaction.paid) FROM debtor, transaction\
-                WHERE debtor.id = transaction.debtor_id AND debtor.serial = :debtor_serial" );
+            query.prepare( "SELECT SUM(transactions.paid) FROM debtor, transactions\
+                WHERE debtor.id = transactions.debtor_id AND debtor.serial = :debtor_serial" );
             query.bindValue( ":debtor_serial", serial_edit->text() );
 
             if ( !query.exec() ) {
@@ -197,7 +197,7 @@ DebtorInstallmentDialog::SaveInstallment() {
             QString debtor_id = query.value(0).toString();
             QString agent_id  = query.value(1).toString();
 
-            query.prepare( "INSERT INTO transaction ( agent_id, debtor_id, paid,\
+            query.prepare( "INSERT INTO transactions ( agent_id, debtor_id, paid,\
             date ) VALUES ( :agent_id, :debtor_id, :paid, :date )" );
 
             query.bindValue( ":agent_id", agent_id );

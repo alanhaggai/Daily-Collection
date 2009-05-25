@@ -11,9 +11,6 @@ class DbConnect {
     public:
         static bool Connect();
         static void Disconnect();
-        static QString database;
-        static QString username;
-        static QString password;
     private:
         static QSqlDatabase db;
 };

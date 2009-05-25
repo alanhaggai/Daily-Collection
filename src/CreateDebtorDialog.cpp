@@ -113,7 +113,7 @@ CreateDebtorDialog::SaveDebtor() {
     query.next();
     QString debtor_id = query.value(0).toString();
 
-    query.prepare( "INSERT INTO transaction ( debtor_id, agent_id, date, paid )\
+    query.prepare( "INSERT INTO transactions ( debtor_id, agent_id, date, paid )\
             VALUES ( :debtor_id, :agent_id, :date, 0 )" );
 
     query.bindValue( ":debtor_id", debtor_id );

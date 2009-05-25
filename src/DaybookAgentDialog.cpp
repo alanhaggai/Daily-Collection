@@ -80,8 +80,8 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
     // been selected in the Combo Box
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, debtor.amount,\
-        SUM(transaction.paid) FROM debtor, transaction WHERE debtor.agent_id =\
-        :agent_id AND debtor.id = transaction.debtor_id GROUP BY debtor.serial\
+        SUM(transactions.paid) FROM debtor, transactions WHERE debtor.agent_id =\
+        :agent_id AND debtor.id = transactions.debtor_id GROUP BY debtor.serial\
         ORDER BY debtor.serial");
     query.bindValue( ":agent_id", agent_id );
 
@@ -95,10 +95,7 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
             return;
         }
 
-    // Set row count to the query result size
-    table_widget->setRowCount( query.size() );
-
-    int row = 0;  // Row count
+    qint32 row = 0;  // Row count
 
     int total_amount  = 0;  // Total amount received by debtors from an agent
     int total_paid    = 0;  // Total amount paid by debtors to an agent
@@ -106,6 +103,9 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
 
     // Loop through result rows
     while ( query.next() ) {
+            // Set row count to the query result size
+            table_widget->setRowCount( row + 1 );
+
             QString debtor_serial;   // Debtor serial number
             QString debtor_name;     // Debtor name
             QString debtor_amount;   // Amount received by debtor

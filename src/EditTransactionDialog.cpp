@@ -31,7 +31,7 @@ void EditTransactionDialog::saveTransaction() {
         }
 
     QSqlQuery query;
-    query.prepare("UPDATE transaction SET date = :date, paid = :paid WHERE id = :id");
+    query.prepare("UPDATE transactions SET date = :date, paid = :paid WHERE id = :id");
 
     query.bindValue( ":date", dateCalendar->selectedDate().toString(Qt::ISODate) );
     query.bindValue( ":paid", transactionEdit->text() );
@@ -55,7 +55,7 @@ void EditTransactionDialog::saveTransaction() {
 
 void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial) {
     QSqlQuery query;
-    query.prepare("SELECT transaction.id, transaction.date, transaction.paid, transaction.debtor_id FROM debtor, transaction WHERE debtor.id = transaction.debtor_id AND debtor.serial = :debtor_serial ORDER BY transaction.date");
+    query.prepare("SELECT transactions.id, transactions.date, transactions.paid, transactions.debtor_id FROM debtor, transactions WHERE debtor.id = transactions.debtor_id AND debtor.serial = :debtor_serial ORDER BY transactions.date");
     query.bindValue( ":debtor_serial", serial );
 
     if ( !query.exec() ) {
@@ -67,12 +67,11 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
 
             return;
         }
-
-    tableWidget->setRowCount(query.size());
-
-    int row = 0;
+    qint32 row = 0;
 
     while ( query.next() ) {
+            tableWidget->setRowCount( row + 1 );
+
             QTableWidgetItem *idItem          = new QTableWidgetItem;
             QTableWidgetItem *dateItem        = new QTableWidgetItem;
             QTableWidgetItem *transactionItem = new QTableWidgetItem;
@@ -117,6 +116,7 @@ void EditTransactionDialog::clearTransaction() {
     nameEdit->clear();
     transactionEdit->clear();
     tableWidget->clearContents();
+    tableWidget->setRowCount(0);
 
     serialEdit->setFocus();
 }

@@ -116,16 +116,13 @@ DaybookBalanceDialog::PopulateTableWidget() {
     QProgressDialog progress_dialog( "Retrieving data...", "Abort Fetch", 0,
             query.size(), this );
 
-    // Set number of rows for the Table Widget
-    table_widget->setRowCount( query.size() );
-
     // Do not let other dialogs of our application get focus when the Progress
     // Dialog is displayed
     progress_dialog.setWindowModality(Qt::WindowModal);
     progress_dialog.setMinimumDuration(0);  // Minimum duration after which the
     // Progress Dialog is displayed
 
-    int row      = 0;  // Represents the current row
+    qint32 row   = 0;  // Represents the current row
     int progress = 0;  // Keeps track of progress
 
     table_widget->clearContents();  // Clear already listed contents
@@ -133,8 +130,11 @@ DaybookBalanceDialog::PopulateTableWidget() {
     int total_balance = 0;
 
     while ( query.next() ) {
-            progress_dialog.setValue(progress++);  // Set value for Progress Dialog
-            // and increment it
+            // Set number of rows for the Table Widget
+            table_widget->setRowCount( row + 1 );
+
+            progress_dialog.setValue(progress++);  // Set value for Progress
+            //Dialog and increment it
             qApp->processEvents();  // So that we get a responsive interface
 
             if ( progress_dialog.wasCanceled() ) {

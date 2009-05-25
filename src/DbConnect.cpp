@@ -5,25 +5,15 @@
 #include "DbConnect.h"
 
 QSqlDatabase DbConnect::db;
-QString DbConnect::database;
-QString DbConnect::username;
-QString DbConnect::password;
 
 bool
 DbConnect::Connect() {
     if ( db.isOpen() )
         return true;
 
-    database = "daily_collection";
-    username = "root";
-    password = "cubegin";
-
     // Set up connection related information via MySQL driver.
-    db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("localhost");
-    db.setDatabaseName(database);
-    db.setUserName(username);
-    db.setPassword(password);
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("daily_collection.db");
 
     // Check if connection to the database succeeded or not.
     if ( !db.open() ) {

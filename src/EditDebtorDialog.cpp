@@ -83,11 +83,11 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
             return;
         }
 
-    tableWidget->setRowCount(query.size());
-
-    int row = 0;
+    qint32 row = 0;
 
     while ( query.next() ) {
+            tableWidget->setRowCount( row + 1 );
+
             QTableWidgetItem *idItem      = new QTableWidgetItem;
             QTableWidgetItem *serialItem  = new QTableWidgetItem;
             QTableWidgetItem *nameItem    = new QTableWidgetItem;
@@ -181,6 +181,7 @@ void EditDebtorDialog::clearDebtor() {
     amountEdit->clear();
     phoneEdit->clear();
     tableWidget->clearContents();
+    tableWidget->setRowCount(0);
 
     serialEdit->setFocus();
 }

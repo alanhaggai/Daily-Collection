@@ -24,17 +24,8 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include <QMessageBox>
-#include <QProcess>
 #include <QStringList>
-#include <QDir>
-
-#ifdef Q_OS_WIN32
-QString mysql     = "C:\\\\MySQL\\bin\\mysql.exe";
-QString mysqldump = "C:\\\\MySQL\\bin\\mysqldump.exe";
-#else
-QString mysql     = "/usr/bin/mysql";
-QString mysqldump = "/usr/bin/mysqldump";
-#endif
+#include <QFile>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         QMainWindow(parent) {
@@ -166,50 +157,39 @@ DailyCollectionWindow::Backup() {
     QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
             suggested_filename, "Database Files (*.db)" );
 
-    QString database = DbConnect::database;
-    QString username = DbConnect::username;
-    QString password = DbConnect::password;
+    QFile backup_file;
 
-    QProcess* mysqldump_process = new QProcess;
-    mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
-    mysqldump_process->start( mysqldump, QStringList() << database << "-u"
-            + username << "-p" + password );
+    if ( backup_file.exists(filename) )
+        backup_file.remove(filename);
 
-    if ( !mysqldump_process->waitForFinished() )
-        exit(0);
+    if ( !backup_file.copy( "daily_collection.db", filename ) ) {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Warning, "Backup failed",
+            "Database has not been backed up.",
+            QMessageBox::Ok );
+        msgbox->exec();
+    }
+    else {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Warning, "Backup successful",
+            "Database has been backed up.",
+            QMessageBox::Ok );
+        msgbox->exec();
+    }
 }
 
 void
 DailyCollectionWindow::AutoBackup() {
-    DbConnect::Disconnect();
+    QFile backup_file;
 
-    QString database = DbConnect::database;
-    QString username = DbConnect::username;
-    QString password = DbConnect::password;
-
-    QDir dir("backups/auto");
-
-    if ( !dir.exists() ) {
-            if ( !dir.mkpath(".") ) {
-                    QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Warning, "Automatic Backup Failed",
-                        "Database has not been automatically backed up.",
-                        QMessageBox::Ok );
-                    msgbox->exec();
-
-                    return;
-                }
-        }
-
-    QString filename = dir.absolutePath() + "/"
-            + QDateTime::currentDateTime().toString() + ".db";
-    QProcess* mysqldump_process = new QProcess;
-    mysqldump_process->setStandardOutputFile( filename, QIODevice::WriteOnly );
-    mysqldump_process->start( mysqldump, QStringList() << database << "-u"
-            + username << "-p" + password );
-
-    if ( !mysqldump_process->waitForFinished() )
-        exit(0);
+    if ( !backup_file.copy( "daily_collection.db", "backups/auto/"
+                + QDateTime::currentDateTime().toString() + ".db" ) ) {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Warning, "Automatic backup failed",
+            "Database has not been backed up.",
+            QMessageBox::Ok );
+        msgbox->exec();
+    }
 }
 
 void
@@ -217,35 +197,22 @@ DailyCollectionWindow::Restore() {
     QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
             ".", "Database Files (*.db)" );
 
-    QString database = DbConnect::database;
-    QString username = DbConnect::username;
-    QString password = DbConnect::password;
+    QFile restore_file;
 
-    QString command;
+    restore_file.remove("daily_collection.db");
 
-    if ( DbConnect::Connect() ) {
-            QProcess* mysql_process = new QProcess;
-            mysql_process->setStandardInputFile(filename);
-            mysql_process->start( mysql, QStringList() << "-u" + username << "-p"
-                    + password );
-
-            if ( !mysql_process->waitForFinished() )
-                exit(0);
-
-            if ( mysql_process->exitCode() == 1 ) {
-                    QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Information, "Restoration Successful",
-                        "Database has been restored successfully.",
-                        QMessageBox::Ok );
-                    msgbox->exec();
-
-                    return;
-                }
-        }
-
-    QMessageBox* msgbox = new QMessageBox(
-        QMessageBox::Critical, "Restoration Failure",
-        "Database restoration has failed.",
-        QMessageBox::Ok );
-    msgbox->exec();
+    if ( !restore_file.copy( filename, "daily_collection.db" ) ) {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Information, "Restore successful",
+            "Database has been restored successfully.",
+            QMessageBox::Ok );
+        msgbox->exec();
+    }
+    else {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Critical, "Restore failed",
+            "Database has not been restored.",
+            QMessageBox::Ok );
+        msgbox->exec();
+    }
 }

@@ -92,10 +92,10 @@ TransactionsDialog::ListTransactions() {
         }
 
     QSqlQuery query;
-    query.prepare("SELECT debtor.serial, debtor.name, sum(transaction.paid)\
-            FROM debtor, agent, transaction WHERE transaction.agent_id\
-            = agent.id AND debtor.id = transaction.debtor_id AND\
-            transaction.date >= :from_date AND transaction.date <= :to_date AND\
+    query.prepare("SELECT debtor.serial, debtor.name, sum(transactions.paid)\
+            FROM debtor, agent, transactions WHERE transactions.agent_id\
+            = agent.id AND debtor.id = transactions.debtor_id AND\
+            transactions.date >= :from_date AND transactions.date <= :to_date AND\
             agent.id = :agent_id GROUP BY debtor.serial ORDER BY debtor.serial\
             ASC");
     query.bindValue( ":from_date", from_date );
@@ -116,7 +116,7 @@ TransactionsDialog::ListTransactions() {
 
     table_widget->setRowCount( query.size() );
 
-    qint16 row   = 0;
+    qint32 row   = 0;
     qint32 total = 0;
 
     QString html = "\
