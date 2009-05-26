@@ -13,3 +13,4 @@ doc/
 transactions.html
 *.db
 !schema.db
+!daily_collection.db
