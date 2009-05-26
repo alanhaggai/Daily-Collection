@@ -46,8 +46,9 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
 
     if ( !agent_query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + agent_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + agent_query.lastQuery() + "</b>,"
+                + " failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -72,8 +73,9 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
 
             if ( !amount_query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + amount_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + amount_query.lastQuery()
+                        + "</b>, failed.",
                         QMessageBox::Ok );
                     msgbox->exec();
 
@@ -91,8 +93,9 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
 
             if ( !transaction_query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + transaction_query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + transaction_query.lastQuery()
+                        + "</b>, failed.",
                         QMessageBox::Ok );
                     msgbox->exec();
 
@@ -101,7 +104,7 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
 
             transaction_query.next();  // Cycle through the results
             int agent_amount_remitted = transaction_query.value(0).toInt();
-            int agent_balance         = agent_amount_given - agent_amount_remitted;
+            int agent_balance = agent_amount_given - agent_amount_remitted;
 
             // Create Table Widget items
             QTableWidgetItem* name_item            = new QTableWidgetItem;
@@ -112,14 +115,16 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
             // Assign values to the items
             name_item->setText(agent_name);
             amount_given_item->setText( QString::number(agent_amount_given) );
-            amount_remitted_item->setText( QString::number(agent_amount_remitted) );
+            amount_remitted_item->setText(
+                QString::number(agent_amount_remitted) );
             balance_item->setText( QString::number(agent_balance) );
 
             // Assign an item to each column of Table Widget, and then increment
             // row counter
             table_widget->setItem( row,   NAME,            name_item );
             table_widget->setItem( row,   AMOUNT_GIVEN,    amount_given_item );
-            table_widget->setItem( row,   AMOUNT_REMITTED, amount_remitted_item );
+            table_widget->setItem( row,   AMOUNT_REMITTED,
+                    amount_remitted_item );
             table_widget->setItem( row++, BALANCE,         balance_item );
         }
 }

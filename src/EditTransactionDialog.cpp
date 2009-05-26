@@ -4,11 +4,14 @@
 
 #include "EditTransactionDialog.h"
 
-const int ID          = 0;
-const int DATE        = 1;
-const int TRANSACTION = 2;
+enum {
+    ID,
+    DATE,
+    TRANSACTION
+};
 
-EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog(parent) {
+EditTransactionDialog::EditTransactionDialog(QDialog *parent) :
+        QDialog(parent) {
     setupUi(this);
 
     tableWidget->hideColumn(ID);
@@ -23,7 +26,8 @@ EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog(parent) 
 }
 
 void EditTransactionDialog::saveTransaction() {
-    if ( "" == serialEdit->text() || "" == nameEdit->text() || "" == transactionEdit->text() ) {
+    if ( "" == serialEdit->text() || "" == nameEdit->text()
+            || "" == transactionEdit->text() ) {
             QMessageBox *msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
@@ -33,16 +37,18 @@ void EditTransactionDialog::saveTransaction() {
         }
 
     QSqlQuery query;
-    query.prepare("UPDATE transactions SET date = :date, paid = :paid WHERE id = :id");
+    query.prepare("UPDATE transactions SET date = :date, paid = :paid WHERE id\
+            = :id");
 
-    query.bindValue( ":date", dateCalendar->selectedDate().toString(Qt::ISODate) );
+    query.bindValue( ":date",
+            dateCalendar->selectedDate().toString(Qt::ISODate) );
     query.bindValue( ":paid", transactionEdit->text() );
     query.bindValue( ":id",   transactionId );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -55,20 +61,25 @@ void EditTransactionDialog::saveTransaction() {
     nameEdit->setFocus();
 }
 
-void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial) {
+void EditTransactionDialog::populateTableWidgetSerialEdit(
+    const QString& serial) {
     QSqlQuery query;
-    query.prepare("SELECT transactions.id, transactions.date, transactions.paid, transactions.debtor_id FROM debtor, transactions WHERE debtor.id = transactions.debtor_id AND debtor.serial = :debtor_serial ORDER BY transactions.date");
+    query.prepare("SELECT transactions.id, transactions.date,\
+            transactions.paid, transactions.debtor_id FROM debtor, transactions\
+            WHERE debtor.id = transactions.debtor_id AND debtor.serial =\
+            :debtor_serial ORDER BY transactions.date");
     query.bindValue( ":debtor_serial", serial );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
             return;
         }
+
     qint32 row = 0;
 
     while ( query.next() ) {
@@ -92,8 +103,8 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(const QString& serial)
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -108,7 +119,8 @@ void EditTransactionDialog::fetchItem(QTableWidgetItem *item) {
     currentRow = tableWidget->row(item);
 
     transactionId = tableWidget->item( currentRow, ID )->text().toInt();
-    QDate date = QDate::fromString( tableWidget->item( currentRow, DATE)->text(), "yyyy-MM-dd" );
+    QDate date = QDate::fromString( tableWidget->item( currentRow,
+            DATE)->text(), "yyyy-MM-dd" );
     dateCalendar->setSelectedDate(date);
     transactionEdit->setText( tableWidget->item( currentRow,
             TRANSACTION )->text() );
@@ -123,24 +135,24 @@ void EditTransactionDialog::deleteTransaction() {
         QMessageBox::Ok | QMessageBox::Cancel );
 
     if ( msgbox->exec() == QMessageBox::Ok ) {
-        QSqlQuery query;
-        query.prepare("DELETE FROM transactions WHERE id = :transaction_id");
-        query.bindValue( ":transaction_id", transactionId );
+            QSqlQuery query;
+            query.prepare("DELETE FROM transactions WHERE id = :transaction_id");
+            query.bindValue( ":transaction_id", transactionId );
 
-        if ( !query.exec() ) {
-                QMessageBox* msgbox = new QMessageBox(
-                    QMessageBox::Critical, "Query execution failed",
-                    "Execution of query <b>" + query.lastQuery() + "</b>,"
-                    + " failed.",
-                    QMessageBox::Ok );
-                msgbox->exec();
-            }
+            if ( !query.exec() ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.",
+                        QMessageBox::Ok );
+                    msgbox->exec();
+                }
 
-        transactionEdit->clear();
-        populateTableWidgetSerialEdit( serialEdit->text() );
+            transactionEdit->clear();
+            populateTableWidgetSerialEdit( serialEdit->text() );
 
-        nameEdit->setFocus();
-    }
+            nameEdit->setFocus();
+        }
 }
 
 void EditTransactionDialog::clearTransaction() {

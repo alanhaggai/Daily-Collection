@@ -42,19 +42,24 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     connect( action_EditDebtor,
             SIGNAL( activated() ), this, SLOT( SpawnEditDebtorDialog() ) );
     connect( action_EditTransaction,
-            SIGNAL( activated() ), this, SLOT( SpawnEditTransactionDialog() ) );
+            SIGNAL( activated() ), this,
+            SLOT( SpawnEditTransactionDialog() ) );
     connect( action_DaybookAgent,
-            SIGNAL( activated() ), this, SLOT( SpawnDaybookAgentDialog() ) );
+            SIGNAL( activated() ), this,
+            SLOT( SpawnDaybookAgentDialog() ) );
     connect( action_DaybookAllAgents,
-            SIGNAL( activated() ), this, SLOT( SpawnDaybookAllAgentsDialog() ) );
+            SIGNAL( activated() ), this,
+            SLOT( SpawnDaybookAllAgentsDialog() ) );
     connect( action_DaybookBalance,
             SIGNAL( activated() ), this, SLOT( SpawnDaybookBalanceDialog() ) );
     connect( action_DebtorInstallment,
-            SIGNAL( activated() ), this, SLOT( SpawnDebtorInstallmentDialog() ) );
+            SIGNAL( activated() ), this,
+            SLOT( SpawnDebtorInstallmentDialog() ) );
     connect( action_DebtorDetails,
             SIGNAL( activated() ), this, SLOT( SpawnDebtorDetailsDialog() ) );
     connect( action_DebtorTransactions,
-            SIGNAL( activated() ), this, SLOT( SpawnDebtorTransactionsDialog() ) );
+            SIGNAL( activated() ), this,
+            SLOT( SpawnDebtorTransactionsDialog() ) );
     connect( action_Transactions,
             SIGNAL( activated() ), this, SLOT( SpawnTransactionsDialog() ) );
     connect( action_Backup,
@@ -110,21 +115,24 @@ DailyCollectionWindow::SpawnDaybookAgentDialog() {
 
 void
 DailyCollectionWindow::SpawnDaybookAllAgentsDialog() {
-    DaybookAllAgentsDialog* daybook_all_agents_dialog = new DaybookAllAgentsDialog;
+    DaybookAllAgentsDialog* daybook_all_agents_dialog = new
+    DaybookAllAgentsDialog;
     mdiArea->addSubWindow(daybook_all_agents_dialog);
     daybook_all_agents_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDaybookBalanceDialog() {
-    DaybookBalanceDialog* daybook_balance_dialog = new DaybookBalanceDialog;
+    DaybookBalanceDialog* daybook_balance_dialog = new
+    DaybookBalanceDialog;
     mdiArea->addSubWindow(daybook_balance_dialog);
     daybook_balance_dialog->show();
 }
 
 void
 DailyCollectionWindow::SpawnDebtorInstallmentDialog() {
-    DebtorInstallmentDialog* debtor_installment_dialog = new DebtorInstallmentDialog;
+    DebtorInstallmentDialog* debtor_installment_dialog = new
+    DebtorInstallmentDialog;
     mdiArea->addSubWindow(debtor_installment_dialog);
     debtor_installment_dialog->show();
 }
@@ -138,7 +146,8 @@ DailyCollectionWindow::SpawnDebtorDetailsDialog() {
 
 void
 DailyCollectionWindow::SpawnDebtorTransactionsDialog() {
-    DebtorTransactionsDialog* debtor_transactions_dialog = new DebtorTransactionsDialog;
+    DebtorTransactionsDialog* debtor_transactions_dialog = new
+    DebtorTransactionsDialog;
     mdiArea->addSubWindow(debtor_transactions_dialog);
     debtor_transactions_dialog->show();
 }
@@ -152,9 +161,9 @@ DailyCollectionWindow::SpawnTransactionsDialog() {
 
 void
 DailyCollectionWindow::Backup() {
-    QString suggested_filename = "./backups/" + QDateTime::currentDateTime().toString()
-            + ".db";
-    QString filename = QFileDialog::getSaveFileName( this, "Backup Database",
+    QString suggested_filename = "./backups/"
+            + QDateTime::currentDateTime().toString() + ".db";
+    QString filename = QFileDialog::getSaveFileName( this, "Backup database",
             suggested_filename, "Database Files (*.db)" );
 
     QFile backup_file;
@@ -163,19 +172,19 @@ DailyCollectionWindow::Backup() {
         backup_file.remove(filename);
 
     if ( !backup_file.copy( "daily_collection.db", filename ) ) {
-        QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Warning, "Backup failed",
-            "Database has not been backed up.",
-            QMessageBox::Ok );
-        msgbox->exec();
-    }
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Warning, "Backup failed",
+                "Database has not been backed up.",
+                QMessageBox::Ok );
+            msgbox->exec();
+        }
     else {
-        QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Warning, "Backup successful",
-            "Database has been backed up.",
-            QMessageBox::Ok );
-        msgbox->exec();
-    }
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Warning, "Backup successful",
+                "Database has been backed up.",
+                QMessageBox::Ok );
+            msgbox->exec();
+        }
 }
 
 void
@@ -183,18 +192,18 @@ DailyCollectionWindow::AutoBackup() {
     QFile backup_file;
 
     if ( !backup_file.copy( "daily_collection.db", "backups/auto/"
-                + QDateTime::currentDateTime().toString() + ".db" ) ) {
-        QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Warning, "Automatic backup failed",
-            "Database has not been backed up.",
-            QMessageBox::Ok );
-        msgbox->exec();
-    }
+            + QDateTime::currentDateTime().toString() + ".db" ) ) {
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Warning, "Automatic backup failed",
+                "Database has not been backed up.",
+                QMessageBox::Ok );
+            msgbox->exec();
+        }
 }
 
 void
 DailyCollectionWindow::Restore() {
-    QString filename = QFileDialog::getOpenFileName( this, "Restore Database",
+    QString filename = QFileDialog::getOpenFileName( this, "Restore database",
             ".", "Database Files (*.db)" );
 
     QFile restore_file;
@@ -202,17 +211,17 @@ DailyCollectionWindow::Restore() {
     restore_file.remove("daily_collection.db");
 
     if ( !restore_file.copy( filename, "daily_collection.db" ) ) {
-        QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Information, "Restore successful",
-            "Database has been restored successfully.",
-            QMessageBox::Ok );
-        msgbox->exec();
-    }
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Information, "Restore successful",
+                "Database has been restored successfully.",
+                QMessageBox::Ok );
+            msgbox->exec();
+        }
     else {
-        QMessageBox* msgbox = new QMessageBox(
-            QMessageBox::Critical, "Restore failed",
-            "Database has not been restored.",
-            QMessageBox::Ok );
-        msgbox->exec();
-    }
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Restore failed",
+                "Database has not been restored.",
+                QMessageBox::Ok );
+            msgbox->exec();
+        }
 }

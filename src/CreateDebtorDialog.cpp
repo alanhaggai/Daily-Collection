@@ -25,8 +25,8 @@ CreateDebtorDialog::CreateDebtorDialog(QDialog* parent)
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -76,8 +76,8 @@ CreateDebtorDialog::SaveDebtor() {
     // debtor
     QSqlQuery query;
     query.prepare("INSERT INTO debtor( serial, name, agent_id, address, amount,"
-            "phone, date, deleted ) VALUES ( :serial, :name, :agent_id, :address,\
-            :amount, :phone, :date, 0 )");
+            "phone, date, deleted ) VALUES ( :serial, :name, :agent_id,\
+            :address, :amount, :phone, :date, 0 )");
     query.bindValue( ":serial",   serial_edit->text() );
     query.bindValue( ":name",     name_edit->text() );
     query.bindValue( ":agent_id", agent_map.key( agent_combo->currentText() ) );
@@ -89,8 +89,8 @@ CreateDebtorDialog::SaveDebtor() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -102,8 +102,8 @@ CreateDebtorDialog::SaveDebtor() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -113,12 +113,13 @@ CreateDebtorDialog::SaveDebtor() {
     query.next();
     QString debtor_id = query.value(0).toString();
 
-    query.prepare( "INSERT INTO transactions ( debtor_id, agent_id, date, paid )\
-            VALUES ( :debtor_id, :agent_id, :date, 0 )" );
+    query.prepare( "INSERT INTO transactions ( debtor_id, agent_id, date,\
+            paid ) VALUES ( :debtor_id, :agent_id, :date, 0 )" );
 
     query.bindValue( ":debtor_id", debtor_id );
     query.bindValue( ":agent_id", agent_map.key( agent_combo->currentText() ) );
-    query.bindValue( ":date", date_calendar->selectedDate().toString(Qt::ISODate) );
+    query.bindValue( ":date",
+            date_calendar->selectedDate().toString(Qt::ISODate) );
 
     // Clear Line Edits and Combo Box
     serial_edit->clear();

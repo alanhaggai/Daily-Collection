@@ -34,8 +34,8 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -103,8 +103,8 @@ DaybookBalanceDialog::PopulateTableWidget() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -138,8 +138,8 @@ DaybookBalanceDialog::PopulateTableWidget() {
             qApp->processEvents();  // So that we get a responsive interface
 
             if ( progress_dialog.wasCanceled() ) {
-                    // If Progress Dialog's `Abort Fetch' button is clicked, end further
-                    // processing by breaking out of the loop
+                    // If Progress Dialog's `Abort Fetch' button is clicked, end
+                    // further processing by breaking out of the loop
                     break;
                 }
 

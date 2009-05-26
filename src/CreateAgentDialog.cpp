@@ -32,7 +32,7 @@ CreateAgentDialog::SaveAgent() {
     // Check if name and address have been entered or not
     if ( "" == agent_name || "" == agent_address ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Warning, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete fields",
                 "All fields are to be filled.", QMessageBox::Ok );
             msgbox->exec();  // Fire up a message box
 
@@ -49,8 +49,8 @@ CreateAgentDialog::SaveAgent() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 

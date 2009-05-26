@@ -49,13 +49,14 @@ DebtorInstallmentDialog::PopulateValuesOnSerialChange(const QString&
         debtor_serial) {
     // Get name and amount received by the debtor
     QSqlQuery query;
-    query.prepare("SELECT name, amount FROM debtor WHERE serial = :debtor_serial");
+    query.prepare("SELECT name, amount FROM debtor WHERE serial =\
+            :debtor_serial");
     query.bindValue( ":debtor_serial", debtor_serial );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -87,7 +88,8 @@ DebtorInstallmentDialog::PopulateValuesOnSerialChange(const QString&
  * Calculate the amount which will be paid then
  */
 void
-DebtorInstallmentDialog::CalculateAmount(const QString& number_of_installments) {
+DebtorInstallmentDialog::CalculateAmount(
+    const QString& number_of_installments) {
     amount_edit->setText( QString::number( number_of_installments.toInt() *
             installment ) );
 }
@@ -161,15 +163,16 @@ DebtorInstallmentDialog::SaveInstallment() {
             paid = amount;
 
             QSqlQuery query;
-            query.prepare( "SELECT SUM(transactions.paid) FROM debtor, transactions\
-                WHERE debtor.id = transactions.debtor_id AND debtor.serial = :debtor_serial" );
+            query.prepare( "SELECT SUM(transactions.paid) FROM debtor,\
+                    transactions WHERE debtor.id = transactions.debtor_id AND\
+                    debtor.serial = :debtor_serial" );
             query.bindValue( ":debtor_serial", serial_edit->text() );
 
             if ( !query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
-                        QMessageBox::Ok );
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;
@@ -179,14 +182,15 @@ DebtorInstallmentDialog::SaveInstallment() {
 
             QString sum = query.value(0).toString();
 
-            query.prepare( "SELECT id, agent_id FROM debtor WHERE debtor.serial = :debtor_serial" );
+            query.prepare( "SELECT id, agent_id FROM debtor WHERE debtor.serial\
+                    = :debtor_serial" );
             query.bindValue( ":debtor_serial", serial_edit->text() );
 
             if ( !query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
-                        QMessageBox::Ok );
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;
@@ -197,19 +201,21 @@ DebtorInstallmentDialog::SaveInstallment() {
             QString debtor_id = query.value(0).toString();
             QString agent_id  = query.value(1).toString();
 
-            query.prepare( "INSERT INTO transactions ( agent_id, debtor_id, paid,\
-            date ) VALUES ( :agent_id, :debtor_id, :paid, :date )" );
+            query.prepare( "INSERT INTO transactions ( agent_id, debtor_id,\
+                    paid, date ) VALUES ( :agent_id, :debtor_id, :paid,\
+                    :date )" );
 
             query.bindValue( ":agent_id", agent_id );
             query.bindValue( ":debtor_id", debtor_id );
             query.bindValue( ":paid", amount );
-            query.bindValue( ":date", date_calendar->selectedDate().toString(Qt::ISODate) );
+            query.bindValue( ":date",
+                    date_calendar->selectedDate().toString(Qt::ISODate) );
 
             if ( !query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
-                        QMessageBox::Ok );
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;
@@ -220,8 +226,9 @@ DebtorInstallmentDialog::SaveInstallment() {
 
             if ( !query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.",
                         QMessageBox::Ok );
                     msgbox->exec();
 
@@ -233,15 +240,16 @@ DebtorInstallmentDialog::SaveInstallment() {
             amount_rented = query.value(0).toInt();
 
             if ( amount_rented == amount ) {
-                    query.prepare( "UPDATE debtor SET deleted = 1 WHERE id = :id" );
+                    query.prepare( "UPDATE debtor SET deleted = 1 WHERE\
+                            id = :id" );
                     query.bindValue( ":id", debtor_id );
                 }
 
             if ( !query.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
-                        QMessageBox::Critical, "Query Execution Failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
-                        QMessageBox::Ok );
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;

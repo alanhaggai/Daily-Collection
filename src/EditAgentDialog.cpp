@@ -4,10 +4,12 @@
 
 #include "EditAgentDialog.h"
 
-const int ID      = 0;
-const int NAME    = 1;
-const int ADDRESS = 2;
-const int PHONE   = 3;
+enum {
+    ID,
+    NAME,
+    ADDRESS,
+    PHONE,
+};
 
 EditAgentDialog::EditAgentDialog(QDialog *parent) : QDialog(parent) {
     setupUi(this);
@@ -15,8 +17,10 @@ EditAgentDialog::EditAgentDialog(QDialog *parent) : QDialog(parent) {
     tableWidget->hideColumn(ID);
     populateTableWidget();
 
-    connect( tableWidget, SIGNAL( itemClicked(QTableWidgetItem *) ), this, SLOT( fetchItem(QTableWidgetItem *) ) );
-    connect( saveButton,  SIGNAL(clicked()),                         this, SLOT(save()) );
+    connect( tableWidget, SIGNAL( itemClicked(QTableWidgetItem *) ), this,
+            SLOT( fetchItem(QTableWidgetItem *) ) );
+    connect( saveButton,  SIGNAL(clicked()),                         this,
+            SLOT(save()) );
 }
 
 void EditAgentDialog::populateTableWidget() {
@@ -25,8 +29,8 @@ void EditAgentDialog::populateTableWidget() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -69,7 +73,8 @@ void EditAgentDialog::fetchItem(QTableWidgetItem *item) {
 }
 
 void EditAgentDialog::save() {
-    if ( "" == nameEdit->text() || "" == addressEdit->toPlainText() || "" == phoneEdit->text() ) {
+    if ( "" == nameEdit->text() || "" == addressEdit->toPlainText()
+            || "" == phoneEdit->text() ) {
             QMessageBox *msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
@@ -79,7 +84,8 @@ void EditAgentDialog::save() {
         }
 
     QSqlQuery query;
-    query.prepare("UPDATE agent SET name = :name, address = :address, phone = :phone WHERE id = :id");
+    query.prepare("UPDATE agent SET name = :name, address = :address, \
+            phone = :phone WHERE id = :id");
 
     query.bindValue( ":id",      tableWidget->item( currentRow, ID )->text() );
     query.bindValue( ":name",    nameEdit->text() );
@@ -88,8 +94,8 @@ void EditAgentDialog::save() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 

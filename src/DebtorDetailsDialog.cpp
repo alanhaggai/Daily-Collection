@@ -60,26 +60,27 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
 
     // Why should we waste time/resource on populating the Table Widget with an
     // unwanted humongous list?
-    if ( debtor_serial.length() < 3 ) {
-            return;
-        }
+    if ( debtor_serial.length() < 3 )
+        return;
 
     QSqlQuery query;
-    query.prepare("SELECT debtor.serial, debtor.name, agent.name, debtor.address,\
-            debtor.amount, debtor.phone, debtor.date, debtor.agent_id, debtor.id\
-            FROM debtor, agent WHERE debtor.agent_id = agent.id AND debtor.serial\
-            LIKE :debtor_serial ORDER BY serial ASC");
+    query.prepare("SELECT debtor.serial, debtor.name, agent.name,\
+            debtor.address, debtor.amount, debtor.phone, debtor.date,\
+            debtor.agent_id, debtor.id FROM debtor, agent WHERE\
+            debtor.agent_id = agent.id AND debtor.serial LIKE :debtor_serial\
+            ORDER BY serial ASC");
     query.bindValue( ":debtor_serial", "%" + debtor_serial + "%" );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
             return;
         }
+
     qint32 row = 0;
 
     while ( query.next() ) {
@@ -118,11 +119,18 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
             QTableWidgetItem* date_item    = new QTableWidgetItem;
 
             QSqlQuery query_sum;
-            query_sum.prepare("SELECT SUM(transactions.paid) FROM transactions WHERE\
-                debtor_id = :debtor_id");
+            query_sum.prepare("SELECT SUM(transactions.paid) FROM transactions\
+                    WHERE debtor_id = :debtor_id");
             query_sum.bindValue( ":debtor_id", debtor_id );
 
             if ( !query_sum.exec() ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
+                    msgbox->exec();
+
+                    return;
                 }
 
             query_sum.next();
@@ -163,9 +171,8 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
 
     // Why should we waste time/resource on populating the Table Widget with an
     // unwanted humongous list?
-    if ( debtor_name.length() < 3 ) {
+    if ( debtor_name.length() < 3 )
             return;
-        }
 
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, agent.name,\
@@ -176,8 +183,8 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -222,11 +229,18 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
             QTableWidgetItem* date_item    = new QTableWidgetItem;
 
             QSqlQuery query_sum;
-            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction WHERE\
-                debtor_id = :debtor_id");
+            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction\
+                    WHERE debtor_id = :debtor_id");
             query_sum.bindValue( ":debtor_id", debtor_id );
 
             if ( !query_sum.exec() ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>,"
+                        + " failed.", QMessageBox::Ok );
+                    msgbox->exec();
+
+                    return;
                 }
 
             query_sum.next();

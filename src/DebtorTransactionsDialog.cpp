@@ -13,7 +13,7 @@
 
 enum {
     DATE,
-    PAID,
+    PAID
 };
 
 //! Constructor
@@ -24,7 +24,7 @@ DebtorTransactionsDialog::DebtorTransactionsDialog(QDialog* parent) :
 
     connect( serial_edit, SIGNAL( textChanged(const QString&) ), this,
             SLOT( SerialEditTextChanged(const QString&) ) );
-    connect( clear_button, SIGNAL( clicked() ), this, SLOT( Clear() ) );
+    connect( clear_button,  SIGNAL( clicked() ), this, SLOT( Clear() ) );
 }
 
 /*
@@ -37,9 +37,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
     table_widget->clearContents();
     table_widget->setRowCount(0);
 
-    if ( debtor_serial.length() < 4 ) {
-            return;
-        }
+    if ( debtor_serial.length() < 4 )
+        return;
 
     QSqlQuery query;
     query.prepare("SELECT debtor.name, debtor.amount, SUM(transactions.paid)\
@@ -49,8 +48,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -81,8 +80,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 

@@ -36,8 +36,8 @@ DaybookAgentDialog::DaybookAgentDialog(QDialog* parent) :
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -80,15 +80,15 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
     // been selected in the Combo Box
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, debtor.amount,\
-        SUM(transactions.paid) FROM debtor, transactions WHERE debtor.agent_id =\
-        :agent_id AND debtor.id = transactions.debtor_id GROUP BY debtor.serial\
-        ORDER BY debtor.serial");
+        SUM(transactions.paid) FROM debtor, transactions WHERE debtor.agent_id\
+        = :agent_id AND debtor.id = transactions.debtor_id GROUP BY\
+        debtor.serial ORDER BY debtor.serial");
     query.bindValue( ":agent_id", agent_id );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 

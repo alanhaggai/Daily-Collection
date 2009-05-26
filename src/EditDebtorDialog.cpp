@@ -4,14 +4,16 @@
 
 #include "EditDebtorDialog.h"
 
-const int ID      = 0;
-const int SERIAL  = 1;
-const int NAME    = 2;
-const int AGENT   = 3;
-const int ADDRESS = 4;
-const int AMOUNT  = 5;
-const int PHONE   = 6;
-const int DATE    = 7;
+enum {
+    ID,
+    SERIAL,
+    NAME,
+    AGENT,
+    ADDRESS,
+    AMOUNT,
+    PHONE,
+    DATE
+};
 
 EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog(parent) {
     setupUi(this);
@@ -21,8 +23,8 @@ EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog(parent) {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -47,11 +49,13 @@ EditDebtorDialog::EditDebtorDialog(QDialog *parent) : QDialog(parent) {
     tableWidget->setColumnWidth( PHONE,   100);
     tableWidget->setColumnWidth( DATE,    100);
 
-    connect( tableWidget,  SIGNAL( itemClicked(QTableWidgetItem *) ), this, SLOT( fetchItem(QTableWidgetItem *) ) );
-    connect( saveButton,   SIGNAL(clicked()),                         this, SLOT(saveDebtor()) );
-    connect( deleteButton, SIGNAL(clicked()),                         this, SLOT(deleteDebtor()) );
-    connect( clearButton,  SIGNAL(clicked()),                         this, SLOT(clearDebtor()) );
-    connect( serialEdit,   SIGNAL(textChanged(const QString&)),       this, SLOT(populateTableWidgetSerialEdit(const QString&)) );
+    connect( tableWidget,  SIGNAL( itemClicked(QTableWidgetItem *) ), this,
+            SLOT( fetchItem(QTableWidgetItem *) ) );
+    connect( saveButton,   SIGNAL(clicked()), this, SLOT(saveDebtor()) );
+    connect( deleteButton, SIGNAL(clicked()), this, SLOT(deleteDebtor()) );
+    connect( clearButton,  SIGNAL(clicked()), this, SLOT(clearDebtor()) );
+    connect( serialEdit,   SIGNAL(textChanged(const QString&)), this,
+            SLOT(populateTableWidgetSerialEdit(const QString&)) );
 }
 
 void EditDebtorDialog::fetchItem(QTableWidgetItem *item) {
@@ -59,12 +63,14 @@ void EditDebtorDialog::fetchItem(QTableWidgetItem *item) {
 
     serialEdit->setText( tableWidget->item( currentRow,  SERIAL )->text() );
     nameEdit->setText( tableWidget->item( currentRow,    NAME )->text() );
-    agentCombo->setCurrentIndex( agentCombo->findText( tableWidget->item( currentRow, AGENT )->text() ) );
+    agentCombo->setCurrentIndex( agentCombo->findText( tableWidget->item(
+                currentRow, AGENT )->text() ) );
     addressEdit->setText( tableWidget->item( currentRow, ADDRESS )->text() );
     amountEdit->setText( tableWidget->item( currentRow,  AMOUNT )->text() );
     phoneEdit->setText( tableWidget->item( currentRow,   PHONE )->text() );
 
-    QDate date = QDate::fromString( tableWidget->item( currentRow, DATE)->text(), "yyyy-MM-dd" );
+    QDate date = QDate::fromString( tableWidget->item( currentRow,
+            DATE)->text(), "yyyy-MM-dd" );
     dateCalendar->setSelectedDate(date);
 }
 
@@ -75,8 +81,8 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -100,7 +106,8 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
             idItem->setText( query.value(ID).toString() );
             serialItem->setText( query.value(SERIAL).toString() );
             nameItem->setText( query.value(NAME).toString() );
-            agentItem->setText( agentMap[ query.value(AGENT).toString().toInt() ] );
+            agentItem->setText(
+                agentMap[ query.value(AGENT).toString().toInt() ] );
             addressItem->setText( query.value(ADDRESS).toString() );
             amountItem->setText( query.value(AMOUNT).toString() );
             phoneItem->setText( query.value(PHONE).toString() );
@@ -118,9 +125,11 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
 }
 
 void EditDebtorDialog::saveDebtor() {
-    if ( "" == serialEdit->text() || "" == nameEdit->text() || -1 == agentCombo->currentIndex() || "" == addressEdit->toPlainText() || "" == amountEdit->text() ) {
+    if ( "" == serialEdit->text() || "" == nameEdit->text()
+            || -1 == agentCombo->currentIndex()
+            || "" == addressEdit->toPlainText() || "" == amountEdit->text() ) {
             QMessageBox *msgbox = new QMessageBox(
-                QMessageBox::Warning, "Incomplete Fields",
+                QMessageBox::Warning, "Incomplete fields",
                 "All fields are to be filled.", QMessageBox::Ok );
             msgbox->exec();
 
@@ -128,7 +137,9 @@ void EditDebtorDialog::saveDebtor() {
         }
 
     QSqlQuery query;
-    query.prepare("UPDATE debtor SET serial = :serial, name = :name, agent_id = :agent_id, address = :address, amount = :amount, phone = :phone, date = :date WHERE id = :id");
+    query.prepare("UPDATE debtor SET serial = :serial, name = :name, agent_id\
+            = :agent_id, address = :address, amount = :amount, phone = :phone,\
+            date = :date WHERE id = :id");
 
     query.bindValue( ":id",       tableWidget->item( currentRow, ID )->text() );
     query.bindValue( ":serial",   serialEdit->text() );
@@ -137,12 +148,13 @@ void EditDebtorDialog::saveDebtor() {
     query.bindValue( ":address",  addressEdit->toPlainText() );
     query.bindValue( ":amount",   amountEdit->text() );
     query.bindValue( ":phone",    phoneEdit->text() );
-    query.bindValue( ":date",     dateCalendar->selectedDate().toString(Qt::ISODate) );
+    query.bindValue( ":date",
+            dateCalendar->selectedDate().toString(Qt::ISODate) );
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -153,7 +165,9 @@ void EditDebtorDialog::saveDebtor() {
 }
 
 void EditDebtorDialog::deleteDebtor() {
-    if ( QMessageBox::No == QMessageBox::warning( this, tr("Delete debtor?"), "Are you sure you want to delete debtor details?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) )
+    if ( QMessageBox::No == QMessageBox::warning( this, tr("Delete debtor?"),
+            "Are you sure you want to delete debtor details?",
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) )
         return;
 
     QSqlQuery query;
@@ -162,8 +176,8 @@ void EditDebtorDialog::deleteDebtor() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 

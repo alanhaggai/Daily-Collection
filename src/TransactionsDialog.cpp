@@ -35,8 +35,8 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -104,8 +104,8 @@ TransactionsDialog::ListTransactions() {
 
     if ( !query.exec() ) {
             QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Critical, "Query Execution Failed",
-                "Execution of query <b>" + query.lastQuery() + "</b>, failed.\n\nMost probably, MySQL server was not started.",
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
                 QMessageBox::Ok );
             msgbox->exec();
 
@@ -122,7 +122,11 @@ TransactionsDialog::ListTransactions() {
     QString html = "\
         <html>\n\
             <head>\n\
-                <title>Transactions by " + agent_name + " from " + from_calendar->selectedDate().toString("dd-MM-yyyy") + " to " + to_calendar->selectedDate().toString("dd-MM-yyyy") + "</title>\n\
+                <title>Transactions by " + agent_name + " from "
+            + from_calendar->selectedDate().toString("dd-MM-yyyy")
+            + " to "
+            + to_calendar->selectedDate().toString("dd-MM-yyyy")
+            + "</title>\n\
                 <style type='text/css'>\n\
                 </style>\n\
                 <link type='text/css' rel='stylesheet' href='style.css' />\n\
@@ -133,13 +137,18 @@ TransactionsDialog::ListTransactions() {
                         <h2>Transactions</h2>\n\
                         <table>\n\
                             <tr>\n\
-                                <td>Agent</td><td class='right'><b>" + agent_name + "</b></td>\n\
+                                <td>Agent</td><td class='right'><b>"
+            + agent_name + "</b></td>\n\
                             </tr>\n\
                             <tr>\n\
-                                <td>From</td><td class='right'><b>" + from_calendar->selectedDate().toString("dd-MM-yyyy") + "</b></td>\n\
+                                <td>From</td><td class='right'><b>"
+            + from_calendar->selectedDate().toString("dd-MM-yyyy")
+            + "</b></td>\n\
                             </tr>\n\
                             <tr>\n\
-                                <td>To</td><td class='right'><b>" + to_calendar->selectedDate().toString("dd-MM-yyyy") + "</b></td>\n\
+                                <td>To</td><td class='right'><b>"
+            + to_calendar->selectedDate().toString("dd-MM-yyyy")
+            + "</b></td>\n\
                             </tr>\n\
                         </table>\n\
                     </div>\n\
@@ -173,7 +182,10 @@ TransactionsDialog::ListTransactions() {
 
             html += "\
                     <tr style='$style'>\n\
-                        <td class='right'>" + serial + "</td><td class='centre'>" + name + "</td><td class='right'>Rs. " + paid + "</td>\n\
+                        <td class='right'>" + serial
+                    + "</td><td class='centre'>"
+                    + name + "</td><td class='right'>Rs. " + paid
+                    + "</td>\n\
                     </tr>\n\
                     ";
         }
@@ -182,7 +194,9 @@ TransactionsDialog::ListTransactions() {
                             </table>\n\
                             <table>\n\
                                 <tr>\n\
-                                    <td>Total</td><td class='right'><b>Rs. " + QString::number(total) + "</b></td>\n\
+                                    <td>Total</td><td class='right'><b>Rs. "
+            + QString::number(total)
+            + "</b></td>\n\
                                 </tr>\n\
                             </table>\n\
                         </div>\n\
@@ -208,7 +222,8 @@ TransactionsDialog::OpenReportInBrowser() {
     if ( flag == false ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Data required to produce report",
-                "Please list the transactions before opening the report.", QMessageBox::Ok );
+                "Please list the transactions before opening the report.",
+                QMessageBox::Ok );
             msgbox->exec();
 
             return;
