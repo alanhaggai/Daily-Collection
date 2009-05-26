@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+#include <QProgressDialog>
 
 enum {
     SERIAL,
@@ -82,7 +83,6 @@ TransactionsDialog::ListTransactions() {
     to_date    = to_calendar->selectedDate().toString(Qt::ISODate);
     from_date  = from_calendar->selectedDate().toString(Qt::ISODate);
 
-
     if ( -1 == agent_combo->currentIndex() ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
@@ -95,9 +95,9 @@ TransactionsDialog::ListTransactions() {
     query.prepare("SELECT debtor.serial, debtor.name, sum(transactions.paid)\
             FROM debtor, agent, transactions WHERE transactions.agent_id\
             = agent.id AND debtor.id = transactions.debtor_id AND\
-            transactions.date >= :from_date AND transactions.date <= :to_date AND\
-            agent.id = :agent_id GROUP BY debtor.serial ORDER BY debtor.serial\
-            ASC");
+            transactions.date >= :from_date AND transactions.date <= :to_date\
+            AND agent.id = :agent_id GROUP BY debtor.serial ORDER BY\
+            debtor.serial ASC");
     query.bindValue( ":from_date", from_date );
     query.bindValue( ":to_date", to_date );
     query.bindValue( ":agent_id", agent );
@@ -111,6 +111,18 @@ TransactionsDialog::ListTransactions() {
 
             return;
         }
+
+    qint32 count = 0;
+
+    while ( query.next() )
+        count++;
+
+    query.first();
+
+    QProgressDialog progress_dialog( "Retrieving data...", "Abort Fetch", 0,
+            count, this );
+    progress_dialog.setWindowModality(Qt::WindowModal);
+    progress_dialog.setMinimumDuration(0);
 
     flag = true;
 
@@ -155,7 +167,15 @@ TransactionsDialog::ListTransactions() {
                             <th>Serial</th><th>Name</th><th>Transaction</th>\n\
             ";
 
+    qint32 progress = 0;
+
     while ( query.next() ) {
+            progress_dialog.setValue(progress++);
+            qApp->processEvents();
+
+            if ( progress_dialog.wasCanceled() )
+                break;
+
             table_widget->setRowCount( row + 1 );
 
             QString serial;

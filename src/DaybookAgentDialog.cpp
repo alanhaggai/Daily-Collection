@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QProgressDialog>
 
 //! Enumerator constants for representing Table Widget columns
 enum {
@@ -95,7 +96,21 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
             return;
         }
 
-    qint32 row = 0;  // Row count
+    qint32 count = 0;
+
+    while ( query.next() ) {
+        count++;
+    }
+
+    query.first();
+
+    QProgressDialog progress_dialog( "Retrieving data...", "Abort Fetch", 0,
+            count, this );
+    progress_dialog.setWindowModality(Qt::WindowModal);
+    progress_dialog.setMinimumDuration(0);
+
+    qint32 row      = 0;  // Row count
+    qint32 progress = 0;
 
     int total_amount  = 0;  // Total amount received by debtors from an agent
     int total_paid    = 0;  // Total amount paid by debtors to an agent
@@ -103,6 +118,12 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
 
     // Loop through result rows
     while ( query.next() ) {
+            progress_dialog.setValue(progress++);
+            qApp->processEvents();
+
+            if ( progress_dialog.wasCanceled() )
+                break;
+
             // Set row count to the query result size
             table_widget->setRowCount( row + 1 );
 
