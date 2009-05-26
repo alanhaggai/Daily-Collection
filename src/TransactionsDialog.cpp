@@ -114,8 +114,6 @@ TransactionsDialog::ListTransactions() {
 
     flag = true;
 
-    table_widget->setRowCount( query.size() );
-
     qint32 row   = 0;
     qint32 total = 0;
 
@@ -158,6 +156,8 @@ TransactionsDialog::ListTransactions() {
             ";
 
     while ( query.next() ) {
+            table_widget->setRowCount( row + 1 );
+
             QString serial;
             QString name;
             QString paid;
