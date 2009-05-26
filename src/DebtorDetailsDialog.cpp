@@ -126,8 +126,8 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
             if ( !query_sum.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
                         QMessageBox::Critical, "Query execution failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>,"
-                        + " failed.", QMessageBox::Ok );
+                        "Execution of query <b>" + query_sum.lastQuery()
+                        + "</b>, failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;
@@ -191,11 +191,11 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
             return;
         }
 
-    table_widget->setRowCount( query.size() );
-
     qint32 row = 0;
 
     while ( query.next() ) {
+            table_widget->setRowCount( row + 1 );
+
             QString debtor_serial;
             QString debtor_name;
             QString debtor_agent_name;
@@ -229,15 +229,15 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
             QTableWidgetItem* date_item    = new QTableWidgetItem;
 
             QSqlQuery query_sum;
-            query_sum.prepare("SELECT SUM(transaction.paid) FROM transaction\
+            query_sum.prepare("SELECT SUM(transactions.paid) FROM transactions\
                     WHERE debtor_id = :debtor_id");
             query_sum.bindValue( ":debtor_id", debtor_id );
 
             if ( !query_sum.exec() ) {
                     QMessageBox* msgbox = new QMessageBox(
                         QMessageBox::Critical, "Query execution failed",
-                        "Execution of query <b>" + query.lastQuery() + "</b>,"
-                        + " failed.", QMessageBox::Ok );
+                        "Execution of query <b>" + query_sum.lastQuery()
+                        + "</b>, failed.", QMessageBox::Ok );
                     msgbox->exec();
 
                     return;
