@@ -14,6 +14,7 @@ class EditTransactionDialog : public QDialog, public Ui::EditTransactionDialog {
         void fetchItem(QTableWidgetItem *);
         void clearTransaction();
         void saveTransaction();
+        void deleteTransaction();
 
     private:
         int currentRow, transactionId;

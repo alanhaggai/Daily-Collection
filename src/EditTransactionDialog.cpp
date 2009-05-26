@@ -13,11 +13,13 @@ EditTransactionDialog::EditTransactionDialog(QDialog *parent) : QDialog(parent) 
 
     tableWidget->hideColumn(ID);
 
-    connect( tableWidget, SIGNAL( itemClicked(QTableWidgetItem *) ), this, SLOT( fetchItem(QTableWidgetItem *) ) );
-    connect( saveButton,   SIGNAL(clicked()),                         this, SLOT(saveTransaction()) );
-    //connect( deleteButton, SIGNAL(clicked()),                         this, SLOT(deleteTransaction()) );
-    connect( clearButton,  SIGNAL(clicked()),                         this, SLOT(clearTransaction()) );
-    connect( serialEdit,  SIGNAL(textChanged(const QString&)),       this, SLOT(populateTableWidgetSerialEdit(const QString&)) );
+    connect( tableWidget, SIGNAL( itemClicked(QTableWidgetItem *) ), this,
+            SLOT( fetchItem(QTableWidgetItem *) ) );
+    connect( saveButton,   SIGNAL(clicked()), this, SLOT(saveTransaction()) );
+    connect( clearButton,  SIGNAL(clicked()), this, SLOT(clearTransaction()) );
+    connect( deleteButton, SIGNAL(clicked()), this, SLOT(deleteTransaction()) );
+    connect( serialEdit,  SIGNAL(textChanged(const QString&)), this,
+            SLOT(populateTableWidgetSerialEdit(const QString&)) );
 }
 
 void EditTransactionDialog::saveTransaction() {
@@ -108,7 +110,37 @@ void EditTransactionDialog::fetchItem(QTableWidgetItem *item) {
     transactionId = tableWidget->item( currentRow, ID )->text().toInt();
     QDate date = QDate::fromString( tableWidget->item( currentRow, DATE)->text(), "yyyy-MM-dd" );
     dateCalendar->setSelectedDate(date);
-    transactionEdit->setText( tableWidget->item( currentRow, TRANSACTION )->text() );
+    transactionEdit->setText( tableWidget->item( currentRow,
+            TRANSACTION )->text() );
+}
+
+void EditTransactionDialog::deleteTransaction() {
+    transactionId = tableWidget->item( currentRow, ID )->text().toInt();
+
+    QMessageBox* msgbox = new QMessageBox(
+        QMessageBox::Critical, "Confirm transaction delete",
+        "Are you sure you want to delete the transaction?",
+        QMessageBox::Ok | QMessageBox::Cancel );
+
+    if ( msgbox->exec() == QMessageBox::Ok ) {
+        QSqlQuery query;
+        query.prepare("DELETE FROM transactions WHERE id = :transaction_id");
+        query.bindValue( ":transaction_id", transactionId );
+
+        if ( !query.exec() ) {
+                QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Critical, "Query execution failed",
+                    "Execution of query <b>" + query.lastQuery() + "</b>,"
+                    + " failed.",
+                    QMessageBox::Ok );
+                msgbox->exec();
+            }
+
+        transactionEdit->clear();
+        populateTableWidgetSerialEdit( serialEdit->text() );
+
+        nameEdit->setFocus();
+    }
 }
 
 void EditTransactionDialog::clearTransaction() {
