@@ -201,7 +201,7 @@ TransactionsDialog::ListTransactions() {
             table_widget->setItem( row++, PAID,   paid_item );
 
             html += "\
-                    <tr style='$style'>\n\
+                    <tr class='style" + QString::number( row % 2 ) +"'>\n\
                         <td class='right'>" + serial
                     + "</td><td class='centre'>"
                     + name + "</td><td class='right'>Rs. " + paid
@@ -257,9 +257,6 @@ TransactionsDialog::OpenReportInBrowser() {
         + file );
 #else
     QString file = QDir::currentPath() + "/transactions.html";
-    browser_process->start( "firefox " + file );
+    browser_process->execute( "firefox " + file );
 #endif
-
-    if ( !browser_process->waitForFinished() )
-        exit(0);
 }
