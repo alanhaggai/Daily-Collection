@@ -20,7 +20,17 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QMdiArea" name="mdiArea"/>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="background">
+       <brush brushstyle="NoBrush">
+        <color alpha="255">
+         <red>160</red>
+         <green>160</green>
+         <blue>160</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -30,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>560</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Daily_Collection">
@@ -75,12 +85,6 @@
     <addaction name="action_DebtorDetails"/>
     <addaction name="action_DebtorTransactions"/>
    </widget>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>&amp;Help</string>
-    </property>
-    <addaction name="action_HelpAboutDailyCollection"/>
-   </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
      <string>&amp;Window</string>
@@ -100,7 +104,6 @@
    <addaction name="menuDay_book"/>
    <addaction name="menuD_ebtor"/>
    <addaction name="menuWindow"/>
-   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Transactions">
@@ -112,10 +115,16 @@
    <property name="text">
     <string>&amp;Backup</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
   </action>
   <action name="action_Restore">
    <property name="text">
     <string>&amp;Restore</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="action_Exit">
