@@ -14,3 +14,7 @@ transactions.html
 *.db
 !schema.db
 !daily_collection.db
+*.Debug
+*.Release
+debug
+release
