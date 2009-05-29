@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QStringList>
 #include <QFile>
+#include <QSettings>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         QMainWindow(parent) {
@@ -161,10 +162,13 @@ DailyCollectionWindow::SpawnTransactionsDialog() {
 
 void
 DailyCollectionWindow::Backup() {
-    QString suggested_filename = "./backups/"
-            + QDateTime::currentDateTime().toString() + ".db";
+    QString suggested_filename = QDir::toNativeSeparators( "backups/"
+            + QDateTime::currentDateTime().toString("MMM d yyyy hh.mm.ss") );
     QString filename = QFileDialog::getSaveFileName( this, "Backup database",
             suggested_filename, "Database Files (*.db)" );
+
+    if ( filename.isEmpty() )
+        return;
 
     QFile backup_file;
 
@@ -181,7 +185,7 @@ DailyCollectionWindow::Backup() {
     else {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Backup successful",
-                "Database has been backed up.",
+                "Database has been backed up successfully.",
                 QMessageBox::Ok );
             msgbox->exec();
         }
@@ -189,16 +193,22 @@ DailyCollectionWindow::Backup() {
 
 void
 DailyCollectionWindow::AutoBackup() {
-    QFile backup_file;
+    QSettings settings( "daily_collection.ini", QSettings::IniFormat );
 
-    if ( !backup_file.copy( "daily_collection.db", "backups/auto/"
-            + QDateTime::currentDateTime().toString() + ".db" ) ) {
-            QMessageBox* msgbox = new QMessageBox(
-                QMessageBox::Warning, "Automatic backup failed",
-                "Database has not been backed up.",
-                QMessageBox::Ok );
-            msgbox->exec();
-        }
+    if ( settings.value("auto-backup").toBool() != false ) {
+        QFile backup_file;
+
+        if ( !backup_file.copy( "daily_collection.db",
+                QDir::toNativeSeparators("backups/auto/")
+                + QDateTime::currentDateTime().toString("MMM d yyyy hh.mm.ss")
+                + ".db" ) ) {
+                QMessageBox* msgbox = new QMessageBox(
+                    QMessageBox::Warning, "Automatic backup failed",
+                    "Database has not been backed up automatically.",
+                    QMessageBox::Ok );
+                msgbox->exec();
+            }
+    }
 }
 
 void
@@ -206,6 +216,10 @@ DailyCollectionWindow::Restore() {
     QString filename = QFileDialog::getOpenFileName( this, "Restore database",
             ".", "Database Files (*.db)" );
 
+    if ( filename.isEmpty() )
+        return;
+
+    AutoBackup();
     QFile restore_file;
 
     restore_file.remove("daily_collection.db");
