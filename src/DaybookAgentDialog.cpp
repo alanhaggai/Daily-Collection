@@ -109,6 +109,9 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
     progress_dialog.setWindowModality(Qt::WindowModal);
     progress_dialog.setMinimumDuration(0);
 
+    // Set row count to the query result size
+    table_widget->setRowCount(count);
+
     qint32 row      = 0;  // Row count
     qint32 progress = 0;
 
@@ -117,15 +120,12 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
     int total_balance = 0;  // Equals: total_amount - total_paid
 
     // Loop through result rows
-    while ( query.next() ) {
+    do {
             progress_dialog.setValue(progress++);
             qApp->processEvents();
 
             if ( progress_dialog.wasCanceled() )
                 break;
-
-            // Set row count to the query result size
-            table_widget->setRowCount( row + 1 );
 
             QString debtor_serial;   // Debtor serial number
             QString debtor_name;     // Debtor name
@@ -167,7 +167,7 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
             total_amount  += debtor_amount.toInt();
             total_paid    += debtor_paid.toInt();
             total_balance += debtor_balance.toInt();
-        }
+        } while ( query.next() );
 
     // Set Line Edits with their respective values
     total_amount_edit->setText( QString::number(total_amount) );

@@ -132,6 +132,9 @@ DaybookBalanceDialog::PopulateTableWidget() {
     progress_dialog.setMinimumDuration(0);  // Minimum duration after which the
     // Progress Dialog is displayed
 
+    // Set number of rows for the Table Widget
+    table_widget->setRowCount(count);
+
     qint32 row   = 0;  // Represents the current row
     int progress = 0;  // Keeps track of progress
 
@@ -139,7 +142,7 @@ DaybookBalanceDialog::PopulateTableWidget() {
 
     int total_balance = 0;
 
-    while ( query.next() ) {
+    do {
             QString debtor_serial;   // Debtor serial number
             QString debtor_name;     // Debtor name
             int     debtor_balance;  // Remaining debts
@@ -147,9 +150,6 @@ DaybookBalanceDialog::PopulateTableWidget() {
             debtor_serial  = query.value(SERIAL).toString();
             debtor_name    = query.value(NAME).toString();
             debtor_balance = query.value(2).toInt() - query.value(3).toInt();
-
-            // Set number of rows for the Table Widget
-            table_widget->setRowCount( row + 1 );
 
             if ( debtor_balance == 0 )
                 continue;
@@ -181,7 +181,7 @@ DaybookBalanceDialog::PopulateTableWidget() {
             table_widget->setItem( row,   SERIAL,  serial_item );
             table_widget->setItem( row,   NAME,    name_item );
             table_widget->setItem( row++, BALANCE, balance_item );
-        }
+        } while ( query.next() );
 
     // Display total balance in total_balance_edit Line Edit
     total_balance_edit->setText( QString::number(total_balance) );

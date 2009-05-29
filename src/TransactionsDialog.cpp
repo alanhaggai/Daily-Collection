@@ -124,6 +124,8 @@ TransactionsDialog::ListTransactions() {
     progress_dialog.setWindowModality(Qt::WindowModal);
     progress_dialog.setMinimumDuration(0);
 
+    table_widget->setRowCount(count);
+
     flag = true;
 
     qint32 row   = 0;
@@ -169,14 +171,12 @@ TransactionsDialog::ListTransactions() {
 
     qint32 progress = 0;
 
-    while ( query.next() ) {
+    do {
             progress_dialog.setValue(progress++);
             qApp->processEvents();
 
             if ( progress_dialog.wasCanceled() )
                 break;
-
-            table_widget->setRowCount( row + 1 );
 
             QString serial;
             QString name;
@@ -208,7 +208,7 @@ TransactionsDialog::ListTransactions() {
                     + "</td>\n\
                     </tr>\n\
                     ";
-        }
+        } while ( query.next() );
 
     html += "\
                             </table>\n\
