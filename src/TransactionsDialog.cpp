@@ -68,6 +68,10 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
             SLOT( OpenReportInBrowser() ) );
 }
 
+TransactionsDialog::~TransactionsDialog() {
+    flag = false;
+}
+
 void
 TransactionsDialog::ListTransactions() {
     table_widget->clearContents();

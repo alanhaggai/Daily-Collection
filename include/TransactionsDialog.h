@@ -13,6 +13,7 @@ class TransactionsDialog : public QDialog,
 
     public:
         TransactionsDialog( QDialog *parent = 0 );
+        ~TransactionsDialog();
 
     private:
         QMap<int, QString> agent_map;
