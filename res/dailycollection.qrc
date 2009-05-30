@@ -1,5 +1,14 @@
 <RCC>
   <qresource prefix="/" >
+    <file>Document.png</file>
+    <file>Web-page.png</file>
+    <file>Add.png</file>
+    <file>Subtract.png</file>
+    <file>Exit.png</file>
+    <file>Save.png</file>
+    <file>Open.png</file>
     <file>icon.png</file>
+    <file>Arrow-Right.png</file>
+    <file>Arrow-Left.png</file>
   </qresource>
 </RCC>

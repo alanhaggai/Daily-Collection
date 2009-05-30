@@ -14,7 +14,7 @@
    <string>Daily Collection</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../res/dailycollection.qrc">
     <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -112,6 +112,10 @@
    </property>
   </action>
   <action name="action_Backup">
+   <property name="icon">
+    <iconset resource="../res/dailycollection.qrc">
+     <normaloff>:/Save.png</normaloff>:/Save.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Backup</string>
    </property>
@@ -120,6 +124,10 @@
    </property>
   </action>
   <action name="action_Restore">
+   <property name="icon">
+    <iconset resource="../res/dailycollection.qrc">
+     <normaloff>:/Open.png</normaloff>:/Open.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Restore</string>
    </property>
@@ -128,6 +136,10 @@
    </property>
   </action>
   <action name="action_Exit">
+   <property name="icon">
+    <iconset resource="../res/dailycollection.qrc">
+     <normaloff>:/Exit.png</normaloff>:/Exit.png</iconset>
+   </property>
    <property name="text">
     <string>E&amp;xit</string>
    </property>
@@ -224,6 +236,10 @@
    </property>
   </action>
   <action name="action_NextWindow">
+   <property name="icon">
+    <iconset resource="../res/dailycollection.qrc">
+     <normaloff>:/Arrow-Right.png</normaloff>:/Arrow-Right.png</iconset>
+   </property>
    <property name="text">
     <string>Next Window</string>
    </property>
@@ -232,6 +248,10 @@
    </property>
   </action>
   <action name="action_PreviousWindow">
+   <property name="icon">
+    <iconset resource="../res/dailycollection.qrc">
+     <normaloff>:/Arrow-Left.png</normaloff>:/Arrow-Left.png</iconset>
+   </property>
    <property name="text">
     <string>Previous Window</string>
    </property>
@@ -241,7 +261,7 @@
   </action>
  </widget>
  <resources>
-  <include location="dailycollection.qrc"/>
+  <include location="../res/dailycollection.qrc"/>
  </resources>
  <connections>
   <connection>

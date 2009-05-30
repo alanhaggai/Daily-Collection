@@ -162,7 +162,8 @@ DailyCollectionWindow::SpawnTransactionsDialog() {
 
 void
 DailyCollectionWindow::Backup() {
-    QString suggested_filename = QDir::toNativeSeparators( "backups/"
+    QString suggested_filename = QDir::toNativeSeparators(
+            QCoreApplication::applicationDirPath() + "/backups/"
             + QDateTime::currentDateTime().toString("MMM d yyyy hh.mm.ss") );
     QString filename = QFileDialog::getSaveFileName( this, "Backup database",
             suggested_filename, "Database Files (*.db)" );
@@ -199,7 +200,8 @@ DailyCollectionWindow::AutoBackup() {
         QFile backup_file;
 
         if ( !backup_file.copy( "daily_collection.db",
-                QDir::toNativeSeparators("backups/auto/")
+                QDir::toNativeSeparators( QCoreApplication::applicationDirPath()
+                + "/backups/auto/")
                 + QDateTime::currentDateTime().toString("MMM d yyyy hh.mm.ss")
                 + ".db" ) ) {
                 QMessageBox* msgbox = new QMessageBox(
@@ -214,17 +216,19 @@ DailyCollectionWindow::AutoBackup() {
 void
 DailyCollectionWindow::Restore() {
     QString filename = QFileDialog::getOpenFileName( this, "Restore database",
-            ".", "Database Files (*.db)" );
+            QCoreApplication::applicationDirPath() , "Database Files (*.db)" );
 
     if ( filename.isEmpty() )
         return;
 
     AutoBackup();
-    QFile restore_file;
 
+    DbConnect::Disconnect();
+
+    QFile restore_file;
     restore_file.remove("daily_collection.db");
 
-    if ( !restore_file.copy( filename, "daily_collection.db" ) ) {
+    if ( restore_file.copy( filename, "daily_collection.db" ) ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Information, "Restore successful",
                 "Database has been restored successfully.",
@@ -238,4 +242,6 @@ DailyCollectionWindow::Restore() {
                 QMessageBox::Ok );
             msgbox->exec();
         }
+
+    DbConnect::Connect();
 }

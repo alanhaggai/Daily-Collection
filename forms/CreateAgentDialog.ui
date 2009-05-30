@@ -95,12 +95,20 @@
      <property name="text">
       <string>&amp;Save</string>
      </property>
+     <property name="icon">
+      <iconset resource="../res/dailycollection.qrc">
+       <normaloff>:/Add.png</normaloff>:/Add.png</iconset>
+     </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QPushButton" name="clear_button">
      <property name="text">
       <string>&amp;Clear</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../res/dailycollection.qrc">
+       <normaloff>:/Subtract.png</normaloff>:/Subtract.png</iconset>
      </property>
     </widget>
    </item>
@@ -126,7 +134,9 @@
   <tabstop>save_button</tabstop>
   <tabstop>clear_button</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../res/dailycollection.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>clear_button</sender>
