@@ -92,7 +92,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="open_report_in_browser">
+      <widget class="QPushButton" name="open_report_in_browser_button">
        <property name="text">
         <string>&amp;Open report in browser</string>
        </property>
