@@ -23,7 +23,7 @@ enum {
     PAID,
 };
 
-bool flag = false;
+bool flag_transactions = false;
 
 //! Constructor
 TransactionsDialog::TransactionsDialog(QDialog* parent) :
@@ -69,7 +69,7 @@ TransactionsDialog::TransactionsDialog(QDialog* parent) :
 }
 
 TransactionsDialog::~TransactionsDialog() {
-    flag = false;
+    flag_transactions = false;
 }
 
 void
@@ -130,7 +130,7 @@ TransactionsDialog::ListTransactions() {
 
     table_widget->setRowCount(count);
 
-    flag = true;
+    flag_transactions = true;
 
     qint32 row   = 0;
     qint32 total = 0;
@@ -243,7 +243,7 @@ TransactionsDialog::ListTransactions() {
 
 void
 TransactionsDialog::OpenReportInBrowser() {
-    if ( flag == false ) {
+    if ( flag_transactions == false ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Data required to produce report",
                 "Please list the transactions before opening the report.",

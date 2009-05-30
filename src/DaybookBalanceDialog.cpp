@@ -12,6 +12,10 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QProgressDialog>
+#include <QFile>
+#include <QDir>
+#include <QTextStream>
+#include <QProcess>
 
 //! Enumerated constants to represent Table Widget columns
 enum {
@@ -19,6 +23,8 @@ enum {
     NAME,
     BALANCE,
 };
+
+bool flag_balance = false;
 
 /*!
  * Fetch agent id and agent name from agent table. Populate the values in a map
@@ -64,6 +70,8 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
 
     connect( list_button, SIGNAL( clicked() ), this,
             SLOT( List() ) );
+    connect( open_report_in_browser_button, SIGNAL( clicked() ), this,
+            SLOT( OpenReportInBrowser() ) );
 }
 
 /*!
@@ -73,12 +81,23 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
  */
 void
 DaybookBalanceDialog::List() {
+
+    table_widget->clearContents();
+    table_widget->setRowCount(0);
+
+    qint16 agent;
+    QString agent_name;
+    QString date;
+
+    agent      = agent_map.key( agent_combo->currentText() );
+    agent_name = agent_combo->currentText();
+    date       = date_calendar->selectedDate().toString(Qt::ISODate);
+
     if ( -1 == agent_combo->currentIndex() ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
                 "All fields are to be filled.", QMessageBox::Ok );
-            msgbox->exec();
-
+            msgbox->exec();  // Popup message box to let the user know about it
             return;
         }
 
@@ -135,10 +154,43 @@ DaybookBalanceDialog::List() {
     // Set number of rows for the Table Widget
     table_widget->setRowCount(count);
 
-    qint32 row   = 0;  // Represents the current row
-    int progress = 0;  // Keeps track of progress
+    flag_balance = true;
+
+    qint32 row      = 0;  // Represents the current row
+    qint32 progress = 0;  // Keeps track of progress
 
     table_widget->clearContents();  // Clear already listed contents
+
+    QString html = "\
+        <html>\n\
+            <head>\n\
+                <title>Balance Sheet: " + agent_name + " on "
+            + date_calendar->selectedDate().toString("dd-MM-yyyy")
+            + "</title>\n\
+                <style type='text/css'>\n\
+                </style>\n\
+                <link type='text/css' rel='stylesheet' href='style.css' />\n\
+            </head>\n\
+            <body>\n\
+                <div id='container'>\n\
+                    <div id='header'>\n\
+                        <h2>Balance Sheet</h2>\n\
+                        <table>\n\
+                            <tr>\n\
+                                <td>Agent</td><td class='right'><b>"
+            + agent_name + "</b></td>\n\
+                            </tr>\n\
+                            <tr>\n\
+                                <td>Date</td><td class='right'><b>"
+            + date_calendar->selectedDate().toString("dd-MM-yyyy")
+            + "</b></td>\n\
+                            </tr>\n\
+                        </table>\n\
+                    </div>\n\
+                    <div id='content'>\n\
+                        <table>\n\
+                            <th>Serial</th><th>Name</th><th>Balance</th>\n\
+            ";
 
     int total_balance = 0;
 
@@ -181,6 +233,16 @@ DaybookBalanceDialog::List() {
             table_widget->setItem( row,   SERIAL,  serial_item );
             table_widget->setItem( row,   NAME,    name_item );
             table_widget->setItem( row++, BALANCE, balance_item );
+
+            html += "\
+                    <tr class='style" + QString::number( row % 2 ) +"'>\n\
+                        <td class='right'>" + debtor_serial
+                    + "</td><td class='centre'>"
+                    + debtor_name + "</td><td class='right'>Rs. "
+                    + QString::number(debtor_balance)
+                    + "</td>\n\
+                    </tr>\n\
+                    ";
         } while ( query.next() );
 
     // Display total balance in total_balance_edit Line Edit
@@ -188,4 +250,52 @@ DaybookBalanceDialog::List() {
 
     // Explicitly set maximum value of the Progress Dialog
     progress_dialog.setValue( query.size() );
+
+    html += "\
+                            </table>\n\
+                            <table>\n\
+                                <tr>\n\
+                                    <td>Total balance</td><td class='right'><b>Rs. "
+            + QString::number(total_balance)
+            + "</b></td>\n\
+                                </tr>\n\
+                            </table>\n\
+                        </div>\n\
+                    </div>\n\
+                </body>\n\
+            </html>\n\
+            ";
+
+    QFile file("balance.html");
+
+    if ( file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
+            QTextStream out(&file);
+            out << html;
+
+            file.close();
+        }
+}
+
+void
+DaybookBalanceDialog::OpenReportInBrowser() {
+    if ( flag_balance == false ) {
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Warning, "Data required to produce report",
+                "Please list the balance before opening the report.",
+                QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
+        }
+
+    QProcess* browser_process = new QProcess;
+#ifdef Q_OS_WIN32
+    QString file = QDir::currentPath() + "\\balance.html";
+    browser_process->start(
+        "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
+        + file );
+#else
+    QString file = QDir::currentPath() + "/balance.html";
+    browser_process->execute( "firefox " + file );
+#endif
 }
