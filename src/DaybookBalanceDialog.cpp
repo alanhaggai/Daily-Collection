@@ -63,7 +63,7 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
     table_widget->setColumnWidth( BALANCE, 100);
 
     connect( list_button, SIGNAL( clicked() ), this,
-            SLOT( PopulateTableWidget() ) );
+            SLOT( List() ) );
 }
 
 /*!
@@ -72,7 +72,7 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
  * on or before the selected date, under the selected agent.
  */
 void
-DaybookBalanceDialog::PopulateTableWidget() {
+DaybookBalanceDialog::List() {
     if ( -1 == agent_combo->currentIndex() ) {
             QMessageBox* msgbox = new QMessageBox(
                 QMessageBox::Warning, "Incomplete Fields",
