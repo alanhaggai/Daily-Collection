@@ -11,7 +11,7 @@ DbConnect::Connect() {
     if ( db.isOpen() )
         return true;
 
-    // Set up connection related information via MySQL driver.
+    // Set up connection related information via SQLite driver.
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("daily_collection.db");
 
