@@ -10,7 +10,7 @@ qrc_*
 .obj/
 .moc/
 doc/
-transactions.html
+*.html
 *.db
 !schema.db
 !daily_collection.db
