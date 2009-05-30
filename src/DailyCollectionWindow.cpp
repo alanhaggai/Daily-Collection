@@ -27,6 +27,7 @@
 #include <QStringList>
 #include <QFile>
 #include <QSettings>
+#include <QFileInfo>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         QMainWindow(parent) {
@@ -224,6 +225,18 @@ DailyCollectionWindow::Restore() {
     AutoBackup();
 
     DbConnect::Disconnect();
+
+    QFileInfo new_file(filename);
+    QFileInfo original_file("daily_collection.db");
+
+    if ( new_file.lastModified() < original_file.lastModified() ) {
+        QMessageBox* msgbox = new QMessageBox(
+            QMessageBox::Information, "Confirm older database restore",
+            "Are you sure you want to restore an older database?",
+            QMessageBox::Ok | QMessageBox::Cancel );
+        if ( msgbox->exec() == QMessageBox::Cancel )
+            return;
+    }
 
     QFile restore_file;
     restore_file.remove("daily_collection.db");
