@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QDate>
 
 enum {
     DATE,
@@ -117,7 +118,7 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
             QString date;
             QString paid;
 
-            date = query.value(DATE).toString();
+            date = query.value(DATE).toDate().toString("dd-MM-yyyy");
             paid = query.value(PAID).toString();
 
             QTableWidgetItem* date_item = new QTableWidgetItem;

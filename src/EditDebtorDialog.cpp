@@ -70,7 +70,7 @@ void EditDebtorDialog::fetchItem(QTableWidgetItem *item) {
     phoneEdit->setText( tableWidget->item( currentRow,   PHONE )->text() );
 
     QDate date = QDate::fromString( tableWidget->item( currentRow,
-            DATE)->text(), "yyyy-MM-dd" );
+            DATE)->text(), "dd-MM-yyyy" );
     dateCalendar->setSelectedDate(date);
 }
 
@@ -111,7 +111,8 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
             addressItem->setText( query.value(ADDRESS).toString() );
             amountItem->setText( query.value(AMOUNT).toString() );
             phoneItem->setText( query.value(PHONE).toString() );
-            dateItem->setText( query.value(DATE).toString() );
+            dateItem->setText(
+                    query.value(DATE).toDate().toString("dd-MM-yyyy") );
 
             tableWidget->setItem( row,   ID,      idItem );
             tableWidget->setItem( row,   SERIAL,  serialItem );

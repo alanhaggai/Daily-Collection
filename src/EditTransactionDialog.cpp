@@ -90,7 +90,7 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(
             QTableWidgetItem *transactionItem = new QTableWidgetItem;
 
             idItem->setText( query.value(ID).toString() );
-            dateItem->setText( query.value(DATE).toString() );
+            dateItem->setText( query.value(DATE).toDate().toString("dd-MM-yyyy") );
             transactionItem->setText( query.value(TRANSACTION).toString() );
 
             tableWidget->setItem( row,   ID,          idItem );
@@ -120,7 +120,7 @@ void EditTransactionDialog::fetchItem(QTableWidgetItem *item) {
 
     transactionId = tableWidget->item( currentRow, ID )->text().toInt();
     QDate date = QDate::fromString( tableWidget->item( currentRow,
-            DATE)->text(), "yyyy-MM-dd" );
+            DATE)->text(), "dd-MM-yyyy" );
     dateCalendar->setSelectedDate(date);
     transactionEdit->setText( tableWidget->item( currentRow,
             TRANSACTION )->text() );

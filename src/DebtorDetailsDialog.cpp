@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QDate>
 
 //! Enumerator constants for representing Table Widget columns
 enum {
@@ -104,7 +105,7 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
             debtor_address    = query.value(3).toString();
             debtor_amount     = query.value(4).toInt();
             debtor_phone      = query.value(5).toString();
-            debtor_date       = query.value(6).toString();
+            debtor_date       = query.value(6).toDate().toString("dd-MM-yyyy");
             agent_id          = query.value(7).toString();
             debtor_id         = query.value(8).toString();
 
@@ -214,7 +215,7 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
             debtor_address    = query.value(3).toString();
             debtor_amount     = query.value(4).toInt();
             debtor_phone      = query.value(5).toString();
-            debtor_date       = query.value(6).toString();
+            debtor_date       = query.value(6).toDate().toString("dd-MM-yyyy");
             agent_id          = query.value(7).toString();
             debtor_id         = query.value(8).toString();
 
