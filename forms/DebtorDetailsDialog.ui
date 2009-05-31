@@ -190,5 +190,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>serial_edit</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>452</x>
+     <y>582</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

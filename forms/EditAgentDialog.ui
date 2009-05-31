@@ -93,7 +93,10 @@
         <number>4</number>
        </property>
        <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>true</bool>
        </attribute>
        <column>
         <property name="text">
@@ -209,6 +212,22 @@
     <hint type="destinationlabel">
      <x>120</x>
      <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearButton</sender>
+   <signal>clicked()</signal>
+   <receiver>nameEdit</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>450</x>
+     <y>480</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>19</y>
     </hint>
    </hints>
   </connection>
