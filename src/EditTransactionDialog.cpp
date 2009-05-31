@@ -80,23 +80,30 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(
             return;
         }
 
+    qint32 count = 0;
+
+    while ( query.next() )
+        count++;
+
+    tableWidget->setRowCount(count);
+    query.first();
+
     qint32 row = 0;
 
-    while ( query.next() ) {
-            tableWidget->setRowCount( row + 1 );
-
+    do {
             QTableWidgetItem *idItem          = new QTableWidgetItem;
             QTableWidgetItem *dateItem        = new QTableWidgetItem;
             QTableWidgetItem *transactionItem = new QTableWidgetItem;
 
             idItem->setText( query.value(ID).toString() );
-            dateItem->setText( query.value(DATE).toDate().toString("dd-MM-yyyy") );
+            dateItem->setText(
+                    query.value(DATE).toDate().toString("dd-MM-yyyy") );
             transactionItem->setText( query.value(TRANSACTION).toString() );
 
             tableWidget->setItem( row,   ID,          idItem );
             tableWidget->setItem( row,   DATE,        dateItem );
             tableWidget->setItem( row++, TRANSACTION, transactionItem );
-        }
+        } while ( query.next() );
 
     query.prepare("SELECT name FROM debtor WHERE serial = :serial");
     query.bindValue( ":serial", serial );

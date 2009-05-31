@@ -110,11 +110,17 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
             return;
         }
 
+    qint32 count = 0;
+
+    while ( query.next() )
+        count++;
+
+    table_widget->setRowCount(count);
+    query.first();
+
     qint32 row = 0;
 
-    while ( query.next() ) {
-            table_widget->setRowCount( row + 1 );
-
+    do {
             QString date;
             QString paid;
 
@@ -129,7 +135,7 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
 
             table_widget->setItem( row,   DATE, date_item );
             table_widget->setItem( row++, PAID, paid_item );
-        }
+        } while ( query.next() );
 
     installments_edit->setText( QString::number(row) );
 }
