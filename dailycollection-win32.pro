@@ -21,6 +21,7 @@ HEADERS += include/CreateAgentDialog.h \
            include/EditAgentDialog.h \
            include/EditDebtorDialog.h \
            include/EditTransactionDialog.h \
+           include/SettingsDialog.h \
            include/TransactionsDialog.h
 FORMS += forms/CreateAgentDialog.ui \
          forms/CreateDebtorDialog.ui \
@@ -34,6 +35,7 @@ FORMS += forms/CreateAgentDialog.ui \
          forms/EditAgentDialog.ui \
          forms/EditDebtorDialog.ui \
          forms/EditTransactionDialog.ui \
+         forms/SettingsDialog.ui \
          forms/TransactionsDialog.ui
 SOURCES += src/CreateAgentDialog.cpp \
            src/CreateDebtorDialog.cpp \
@@ -49,5 +51,6 @@ SOURCES += src/CreateAgentDialog.cpp \
            src/EditDebtorDialog.cpp \
            src/EditTransactionDialog.cpp \
            src/main.cpp \
+           src/SettingsDialog.cpp \
            src/TransactionsDialog.cpp
 RESOURCES += res/dailycollection.qrc

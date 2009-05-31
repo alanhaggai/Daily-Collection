@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QProcess>
+#include <QSettings>
 
 //! Enumerated constants to represent Table Widget columns
 enum {
@@ -293,13 +294,22 @@ DaybookBalanceDialog::OpenReportInBrowser() {
         }
 
     QProcess* browser_process = new QProcess;
+
+    QSettings settings;
+    if ( settings.value("Browser/preferred").toString() != "" ) {
+        browser_process->start( settings.value("Browser/preferred").toString()
+                + " " + QDir::currentPath() + QString( QDir::separator() )
+                + "balance.html" );
+    }
+    else {
 #ifdef Q_OS_WIN32
-    QString file = QDir::currentPath() + "\\balance.html";
-    browser_process->start(
-        "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
-        + file );
+        QString file = QDir::currentPath() + "\\balance.html";
+        browser_process->start(
+            "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
+            + file );
 #else
-    QString file = QDir::currentPath() + "/balance.html";
-    browser_process->execute( "firefox " + file );
+        QString file = QDir::currentPath() + "/balance.html";
+        browser_process->execute( "firefox " + file );
 #endif
+    }
 }

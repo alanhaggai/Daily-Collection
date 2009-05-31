@@ -19,6 +19,7 @@
 #include "DebtorDetailsDialog.h"
 #include "DebtorTransactionsDialog.h"
 #include "TransactionsDialog.h"
+#include "SettingsDialog.h"
 #include "DbConnect.h"
 
 #include <QFileDialog>
@@ -28,6 +29,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QFileInfo>
+#include <QDir>
 
 DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
         QMainWindow(parent) {
@@ -68,6 +70,8 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
             SIGNAL( activated() ), this, SLOT( Backup() ) );
     connect( action_Restore,
             SIGNAL( activated() ), this, SLOT( Restore() ) );
+    connect( action_Settings,
+            SIGNAL( activated() ), this, SLOT( SpawnSettingsDialog() ) );
     connect( qApp, SIGNAL( aboutToQuit() ), this, SLOT( AutoBackup() ) );
 }
 
@@ -162,6 +166,13 @@ DailyCollectionWindow::SpawnTransactionsDialog() {
 }
 
 void
+DailyCollectionWindow::SpawnSettingsDialog() {
+    SettingsDialog* settings_dialog = new SettingsDialog;
+    mdiArea->addSubWindow(settings_dialog);
+    settings_dialog->show();
+}
+
+void
 DailyCollectionWindow::Backup() {
     QString suggested_filename = QDir::toNativeSeparators(
             QCoreApplication::applicationDirPath() + "/backups/"
@@ -195,14 +206,21 @@ DailyCollectionWindow::Backup() {
 
 void
 DailyCollectionWindow::AutoBackup() {
-    QSettings settings( "daily_collection.ini", QSettings::IniFormat );
+    QSettings settings;
 
-    if ( settings.value("auto-backup").toBool() != false ) {
-        QFile backup_file;
+    if ( settings.value("AutomaticBackup/enabled").toInt() == 2 ) {
+        QFile   backup_file;
+        QString data_store
+                = settings.value("AutomaticBackup/data_store").toString();
+        QString dir;
+
+        if ( data_store.length() == 0 || !QFile::exists(data_store) )
+            dir = QCoreApplication::applicationDirPath() + "/backups/auto/";
+        else
+            dir = data_store + QDir::separator();
 
         if ( !backup_file.copy( "daily_collection.db",
-                QDir::toNativeSeparators( QCoreApplication::applicationDirPath()
-                + "/backups/auto/")
+                QDir::toNativeSeparators(dir)
                 + QDateTime::currentDateTime().toString("MMM d yyyy hh.mm.ss")
                 + ".db" ) ) {
                 QMessageBox* msgbox = new QMessageBox(
