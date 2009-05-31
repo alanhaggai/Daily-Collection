@@ -17,6 +17,7 @@ class DaybookBalanceDialog : public QDialog, public Ui::DaybookBalanceDialog {
     public:
         //! Constructor
         DaybookBalanceDialog( QDialog *parent = 0 );
+        ~DaybookBalanceDialog();
 
     public slots:
         //! \brief Calculate balance of each debtor under an agent and display

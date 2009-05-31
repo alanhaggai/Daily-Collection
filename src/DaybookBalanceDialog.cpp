@@ -74,6 +74,10 @@ DaybookBalanceDialog::DaybookBalanceDialog(QDialog* parent) :
             SLOT( OpenReportInBrowser() ) );
 }
 
+DaybookBalanceDialog::~DaybookBalanceDialog() {
+    flag_balance = false;
+}
+
 /*!
  * Check if an agent has been selected or not. If not, return. Else, fetch
  * details of debtors, including sum or transaction that has already been paid,
