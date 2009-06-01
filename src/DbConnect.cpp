@@ -1,6 +1,8 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QDir>
+#include <QCoreApplication>
 
 #include "DbConnect.h"
 
@@ -13,7 +15,8 @@ DbConnect::Connect() {
 
     // Set up connection related information via SQLite driver.
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("daily_collection.db");
+    db.setDatabaseName( QCoreApplication::applicationDirPath()
+			+ QString( QDir::separator() ) + "daily_collection.db");
 
     // Check if connection to the database succeeded or not.
     if ( !db.open() ) {
