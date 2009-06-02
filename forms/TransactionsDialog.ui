@@ -97,14 +97,22 @@
      <item>
       <widget class="QPushButton" name="list_transactions_button">
        <property name="text">
-        <string>&amp;List Transactions</string>
+        <string>&amp;List</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/dailycollection.qrc">
+         <normaloff>:/Document.png</normaloff>:/Document.png</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="open_report_in_browser_button">
        <property name="text">
-        <string>&amp;Open Report in Browser</string>
+        <string>&amp;Open report in browser</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/dailycollection.qrc">
+         <normaloff>:/Web-page.png</normaloff>:/Web-page.png</iconset>
        </property>
       </widget>
      </item>
@@ -149,6 +157,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res/dailycollection.qrc"/>
+ </resources>
  <connections/>
 </ui>

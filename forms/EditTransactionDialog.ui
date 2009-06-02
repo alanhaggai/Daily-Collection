@@ -132,12 +132,20 @@
        <property name="text">
         <string>&amp;Save</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res/dailycollection.qrc">
+         <normaloff>:/Add.png</normaloff>:/Add.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="clearButton">
        <property name="text">
         <string>&amp;Clear</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/dailycollection.qrc">
+         <normaloff>:/Subtract.png</normaloff>:/Subtract.png</iconset>
        </property>
       </widget>
      </item>
@@ -146,12 +154,18 @@
        <property name="text">
         <string>&amp;Delete</string>
        </property>
+       <property name="icon">
+        <iconset resource="../res/dailycollection.qrc">
+         <normaloff>:/Exit.png</normaloff>:/Exit.png</iconset>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res/dailycollection.qrc"/>
+ </resources>
  <connections/>
 </ui>
