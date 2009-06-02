@@ -17,7 +17,7 @@
  *
  * \a Daily \a Collection is a software which manages the daily accounting
  * activity of small banks
- * 
+ *
  * Initial version (0.01) of the software was written in
  * <a href='http://perl.org/'>Perl</a> by making use of
  * <a href='http://wxperl.sourceforge.net/'>WxPerl</a> which is a port of

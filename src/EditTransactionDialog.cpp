@@ -97,13 +97,14 @@ void EditTransactionDialog::populateTableWidgetSerialEdit(
 
             idItem->setText( query.value(ID).toString() );
             dateItem->setText(
-                    query.value(DATE).toDate().toString("dd-MM-yyyy") );
+                query.value(DATE).toDate().toString("dd-MM-yyyy") );
             transactionItem->setText( query.value(TRANSACTION).toString() );
 
             tableWidget->setItem( row,   ID,          idItem );
             tableWidget->setItem( row,   DATE,        dateItem );
             tableWidget->setItem( row++, TRANSACTION, transactionItem );
-        } while ( query.next() );
+        }
+    while ( query.next() );
 
     query.prepare("SELECT name FROM debtor WHERE serial = :serial");
     query.bindValue( ":serial", serial );

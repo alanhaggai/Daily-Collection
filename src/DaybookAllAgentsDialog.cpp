@@ -134,5 +134,6 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
             table_widget->setItem( row,   AMOUNT_REMITTED,
                     amount_remitted_item );
             table_widget->setItem( row++, BALANCE,         balance_item );
-        } while ( agent_query.next() );
+        }
+    while ( agent_query.next() );
 }

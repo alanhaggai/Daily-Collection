@@ -139,9 +139,9 @@ DaybookBalanceDialog::List() {
         }
 
     while ( query.next() ) {
-        if ( query.value(2).toInt() - query.value(3).toInt() )
-            count++;
-    }
+            if ( query.value(2).toInt() - query.value(3).toInt() )
+                count++;
+        }
 
     query.first();
 
@@ -240,7 +240,7 @@ DaybookBalanceDialog::List() {
             table_widget->setItem( row++, BALANCE, balance_item );
 
             html += "\
-                    <tr class='style" + QString::number( row % 2 ) +"'>\n\
+                    <tr class='style" + QString::number( row % 2 ) + "'>\n\
                         <td class='right'>" + debtor_serial
                     + "</td><td class='centre'>"
                     + debtor_name + "</td><td class='right'>Rs. "
@@ -248,7 +248,8 @@ DaybookBalanceDialog::List() {
                     + "</td>\n\
                     </tr>\n\
                     ";
-        } while ( query.next() );
+        }
+    while ( query.next() );
 
     // Display total balance in total_balance_edit Line Edit
     total_balance_edit->setText( QString::number(total_balance) );
@@ -296,20 +297,21 @@ DaybookBalanceDialog::OpenReportInBrowser() {
     QProcess* browser_process = new QProcess;
 
     QSettings settings;
+
     if ( settings.value("Browser/preferred").toString() != "" ) {
-        browser_process->start( settings.value("Browser/preferred").toString()
-                + " " + QDir::currentPath() + QString( QDir::separator() )
-                + "balance.html" );
-    }
+            browser_process->start( settings.value("Browser/preferred").toString()
+                    + " " + QDir::currentPath() + QString( QDir::separator() )
+                    + "balance.html" );
+        }
     else {
 #ifdef Q_OS_WIN32
-        QString file = QDir::currentPath() + "\\balance.html";
-        browser_process->start(
-            "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
-            + file );
+            QString file = QDir::currentPath() + "\\balance.html";
+            browser_process->start(
+                "\"C:\\\\Program Files\\Internet Explorer\\iexplore.exe\" "
+                + file );
 #else
-        QString file = QDir::currentPath() + "/balance.html";
-        browser_process->execute( "firefox " + file );
+            QString file = QDir::currentPath() + "/balance.html";
+            browser_process->execute( "firefox " + file );
 #endif
-    }
+        }
 }

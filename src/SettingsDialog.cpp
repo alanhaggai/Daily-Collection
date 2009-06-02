@@ -22,14 +22,14 @@ SettingsDialog::SettingsDialog(QDialog* parent)
         backup_enabled_check->setCheckState(Qt::Checked);
 
     if ( settings.value("AutomaticBackup/data_store").toString() != "" ) {
-        data_store_edit->setText(
+            data_store_edit->setText(
                 settings.value("AutomaticBackup/data_store").toString() );
-    }
+        }
 
     if ( settings.value("Browser/preferred").toString() != "" ) {
-        browser_preferred_edit->setText(
+            browser_preferred_edit->setText(
                 settings.value("Browser/preferred").toString() );
-    }
+        }
 
     connect( save_button,     SIGNAL( clicked() ), this,
             SLOT( SaveSettings() ) );
@@ -59,7 +59,7 @@ SettingsDialog::DataStore() {
     QString directory = QFileDialog::getExistingDirectory( this, "Data store",
             QCoreApplication::applicationDirPath(), QFileDialog::ShowDirsOnly );
 
-    if ( directory.isEmpty() ) 
+    if ( directory.isEmpty() )
         return;
 
     data_store_edit->setText(directory);

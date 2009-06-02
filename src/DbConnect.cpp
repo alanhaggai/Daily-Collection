@@ -16,7 +16,7 @@ DbConnect::Connect() {
     // Set up connection related information via SQLite driver.
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName( QCoreApplication::applicationDirPath()
-			+ QString( QDir::separator() ) + "daily_collection.db");
+            + QString( QDir::separator() ) + "daily_collection.db");
 
     // Check if connection to the database succeeded or not.
     if ( !db.open() ) {

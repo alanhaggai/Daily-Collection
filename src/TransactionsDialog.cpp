@@ -205,14 +205,15 @@ TransactionsDialog::ListTransactions() {
             table_widget->setItem( row++, PAID,   paid_item );
 
             html += "\
-                    <tr class='style" + QString::number( row % 2 ) +"'>\n\
+                    <tr class='style" + QString::number( row % 2 ) + "'>\n\
                         <td class='right'>" + serial
                     + "</td><td class='centre'>"
                     + name + "</td><td class='right'>Rs. " + paid
                     + "</td>\n\
                     </tr>\n\
                     ";
-        } while ( query.next() );
+        }
+    while ( query.next() );
 
     html += "\
                             </table>\n\

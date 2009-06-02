@@ -118,7 +118,7 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
             amountItem->setText( query.value(AMOUNT).toString() );
             phoneItem->setText( query.value(PHONE).toString() );
             dateItem->setText(
-                    query.value(DATE).toDate().toString("dd-MM-yyyy") );
+                query.value(DATE).toDate().toString("dd-MM-yyyy") );
 
             tableWidget->setItem( row,   ID,      idItem );
             tableWidget->setItem( row,   SERIAL,  serialItem );
@@ -128,7 +128,8 @@ void EditDebtorDialog::populateTableWidgetSerialEdit(const QString& serial) {
             tableWidget->setItem( row,   AMOUNT,  amountItem );
             tableWidget->setItem( row,   PHONE,   phoneItem );
             tableWidget->setItem( row++, DATE,    dateItem );
-        } while ( query.next() );
+        }
+    while ( query.next() );
 }
 
 void EditDebtorDialog::saveDebtor() {

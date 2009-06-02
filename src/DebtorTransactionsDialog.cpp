@@ -70,24 +70,24 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
     debtor_balance = debtor_amount - debtor_paid;
 
     if ( debtor_paid == 0 ) {
-        QSqlQuery query_name;
-        query_name.prepare("SELECT name FROM debtor WHERE serial = :debtor_serial");
-        query_name.bindValue( ":debtor_serial", debtor_serial );
+            QSqlQuery query_name;
+            query_name.prepare("SELECT name FROM debtor WHERE serial = :debtor_serial");
+            query_name.bindValue( ":debtor_serial", debtor_serial );
 
-        if ( !query_name.exec() ) {
-                QMessageBox* msgbox = new QMessageBox(
-                    QMessageBox::Critical, "Query execution failed",
-                    "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
-                    QMessageBox::Ok );
-                msgbox->exec();
+            if ( !query_name.exec() ) {
+                    QMessageBox* msgbox = new QMessageBox(
+                        QMessageBox::Critical, "Query execution failed",
+                        "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
+                        QMessageBox::Ok );
+                    msgbox->exec();
 
-                return;
-            }
+                    return;
+                }
 
-        query_name.next();
+            query_name.next();
 
-        debtor_name = query_name.value(0).toString();
-    }
+            debtor_name = query_name.value(0).toString();
+        }
 
 
     name_edit->setText(debtor_name);
@@ -135,7 +135,8 @@ DebtorTransactionsDialog::SerialEditTextChanged(const QString& debtor_serial) {
 
             table_widget->setItem( row,   DATE, date_item );
             table_widget->setItem( row++, PAID, paid_item );
-        } while ( query.next() );
+        }
+    while ( query.next() );
 
     installments_edit->setText( QString::number(row) );
 }

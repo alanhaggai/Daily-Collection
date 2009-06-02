@@ -164,7 +164,8 @@ DebtorDetailsDialog::SerialEditTextChanged(QString debtor_serial) {
             table_widget->setItem( row,   BALANCE, balance_item );
             table_widget->setItem( row,   PHONE,   phone_item );
             table_widget->setItem( row++, DATE,    date_item );
-        } while ( query.next() );
+        }
+    while ( query.next() );
 }
 
 /*!
@@ -179,7 +180,7 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
     // Why should we waste time/resource on populating the Table Widget with an
     // unwanted humongous list?
     if ( debtor_name.length() < 3 )
-            return;
+        return;
 
     QSqlQuery query;
     query.prepare("SELECT debtor.serial, debtor.name, agent.name,\
@@ -280,5 +281,6 @@ DebtorDetailsDialog::NameEditTextChanged(QString debtor_name) {
             table_widget->setItem( row,   BALANCE, balance_item );
             table_widget->setItem( row,   PHONE,   phone_item );
             table_widget->setItem( row++, DATE,    date_item );
-        } while ( query.next() );
+        }
+    while ( query.next() );
 }

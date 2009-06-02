@@ -99,8 +99,8 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
     qint32 count = 0;
 
     while ( query.next() ) {
-        count++;
-    }
+            count++;
+        }
 
     query.first();
 
@@ -167,7 +167,8 @@ DaybookAgentDialog::PopulateTableWidget(int current_index) {
             total_amount  += debtor_amount.toInt();
             total_paid    += debtor_paid.toInt();
             total_balance += debtor_balance.toInt();
-        } while ( query.next() );
+        }
+    while ( query.next() );
 
     // Set Line Edits with their respective values
     total_amount_edit->setText( QString::number(total_amount) );
