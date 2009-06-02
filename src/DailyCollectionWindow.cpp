@@ -36,6 +36,10 @@ DailyCollectionWindow::DailyCollectionWindow(QMainWindow *parent) :
     setupUi(this);
     setWindowState(Qt::WindowMaximized);
 
+    QFile file("style.qss");
+    if ( file.open(QIODevice::ReadOnly) ) 
+        qApp->setStyleSheet( file.readAll() );
+
     // Connect menu actions to slots that spawn respective dialogs
     connect( action_CreateAgent,
             SIGNAL( activated() ), this, SLOT( SpawnCreateAgentDialog() ) );
