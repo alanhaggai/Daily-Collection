@@ -68,6 +68,9 @@
    </item>
    <item row="2" column="3">
     <widget class="QLineEdit" name="installment_edit">
+     <property name="inputMask">
+      <string>99; </string>
+     </property>
      <property name="text">
       <string>1</string>
      </property>
