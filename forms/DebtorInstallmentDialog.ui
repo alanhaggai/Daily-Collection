@@ -143,6 +143,9 @@
         <iconset resource="../res/dailycollection.qrc">
          <normaloff>:/Add.png</normaloff>:/Add.png</iconset>
        </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
