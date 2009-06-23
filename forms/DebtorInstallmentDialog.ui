@@ -78,7 +78,7 @@
       <string>99; </string>
      </property>
      <property name="text">
-      <string>1</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -183,5 +183,86 @@
  <resources>
   <include location="../res/dailycollection.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>serial_edit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>name_edit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>installment_edit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>amount_edit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>serial_edit</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

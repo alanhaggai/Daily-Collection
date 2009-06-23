@@ -13,7 +13,6 @@ class DebtorInstallmentDialog : public QDialog,
         void FiftyRadioToggled(bool checked);
         void HundredRadioToggled(bool checked);
         void SaveInstallment();
-        void Clear();
 
     public:
         DebtorInstallmentDialog( QDialog *parent = 0 );

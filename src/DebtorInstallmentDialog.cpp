@@ -27,7 +27,6 @@ DebtorInstallmentDialog::DebtorInstallmentDialog(QDialog* parent) :
 
     connect( serial_edit, SIGNAL( textChanged(const QString&) ), this,
             SLOT( PopulateValuesOnSerialChange(const QString&) ) );
-    connect( clear_button, SIGNAL( clicked() ), this, SLOT( Clear() ) );
     connect( installment_edit,
             SIGNAL( textChanged(const QString&) ), this,
             SLOT( CalculateAmount(const QString&) ) );
@@ -125,22 +124,6 @@ DebtorInstallmentDialog::HundredRadioToggled(bool checked) {
                 }
 
         }
-}
-
-/**
- * Clear fields
- */
-void
-DebtorInstallmentDialog::Clear() {
-    serial_edit->setText("");
-    name_edit->setText("");
-    amount_edit->setText("");
-    installment_edit->setText("1");
-
-    fifty_radio->setDown(false);
-    hundred_radio->setDown(false);
-
-    serial_edit->setFocus();
 }
 
 /**
@@ -254,8 +237,7 @@ DebtorInstallmentDialog::SaveInstallment() {
 
                     return;
                 }
-
-            Clear();
+            clear_button->click();
         }
     else {
             QMessageBox* msgbox = new QMessageBox(
