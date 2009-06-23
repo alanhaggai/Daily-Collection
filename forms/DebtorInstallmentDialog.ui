@@ -10,6 +10,12 @@
     <height>307</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>307</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Debtor Installment</string>
   </property>
