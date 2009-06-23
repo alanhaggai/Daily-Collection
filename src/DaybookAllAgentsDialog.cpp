@@ -95,8 +95,9 @@ DaybookAllAgentsDialog::PopulateTableWidget() {
             int agent_amount_given = amount_query.value(0).toInt();
 
             // Sum paid column of each debtor whose agent is the current agent
-            transaction_query.prepare("SELECT SUM(paid) FROM debtor_transaction\
-                    WHERE agent_id = :agent_id");
+            transaction_query.prepare("SELECT SUM(paid) FROM debtor, transactions\
+                    WHERE debtor.agent_id = :agent_id AND debtor.id =\
+                    transactions.debtor_id");
             transaction_query.bindValue( ":agent_id", agent_id );
 
             if ( !transaction_query.exec() ) {
