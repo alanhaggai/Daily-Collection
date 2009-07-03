@@ -121,6 +121,16 @@ CreateDebtorDialog::SaveDebtor() {
     query.bindValue( ":date",
             date_calendar->selectedDate().toString(Qt::ISODate) );
 
+    if ( !query.exec() ) {
+            QMessageBox* msgbox = new QMessageBox(
+                QMessageBox::Critical, "Query execution failed",
+                "Execution of query <b>" + query.lastQuery() + "</b>, failed.",
+                QMessageBox::Ok );
+            msgbox->exec();
+
+            return;
+        }
+
     // Clear Line Edits and Combo Box
     serial_edit->clear();
     name_edit->clear();
